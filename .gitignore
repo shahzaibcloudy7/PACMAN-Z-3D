@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Test screenshots
+*.png
+
+# Temporary files
+nul

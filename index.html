@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacman Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Pacman Game</h1>
+        <div class="game-info">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="timer">Time: <span id="timer">0:00</span></div>
+            <div class="power-timer" id="headerPowerTimer" style="display: none;">
+                Power: <span id="headerPowerName">None</span> (<span id="headerPowerTime">0s</span>)
+            </div>
+            <div class="controls">
+                <span>Use WASD or Arrow Keys to move</span>
+                <button id="soundButton" class="sound-button" title="Mute (M)">🔊</button>
+            </div>
+        </div>
+        <canvas id="gameCanvas" width="672" height="416"></canvas>
+        <div class="game-status" id="gameStatus"></div>
+        
+        <!-- Power Status Display -->
+        <div class="power-status" id="powerStatus" style="display: none;">
+            <h3>Active Power</h3>
+            <table>
+                <tr>
+                    <td><strong>Power:</strong></td>
+                    <td id="powerName">None</td>
+                </tr>
+                <tr>
+                    <td><strong>Time Left:</strong></td>
+                    <td id="powerTimer">0s</td>
+                </tr>
+                <tr>
+                    <td><strong>Type:</strong></td>
+                    <td id="powerType">-</td>
+                </tr>
+            </table>
+            <div class="power-timer-bar">
+                <div class="power-timer-fill" id="powerTimerFill" style="width: 100%;"></div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <p>🟡 = Pacman | 👻 = Ghosts | • = Dots | 🍄 = Mushrooms</p>
+            <p>Collect all dots to win! Eat mushrooms for shooting powers!</p>
+            <p><strong>Controls:</strong> WASD/Arrows = Move | Space = Shoot (when powered) | P = Pause/Resume | R = Restart | M = Mute/Unmute</p>
+        </div>
+    </div>
+    <script src="sounds.js"></script>
+    <script src="effects.js"></script>
+    <script src="pacman.js"></script>
+</body>
+</html>
