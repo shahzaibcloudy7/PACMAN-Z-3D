@@ -146,33 +146,37 @@ class PacmanGame {
     }
     
     movePacman() {
+        // CLASSIC GRID-BASED MOVEMENT WITH STRICT CORRIDOR ALIGNMENT
+
         // Calculate speed (boosted if speed power is active)
         const currentSpeed = this.hasSpeedBoost ? this.pacmanSpeed * 1.5 : this.pacmanSpeed;
 
-        // Get current grid position (rounded to nearest integer)
+        // Get current grid cell (the tile Pacman is in/near)
         const currentGridX = Math.round(this.pacman.x);
         const currentGridY = Math.round(this.pacman.y);
 
-        // Calculate offset from grid center
-        const offsetX = this.pacman.x - currentGridX;
-        const offsetY = this.pacman.y - currentGridY;
+        // Calculate distance from grid center
+        const distFromCenterX = this.pacman.x - currentGridX;
+        const distFromCenterY = this.pacman.y - currentGridY;
 
-        // Check if we want to change direction
+        // TURN LOGIC: Only allow turns when reasonably centered in current tile
         if (this.pacman.nextDirection !== this.pacman.direction) {
-            // Determine current movement axis
             const isMovingHorizontal = (this.pacman.direction === 'left' || this.pacman.direction === 'right');
             const isMovingVertical = (this.pacman.direction === 'up' || this.pacman.direction === 'down');
             const isTurningToVertical = (this.pacman.nextDirection === 'up' || this.pacman.nextDirection === 'down');
             const isTurningToHorizontal = (this.pacman.nextDirection === 'left' || this.pacman.nextDirection === 'right');
 
-            // More lenient turn threshold for smoother gameplay
+            // Check if we're centered enough to turn (classic Pacman: must be near tile center)
             let canTurn = false;
             if (isMovingHorizontal && isTurningToVertical) {
-                // Turning from horizontal to vertical: Y must be reasonably centered
-                canTurn = Math.abs(offsetY) < 0.4;
+                // Horizontal to vertical: check if Y is centered
+                canTurn = Math.abs(distFromCenterY) < 0.3;
             } else if (isMovingVertical && isTurningToHorizontal) {
-                // Turning from vertical to horizontal: X must be reasonably centered
-                canTurn = Math.abs(offsetX) < 0.4;
+                // Vertical to horizontal: check if X is centered
+                canTurn = Math.abs(distFromCenterX) < 0.3;
+            } else {
+                // Reversing direction (180 turn) - always allowed
+                canTurn = true;
             }
 
             if (canTurn) {
@@ -187,7 +191,7 @@ class PacmanGame {
                     case 'right': nextGridX++; break;
                 }
 
-                // Wrap grid check
+                // Wrap coordinates
                 if (nextGridX < 0) nextGridX = this.width - 1;
                 if (nextGridX >= this.width) nextGridX = 0;
                 if (nextGridY < 0) nextGridY = this.height - 1;
@@ -196,54 +200,36 @@ class PacmanGame {
                 // Allow turn if path is clear
                 if (this.maze[nextGridY][nextGridX] !== '#') {
                     this.pacman.direction = this.pacman.nextDirection;
-                    // Gently guide towards grid center instead of hard snap
+                    // CLASSIC SNAP: Lock to corridor center when turning
                     if (isTurningToVertical) {
-                        // Moving towards center Y, snap X for vertical movement
-                        const drift = offsetY * 0.5;
-                        this.pacman.y = currentGridY + drift;
-                        this.pacman.x = currentGridX;
-                    } else {
-                        // Moving towards center X, snap Y for horizontal movement
-                        const drift = offsetX * 0.5;
-                        this.pacman.x = currentGridX + drift;
-                        this.pacman.y = currentGridY;
+                        this.pacman.x = currentGridX; // Lock X to corridor center
+                    } else if (isTurningToHorizontal) {
+                        this.pacman.y = currentGridY; // Lock Y to corridor center
                     }
                 }
             }
         }
 
-        // Move in current direction with gentle lane guidance
+        // MOVEMENT: Move in current direction with STRICT corridor locking
         let newX = this.pacman.x;
         let newY = this.pacman.y;
 
         switch (this.pacman.direction) {
             case 'up':
                 newY -= currentSpeed;
-                // Gentle guidance: move X towards grid center (not forcing)
-                if (Math.abs(offsetX) > 0.05) {
-                    newX = this.pacman.x - (offsetX * 0.15);
-                }
+                newX = currentGridX; // STRICT: Lock X to corridor center
                 break;
             case 'down':
                 newY += currentSpeed;
-                // Gentle guidance: move X towards grid center
-                if (Math.abs(offsetX) > 0.05) {
-                    newX = this.pacman.x - (offsetX * 0.15);
-                }
+                newX = currentGridX; // STRICT: Lock X to corridor center
                 break;
             case 'left':
                 newX -= currentSpeed;
-                // Gentle guidance: move Y towards grid center
-                if (Math.abs(offsetY) > 0.05) {
-                    newY = this.pacman.y - (offsetY * 0.15);
-                }
+                newY = currentGridY; // STRICT: Lock Y to corridor center
                 break;
             case 'right':
                 newX += currentSpeed;
-                // Gentle guidance: move Y towards grid center
-                if (Math.abs(offsetY) > 0.05) {
-                    newY = this.pacman.y - (offsetY * 0.15);
-                }
+                newY = currentGridY; // STRICT: Lock Y to corridor center
                 break;
         }
 
@@ -253,51 +239,30 @@ class PacmanGame {
         if (newY < 0) newY = this.height - 1;
         if (newY >= this.height) newY = 0;
 
-        // Check wall collision with better precision
+        // WALL COLLISION: Check if destination is clear
         let checkX = Math.round(newX);
         let checkY = Math.round(newY);
 
-        // Wrap coordinates for wall checking
+        // Wrap check coordinates
         if (checkX < 0) checkX = this.width - 1;
         if (checkX >= this.width) checkX = 0;
         if (checkY < 0) checkY = this.height - 1;
         if (checkY >= this.height) checkY = 0;
 
-        let moved = false;
+        // Only update position if destination is not a wall
         if (this.maze[checkY][checkX] !== '#') {
             this.pacman.x = newX;
             this.pacman.y = newY;
-            moved = true;
-        } else {
-            // If blocked, allow sliding along walls
-            if (this.pacman.direction === 'up' || this.pacman.direction === 'down') {
-                // Blocked vertically, try to slide horizontally if there's room
-                const slideX = Math.round(this.pacman.x);
-                if (this.maze[checkY][slideX] !== '#') {
-                    // Can slide, keep Y movement blocked but allow X correction
-                    this.pacman.x = newX;
-                }
-            } else {
-                // Blocked horizontally, try to slide vertically if there's room
-                const slideY = Math.round(this.pacman.y);
-                if (this.maze[slideY][checkX] !== '#') {
-                    // Can slide, keep X movement blocked but allow Y correction
-                    this.pacman.y = newY;
-                }
-            }
         }
+        // If blocked by wall, position stays the same (no movement)
 
-        // Collect dots (check even if not moved, for edge cases)
+        // DOT COLLECTION
         const gridX = Math.round(this.pacman.x);
         const gridY = Math.round(this.pacman.y);
 
-        // Wrap grid coordinates for collection
-        let collectX = gridX;
-        let collectY = gridY;
-        if (collectX < 0) collectX = this.width - 1;
-        if (collectX >= this.width) collectX = 0;
-        if (collectY < 0) collectY = this.height - 1;
-        if (collectY >= this.height) collectY = 0;
+        // Wrap grid coordinates
+        let collectX = gridX < 0 ? this.width - 1 : (gridX >= this.width ? 0 : gridX);
+        let collectY = gridY < 0 ? this.height - 1 : (gridY >= this.height ? 0 : gridY);
 
         if (this.maze[collectY][collectX] === '.') {
             this.score += 10;
