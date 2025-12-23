@@ -1,23 +1,65 @@
 {
-  "name": "pacman-game",
+  "name": "pacman-z",
   "version": "1.0.0",
-  "description": "A Pacman game for console and web",
-  "main": "game.js",
+  "description": "PACMAN-Z - Modern Pacman game with power-ups and shooting mechanics",
+  "main": "main.js",
+  "author": "Your Name",
+  "license": "MIT",
   "scripts": {
-    "start": "node game.js",
-    "web": "node server.js"
+    "start": "electron .",
+    "build": "electron-builder build --win --publish never",
+    "build:dir": "electron-builder build --win --dir",
+    "dist": "electron-builder"
   },
   "keywords": [
     "game",
     "pacman",
-    "console",
-    "web",
-    "nodejs"
+    "electron",
+    "desktop"
   ],
-  "author": "",
-  "license": "MIT",
-  "type": "commonjs",
-  "dependencies": {
-    "puppeteer": "^24.33.0"
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.pacmanz.game",
+    "productName": "PACMAN-Z",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "pacman.js",
+      "sounds.js",
+      "effects.js",
+      "style.css",
+      "main.js"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PACMAN-Z"
+    },
+    "portable": {
+      "artifactName": "PACMAN-Z-Portable.exe"
+    },
+    "compression": "maximum",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
   }
 }
