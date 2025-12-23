@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if not exist \"C:\\Users\\admin\\.config\\claude-code\" mkdir \"C:\\Users\\admin\\.config\\claude-code\")",
+      "Bash(node:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npx -y @modelcontextprotocol/server-puppeteer)",
+      "Bash(start http://localhost:3001)",
+      "Bash(npx:*)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 15 tail:*)",
+      "Bash(dir /B *.png)",
+      "Bash(dir:*)",
+      "Bash(ls:*)",
+      "Bash(timeout 20 tail:*)",
+      "Bash(timeout 5 ping:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
