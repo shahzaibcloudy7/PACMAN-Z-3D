@@ -43,6 +43,33 @@ h1 {
     color: #00ff00;
 }
 
+.stage {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00ffff;
+}
+
+.high-score {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffa500;
+}
+
+.game-status.stage-complete {
+    color: #00ff00;
+    animation: stagePulse 0.5s ease-in-out infinite;
+}
+
+.game-status.stage-indicator {
+    color: #00ffff;
+    font-size: 24px;
+}
+
+@keyframes stagePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+}
+
 .power-timer {
     font-size: 18px;
     font-weight: bold;

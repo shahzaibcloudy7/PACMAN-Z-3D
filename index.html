@@ -10,7 +10,9 @@
     <div class="game-container">
         <h1>Pacman Game</h1>
         <div class="game-info">
+            <div class="stage">Stage: <span id="currentStage">1</span></div>
             <div class="score">Score: <span id="score">0</span></div>
+            <div class="high-score">High Score: <span id="highScore">0</span></div>
             <div class="timer">Time: <span id="timer">0:00</span></div>
             <div class="power-timer" id="headerPowerTimer" style="display: none;">
                 Power: <span id="headerPowerName">None</span> (<span id="headerPowerTime">0s</span>)
@@ -47,7 +49,7 @@
         
         <div class="instructions">
             <p>🟡 = Pacman | 👻 = Ghosts | • = Dots | 🍄 = Mushrooms</p>
-            <p>Collect all dots to win! Eat mushrooms for shooting powers!</p>
+            <p>Collect all dots to advance to the next stage! Complete all 7 stages to win!</p>
             <p><strong>Controls:</strong> WASD/Arrows = Move | Space = Shoot (when powered) | P = Pause/Resume | R = Restart | M = Mute/Unmute</p>
         </div>
     </div>

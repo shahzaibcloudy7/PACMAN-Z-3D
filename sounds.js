@@ -143,6 +143,19 @@ class SoundManager {
         this.playSequence(ghostDeathTones);
     }
 
+    // Level up sound - ascending celebration
+    playLevelUpSound() {
+        if (this.isMuted) return;
+
+        const levelUpTones = [
+            { frequency: 523, duration: 0.15, type: 'square' },  // C
+            { frequency: 659, duration: 0.15, type: 'square' },  // E
+            { frequency: 784, duration: 0.15, type: 'square' },  // G
+            { frequency: 1047, duration: 0.3, type: 'square' }   // C (high)
+        ];
+        this.playSequence(levelUpTones);
+    }
+
     // Toggle mute
     toggleMute() {
         this.isMuted = !this.isMuted;

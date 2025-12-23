@@ -1,8 +1,132 @@
+// Maze layouts for all 7 stages
+const MAZE_LAYOUTS = [
+  // STAGE 1 - Beginner (current maze - open spaces)
+  [
+    "#####################",
+    "#.........#.........#",
+    "#.##.###.#.###.##.#",
+    "#...................#",
+    "#.##.#.#####.#.##.#",
+    "#....#...#...#....#",
+    "####.###.#.###.####",
+    "#....#...#...#....#",
+    "#.##.#.#####.#.##.#",
+    "#...................#",
+    "#.##.###.#.###.##.#",
+    "#.........#.........#",
+    "#####################"
+  ],
+
+  // STAGE 2 - Narrow Corridors
+  [
+    "#####################",
+    "#.........#.........#",
+    "#.###.###.###.###.#",
+    "#.#.............#.#",
+    "#.#.###########.#.#",
+    "#.#.............#.#",
+    "#.#.###.###.###.#.#",
+    "#.#.............#.#",
+    "#.#.###########.#.#",
+    "#.#.............#.#",
+    "#.###.###.###.###.#",
+    "#.........#.........#",
+    "#####################"
+  ],
+
+  // STAGE 3 - Central Chamber
+  [
+    "#####################",
+    "#.#.#.#.....#.#.#.#",
+    "#.#.#.#######.#.#.#",
+    "#.#.#.........#.#.#",
+    "#.#.#.#######.#.#.#",
+    "#.....#.....#.....#",
+    "#.###.#.....#.###.#",
+    "#.....#.....#.....#",
+    "#.#.#.#######.#.#.#",
+    "#.#.#.........#.#.#",
+    "#.#.#.#######.#.#.#",
+    "#.#.#.#.....#.#.#.#",
+    "#####################"
+  ],
+
+  // STAGE 4 - Complex Maze
+  [
+    "#####################",
+    "#...#...#...#...#..#",
+    "#.#.#.#.#.#.#.#.#.#",
+    "#.#...#...#...#...#",
+    "#.#####.#.#.#####.#",
+    "#.......#.#.......#",
+    "###.#####.#####.###",
+    "#.......#.#.......#",
+    "#.#####.#.#.#####.#",
+    "#.#...#...#...#...#",
+    "#.#.#.#.#.#.#.#.#.#",
+    "#...#...#...#...#..#",
+    "#####################"
+  ],
+
+  // STAGE 5 - Spiral Pattern
+  [
+    "#####################",
+    "#...................#",
+    "###.###########.###",
+    "#.#.#.........#.#.#",
+    "#.#.#.#######.#.#.#",
+    "#.#.#.#.....#.#.#.#",
+    "#.#.#.#.###.#.#.#.#",
+    "#.#.#.#.....#.#.#.#",
+    "#.#.#.#######.#.#.#",
+    "#.#.#.........#.#.#",
+    "###.###########.###",
+    "#...................#",
+    "#####################"
+  ],
+
+  // STAGE 6 - Four Quadrants
+  [
+    "#####################",
+    "#.......###.......#",
+    "#.####..###..####.#",
+    "#.#..#.......#..#.#",
+    "#.#..#.#####.#..#.#",
+    "#......#...#......#",
+    "####...#...#...####",
+    "#......#...#......#",
+    "#.#..#.#####.#..#.#",
+    "#.#..#.......#..#.#",
+    "#.####..###..####.#",
+    "#.......###.......#",
+    "#####################"
+  ],
+
+  // STAGE 7 - Expert Chaos
+  [
+    "#####################",
+    "#.#.#.#.#.#.#.#.#.#",
+    "#...#...#...#...#..#",
+    "#.#####.#.#.#####.#",
+    "#.#...#.#.#.#...#.#",
+    "#.#.#...#.#...#.#.#",
+    "#...#########...#.#",
+    "#.#.#...#.#...#.#.#",
+    "#.#...#.#.#.#...#.#",
+    "#.#####.#.#.#####.#",
+    "#...#...#...#...#..#",
+    "#.#.#.#.#.#.#.#.#.#",
+    "#####################"
+  ]
+];
+
 class PacmanGame {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
         this.scoreElement = document.getElementById('score');
+        this.currentStageElement = document.getElementById('currentStage');
+        this.highScoreElement = document.getElementById('highScore');
         this.timerElement = document.getElementById('timer');
         this.statusElement = document.getElementById('gameStatus');
         this.headerPowerTimer = document.getElementById('headerPowerTimer');
@@ -52,22 +176,17 @@ class PacmanGame {
         this.speedBoostTimer = 0;
         this.speedBoostDuration = 0;
         this.shootingPowerDuration = 0;
-        
-        this.maze = [
-            "#####################",
-            "#.........#.........#",
-            "#.##.###.#.###.##.#",
-            "#...................#",
-            "#.##.#.#####.#.##.#",
-            "#....#...#...#....#",
-            "####.###.#.###.####",
-            "#....#...#...#....#",
-            "#.##.#.#####.#.##.#",
-            "#...................#",
-            "#.##.###.#.###.##.#",
-            "#.........#.........#",
-            "#####################"
-        ];
+
+        // Level progression state
+        this.currentLevel = 1;
+        this.maxLevel = 7;
+        this.levelJustCompleted = false;
+
+        // High score persistence
+        this.highScore = this.loadHighScore();
+
+        // Start at Stage 1
+        this.maze = MAZE_LAYOUTS[0].map(row => row);
         
         this.placeMushrooms();
         this.setupControls();
@@ -144,7 +263,30 @@ class PacmanGame {
             });
         }
     }
-    
+
+    loadHighScore() {
+        try {
+            const saved = localStorage.getItem('pacmanHighScore');
+            return saved ? parseInt(saved, 10) : 0;
+        } catch (e) {
+            console.warn('localStorage not available');
+            return 0;
+        }
+    }
+
+    saveHighScore() {
+        try {
+            if (this.score > this.highScore) {
+                this.highScore = this.score;
+                localStorage.setItem('pacmanHighScore', this.score.toString());
+                return true; // New high score!
+            }
+        } catch (e) {
+            console.warn('localStorage not available');
+        }
+        return false;
+    }
+
     movePacman() {
         // CLASSIC GRID-BASED MOVEMENT WITH STRICT CORRIDOR ALIGNMENT
 
@@ -525,20 +667,30 @@ class PacmanGame {
         if (!this.gameOver) {
             let dotsLeft = this.maze.join('').split('.').length - 1;
             if (dotsLeft === 0) {
-                this.gameOver = true;
-                this.gameWon = true;
-                this.statusElement.textContent = 'YOU WIN! Press R to restart';
-                this.statusElement.className = 'game-status win';
+                this.levelJustCompleted = true;
 
-                // Add victory effects
-                const pacmanPixelX = this.pacman.x * this.cellSize + this.cellSize / 2;
-                const pacmanPixelY = this.pacman.y * this.cellSize + this.cellSize / 2;
-                this.effectsManager.ring(pacmanPixelX, pacmanPixelY, '#00ff00', 5);
-                this.effectsManager.sparkle(pacmanPixelX, pacmanPixelY, '#ffff00', 50);
-                this.effectsManager.startFlash('#00ff00', 0.3, 0.6);
+                if (this.currentLevel < this.maxLevel) {
+                    // Advance to next stage
+                    this.advanceToNextStage();
+                } else {
+                    // Final stage completed - VICTORY!
+                    this.gameOver = true;
+                    this.gameWon = true;
+                    const newHighScore = this.saveHighScore();
+                    const message = newHighScore ?
+                        'GAME COMPLETE! NEW HIGH SCORE! Press R to restart' :
+                        'GAME COMPLETE! Press R to restart';
+                    this.statusElement.textContent = message;
+                    this.statusElement.className = 'game-status win';
 
-                // Play victory sound
-                this.soundManager.playWinSound();
+                    // Victory effects
+                    const pacmanPixelX = this.pacman.x * this.cellSize + this.cellSize / 2;
+                    const pacmanPixelY = this.pacman.y * this.cellSize + this.cellSize / 2;
+                    this.effectsManager.ring(pacmanPixelX, pacmanPixelY, '#00ff00', 5);
+                    this.effectsManager.sparkle(pacmanPixelX, pacmanPixelY, '#ffff00', 50);
+                    this.effectsManager.startFlash('#00ff00', 0.3, 0.6);
+                    this.soundManager.playWinSound();
+                }
             }
         }
     }
@@ -1532,7 +1684,7 @@ class PacmanGame {
     }
     
     gameLoop() {
-        if (!this.gameOver && !this.isPaused) {
+        if (!this.gameOver && !this.isPaused && !this.levelJustCompleted) {
             this.movePacman();
             this.moveGhosts();
             this.updateBullets();
@@ -1546,6 +1698,10 @@ class PacmanGame {
         this.render();
         this.effectsManager.render();
         this.updatePowerStatusDisplay();
+
+        // Update UI displays
+        if (this.currentStageElement) this.currentStageElement.textContent = this.currentLevel;
+        if (this.highScoreElement) this.highScoreElement.textContent = this.highScore;
 
         setTimeout(() => this.gameLoop(), this.frameTime);
     }
@@ -1568,8 +1724,11 @@ class PacmanGame {
     }
     
     togglePause() {
+        // Don't allow pause during stage transition
+        if (this.levelJustCompleted) return;
+
         this.isPaused = !this.isPaused;
-        
+
         if (this.isPaused) {
             this.statusElement.textContent = 'PAUSED - Press P to Resume';
             this.statusElement.className = 'game-status paused';
@@ -1659,8 +1818,83 @@ class PacmanGame {
             soundButton.title = isMuted ? 'Unmute (M)' : 'Mute (M)';
         }
     }
-    
+
+    advanceToNextStage() {
+        this.currentLevel++;
+
+        // Stage completion message
+        this.statusElement.textContent = `STAGE ${this.currentLevel - 1} COMPLETE! Loading Stage ${this.currentLevel}...`;
+        this.statusElement.className = 'game-status stage-complete';
+
+        // Effects
+        const pacmanPixelX = this.pacman.x * this.cellSize + this.cellSize / 2;
+        const pacmanPixelY = this.pacman.y * this.cellSize + this.cellSize / 2;
+        this.effectsManager.sparkle(pacmanPixelX, pacmanPixelY, '#00ff00', 30);
+        this.effectsManager.startFlash('#ffff00', 0.2, 0.4);
+        this.soundManager.playLevelUpSound();
+
+        // Pause 1.5s for transition
+        setTimeout(() => {
+            this.loadStage(this.currentLevel);
+        }, 1500);
+    }
+
+    loadStage(stageNumber) {
+        // Load new maze (deep copy)
+        this.maze = MAZE_LAYOUTS[stageNumber - 1].map(row => row);
+
+        // Reset Pacman to (1, 1)
+        this.pacman.x = 1;
+        this.pacman.y = 1;
+        this.pacman.direction = 'right';
+        this.pacman.nextDirection = 'right';
+
+        // Reset ghosts to home positions
+        this.ghosts.forEach(ghost => {
+            ghost.x = ghost.homeX;
+            ghost.y = ghost.homeY;
+            ghost.targetX = ghost.homeX;
+            ghost.targetY = ghost.homeY;
+            ghost.isDead = false;
+            ghost.respawnTimer = 0;
+        });
+
+        // Clear bullets and power-ups
+        this.bullets = [];
+        this.hasShootingPower = false;
+        this.shootingPowerTimer = 0;
+        this.currentPowerType = null;
+        this.hasShield = false;
+        this.shieldTimer = 0;
+        this.hasSpeedBoost = false;
+        this.speedBoostTimer = 0;
+
+        // Re-place mushrooms
+        this.mushrooms = [];
+        this.placeMushrooms();
+
+        // Update UI - show stage number
+        this.statusElement.textContent = `Stage ${this.currentLevel}`;
+        this.statusElement.className = 'game-status stage-indicator';
+
+        // Clear stage indicator after 2s
+        setTimeout(() => {
+            if (!this.gameOver) {
+                this.statusElement.textContent = '';
+                this.statusElement.className = 'game-status';
+            }
+        }, 2000);
+
+        this.levelJustCompleted = false;
+
+        // NOTE: Score accumulates - NOT reset!
+    }
+
     restart() {
+        // Reset to STAGE 1
+        this.currentLevel = 1;
+        this.levelJustCompleted = false;
+
         // Reset game state
         this.pacman = { x: 1, y: 1, direction: 'right', nextDirection: 'right', mouthAnimation: 0, mouthOpen: true };
         this.ghosts = [
@@ -1683,31 +1917,24 @@ class PacmanGame {
         // Reset timer
         this.gameStartTime = Date.now();
         this.timerElement.textContent = '0:00';
-        
-        // Reset maze
-        this.maze = [
-            "#####################",
-            "#.........#.........#",
-            "#.##.###.#.###.##.#",
-            "#...................#",
-            "#.##.#.#####.#.##.#",
-            "#....#...#...#....#",
-            "####.###.#.###.####",
-            "#....#...#...#....#",
-            "#.##.#.#####.#.##.#",
-            "#...................#",
-            "#.##.###.#.###.##.#",
-            "#.........#.........#",
-            "#####################"
-        ];
-        
+
+        // Load stage 1 maze
+        this.maze = MAZE_LAYOUTS[0].map(row => row);
+
         // Place new mushrooms
         this.placeMushrooms();
-        
-        // Reset UI
+
+        // Reset UI with stage indicator
         this.scoreElement.textContent = this.score;
-        this.statusElement.textContent = '';
-        this.statusElement.className = 'game-status';
+        this.statusElement.textContent = 'Stage 1';
+        this.statusElement.className = 'game-status stage-indicator';
+
+        setTimeout(() => {
+            if (!this.gameOver) {
+                this.statusElement.textContent = '';
+                this.statusElement.className = 'game-status';
+            }
+        }, 2000);
     }
 }
 
