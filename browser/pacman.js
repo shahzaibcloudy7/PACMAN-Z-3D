@@ -1,4 +1,4 @@
-// Maze layouts for all 7 stages
+// Maze layouts for all 14 stages (loops back to Stage 1 with rising ghost speed after Stage 14)
 const MAZE_LAYOUTS = [
   // STAGE 1 - Beginner (current maze - open spaces)
   [
@@ -117,6 +117,125 @@ const MAZE_LAYOUTS = [
     "#...#...#...#...#..#",
     "#.#.#.#.#.#.#.#.#.#",
     "#####################"
+  ],
+
+  // STAGE 8 - Diagonal Zigzag
+  [
+    "#####################",
+    "#...................#",
+    "#.########.########.#",
+    "#.#...............#.#",
+    "#.#.######.######.#.#",
+    "#.#...............#.#",
+    "#.#.####.#.#.####.#.#",
+    "#.......#####.......#",
+    "#.#####.#####.#####.#",
+    "#......###.###......#",
+    "#.########.########.#",
+    "#...................#",
+    "#####################"
+  ],
+
+  // STAGE 9 - Ring Maze
+  [
+    "#####################",
+    "#...................#",
+    "#.########.########.#",
+    "#.#......#.#......#.#",
+    "#.#.####.#.#.####.#.#",
+    "#.#.#..#.....#..#.#.#",
+    "#.#.#....#.#....#.#.#",
+    "#.#.#..#.#.#.#..#.#.#",
+    "#.#.####.#.#.####.#.#",
+    "#.#......#.#......#.#",
+    "#.########.########.#",
+    "#...................#",
+    "#####################"
+  ],
+
+  // STAGE 10 - Grid Cells
+  [
+    "#####################",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#.##.#.###.###.#.##.#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#.##.#.###.###.#.##.#",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#####################"
+  ],
+
+  // STAGE 11 - Checkerboard Pillars
+  [
+    "#####################",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#.#.#.#.......#.#.#.#",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#####################"
+  ],
+
+  // STAGE 12 - Serpentine
+  [
+    "#####################",
+    "#...................#",
+    "#.#######...#######.#",
+    "#...................#",
+    "#.#######...#######.#",
+    "#.#######...#######.#",
+    "#......#.....#......#",
+    "#.#######...#######.#",
+    "#.#######...#######.#",
+    "#...................#",
+    "#.#######...#######.#",
+    "#...................#",
+    "#####################"
+  ],
+
+  // STAGE 13 - Fortress
+  [
+    "#####################",
+    "#...................#",
+    "#.#...#.......#...#.#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...#.#.......#.#...#",
+    "#.##.#.##...##.#.##.#",
+    "#....#.........#....#",
+    "#.##.#.###.###.#.##.#",
+    "#...#.#.......#.#...#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#.#...#.......#...#.#",
+    "#...................#",
+    "#####################"
+  ],
+
+  // STAGE 14 - Labyrinth Extreme
+  [
+    "#####################",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#.#......#.#......#.#",
+    "#.#.####.#.#.####.#.#",
+    "#.#.####.....####.#.#",
+    "#....###.....###....#",
+    "#.#.####.#.#.####.#.#",
+    "#.#.####.#.#.####.#.#",
+    "#.#......#.#......#.#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#####################"
   ]
 ];
 
@@ -154,11 +273,11 @@ class PacmanGame {
         this.ghostHome = { x: 10, y: 6 };
 
         this.ghosts = [
-            { x: 9, y: 5, targetX: 9, targetY: 5, direction: 'up', color: '#ff0000', shape: 'circle', speed: 0.033, points: 100, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 9, y: 5 }, isDead: false, respawnTimer: 0, homeX: 9, homeY: 5 },
-            { x: 10, y: 5, targetX: 10, targetY: 5, direction: 'down', color: '#ffb8ff', shape: 'square', speed: 0.029, points: 150, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 10, y: 5 }, isDead: false, respawnTimer: 0, homeX: 10, homeY: 5 },
-            { x: 11, y: 5, targetX: 11, targetY: 5, direction: 'left', color: '#00ffff', shape: 'triangle', speed: 0.038, points: 120, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 11, y: 5 }, isDead: false, respawnTimer: 0, homeX: 11, homeY: 5 },
-            { x: 8, y: 6, targetX: 8, targetY: 6, direction: 'right', color: '#ffa500', shape: 'diamond', speed: 0.032, points: 180, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 8, y: 6 }, isDead: false, respawnTimer: 0, homeX: 8, homeY: 6 },
-            { x: 12, y: 6, targetX: 12, targetY: 6, direction: 'up', color: '#00ff00', shape: 'star', speed: 0.042, points: 250, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 12, y: 6 }, isDead: false, respawnTimer: 0, homeX: 12, homeY: 6 }
+            { x: 9, y: 5, targetX: 9, targetY: 5, direction: 'up', color: '#ff0000', shape: 'circle', speed: 0.033, baseSpeed: 0.033, points: 100, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 9, y: 5 }, isDead: false, respawnTimer: 0, homeX: 9, homeY: 5 },
+            { x: 10, y: 5, targetX: 10, targetY: 5, direction: 'down', color: '#ffb8ff', shape: 'square', speed: 0.029, baseSpeed: 0.029, points: 150, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 10, y: 5 }, isDead: false, respawnTimer: 0, homeX: 10, homeY: 5 },
+            { x: 11, y: 5, targetX: 11, targetY: 5, direction: 'left', color: '#00ffff', shape: 'triangle', speed: 0.038, baseSpeed: 0.038, points: 120, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 11, y: 5 }, isDead: false, respawnTimer: 0, homeX: 11, homeY: 5 },
+            { x: 8, y: 6, targetX: 8, targetY: 6, direction: 'right', color: '#ffa500', shape: 'diamond', speed: 0.032, baseSpeed: 0.032, points: 180, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 8, y: 6 }, isDead: false, respawnTimer: 0, homeX: 8, homeY: 6 },
+            { x: 12, y: 6, targetX: 12, targetY: 6, direction: 'up', color: '#00ff00', shape: 'star', speed: 0.042, baseSpeed: 0.042, points: 250, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 12, y: 6 }, isDead: false, respawnTimer: 0, homeX: 12, homeY: 6 }
         ];
         this.score = 0;
         this.gameOver = false;
@@ -179,8 +298,10 @@ class PacmanGame {
 
         // Level progression state
         this.currentLevel = 1;
-        this.maxLevel = 7;
+        this.maxLevel = 14;
         this.levelJustCompleted = false;
+        this.lapCount = 1;
+        this.difficultyMultiplier = 1;
 
         // High score persistence
         this.highScore = this.loadHighScore();
@@ -668,29 +789,10 @@ class PacmanGame {
             let dotsLeft = this.maze.join('').split('.').length - 1;
             if (dotsLeft === 0) {
                 this.levelJustCompleted = true;
-
-                if (this.currentLevel < this.maxLevel) {
-                    // Advance to next stage
-                    this.advanceToNextStage();
-                } else {
-                    // Final stage completed - VICTORY!
-                    this.gameOver = true;
-                    this.gameWon = true;
-                    const newHighScore = this.saveHighScore();
-                    const message = newHighScore ?
-                        'GAME COMPLETE! NEW HIGH SCORE! Press R to restart' :
-                        'GAME COMPLETE! Press R to restart';
-                    this.statusElement.textContent = message;
-                    this.statusElement.className = 'game-status win';
-
-                    // Victory effects
-                    const pacmanPixelX = this.pacman.x * this.cellSize + this.cellSize / 2;
-                    const pacmanPixelY = this.pacman.y * this.cellSize + this.cellSize / 2;
-                    this.effectsManager.ring(pacmanPixelX, pacmanPixelY, '#00ff00', 5);
-                    this.effectsManager.sparkle(pacmanPixelX, pacmanPixelY, '#ffff00', 50);
-                    this.effectsManager.startFlash('#00ff00', 0.3, 0.6);
-                    this.soundManager.playWinSound();
-                }
+                this.saveHighScore();
+                // Advance to next stage - loops back to Stage 1 with rising
+                // ghost speed after Stage 14 instead of ending the game.
+                this.advanceToNextStage();
             }
         }
     }
@@ -1700,7 +1802,7 @@ class PacmanGame {
         this.updatePowerStatusDisplay();
 
         // Update UI displays
-        if (this.currentStageElement) this.currentStageElement.textContent = this.currentLevel;
+        if (this.currentStageElement) this.currentStageElement.textContent = this.lapCount > 1 ? `${this.currentLevel} (Lap ${this.lapCount})` : this.currentLevel;
         if (this.highScoreElement) this.highScoreElement.textContent = this.highScore;
 
         setTimeout(() => this.gameLoop(), this.frameTime);
@@ -1820,10 +1922,22 @@ class PacmanGame {
     }
 
     advanceToNextStage() {
+        const completedStage = this.currentLevel;
         this.currentLevel++;
 
-        // Stage completion message
-        this.statusElement.textContent = `STAGE ${this.currentLevel - 1} COMPLETE! Loading Stage ${this.currentLevel}...`;
+        if (this.currentLevel > this.maxLevel) {
+            // Completed a full lap through all stages - loop back to Stage 1
+            // and ramp up ghost speed so repeat laps stay challenging.
+            this.currentLevel = 1;
+            this.lapCount++;
+            this.difficultyMultiplier = Math.min(this.difficultyMultiplier * 1.12, 2.5);
+            this.ghosts.forEach(ghost => {
+                ghost.speed = ghost.baseSpeed * this.difficultyMultiplier;
+            });
+            this.statusElement.textContent = `ALL STAGES COMPLETE! Lap ${this.lapCount} - ghosts are faster now. Loading Stage 1...`;
+        } else {
+            this.statusElement.textContent = `STAGE ${completedStage} COMPLETE! Loading Stage ${this.currentLevel}...`;
+        }
         this.statusElement.className = 'game-status stage-complete';
 
         // Effects
@@ -1874,7 +1988,7 @@ class PacmanGame {
         this.placeMushrooms();
 
         // Update UI - show stage number
-        this.statusElement.textContent = `Stage ${this.currentLevel}`;
+        this.statusElement.textContent = this.lapCount > 1 ? `Stage ${this.currentLevel} (Lap ${this.lapCount})` : `Stage ${this.currentLevel}`;
         this.statusElement.className = 'game-status stage-indicator';
 
         // Clear stage indicator after 2s
@@ -1894,15 +2008,17 @@ class PacmanGame {
         // Reset to STAGE 1
         this.currentLevel = 1;
         this.levelJustCompleted = false;
+        this.lapCount = 1;
+        this.difficultyMultiplier = 1;
 
         // Reset game state
         this.pacman = { x: 1, y: 1, direction: 'right', nextDirection: 'right', mouthAnimation: 0, mouthOpen: true };
         this.ghosts = [
-            { x: 9, y: 5, targetX: 9, targetY: 5, direction: 'up', color: '#ff0000', shape: 'circle', speed: 0.033, points: 100, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 9, y: 5 }, isDead: false, respawnTimer: 0, homeX: 9, homeY: 5 },
-            { x: 10, y: 5, targetX: 10, targetY: 5, direction: 'down', color: '#ffb8ff', shape: 'square', speed: 0.029, points: 150, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 10, y: 5 }, isDead: false, respawnTimer: 0, homeX: 10, homeY: 5 },
-            { x: 11, y: 5, targetX: 11, targetY: 5, direction: 'left', color: '#00ffff', shape: 'triangle', speed: 0.038, points: 120, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 11, y: 5 }, isDead: false, respawnTimer: 0, homeX: 11, homeY: 5 },
-            { x: 8, y: 6, targetX: 8, targetY: 6, direction: 'right', color: '#ffa500', shape: 'diamond', speed: 0.032, points: 180, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 8, y: 6 }, isDead: false, respawnTimer: 0, homeX: 8, homeY: 6 },
-            { x: 12, y: 6, targetX: 12, targetY: 6, direction: 'up', color: '#00ff00', shape: 'star', speed: 0.042, points: 250, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 12, y: 6 }, isDead: false, respawnTimer: 0, homeX: 12, homeY: 6 }
+            { x: 9, y: 5, targetX: 9, targetY: 5, direction: 'up', color: '#ff0000', shape: 'circle', speed: 0.033, baseSpeed: 0.033, points: 100, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 9, y: 5 }, isDead: false, respawnTimer: 0, homeX: 9, homeY: 5 },
+            { x: 10, y: 5, targetX: 10, targetY: 5, direction: 'down', color: '#ffb8ff', shape: 'square', speed: 0.029, baseSpeed: 0.029, points: 150, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 10, y: 5 }, isDead: false, respawnTimer: 0, homeX: 10, homeY: 5 },
+            { x: 11, y: 5, targetX: 11, targetY: 5, direction: 'left', color: '#00ffff', shape: 'triangle', speed: 0.038, baseSpeed: 0.038, points: 120, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 11, y: 5 }, isDead: false, respawnTimer: 0, homeX: 11, homeY: 5 },
+            { x: 8, y: 6, targetX: 8, targetY: 6, direction: 'right', color: '#ffa500', shape: 'diamond', speed: 0.032, baseSpeed: 0.032, points: 180, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 8, y: 6 }, isDead: false, respawnTimer: 0, homeX: 8, homeY: 6 },
+            { x: 12, y: 6, targetX: 12, targetY: 6, direction: 'up', color: '#00ff00', shape: 'star', speed: 0.042, baseSpeed: 0.042, points: 250, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 12, y: 6 }, isDead: false, respawnTimer: 0, homeX: 12, homeY: 6 }
         ];
         this.score = 0;
         this.gameOver = false;

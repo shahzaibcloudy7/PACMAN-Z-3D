@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    if (filePath === '.' || filePath === './') {
+    if (filePath === '.' || filePath === './' || filePath === '.\\') {
         filePath = './index.html';
     }
 
