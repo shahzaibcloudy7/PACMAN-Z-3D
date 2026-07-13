@@ -22,7 +22,7 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile(path.join(__dirname, 'browser', 'index.html'));
   Menu.setApplicationMenu(null); // Remove menu bar
 
   mainWindow.on('closed', function () {

@@ -29,11 +29,11 @@
       "output": "dist"
     },
     "files": [
-      "index.html",
-      "pacman.js",
-      "sounds.js",
-      "effects.js",
-      "style.css",
+      "browser/index.html",
+      "browser/pacman.js",
+      "browser/sounds.js",
+      "browser/effects.js",
+      "browser/style.css",
       "main.js"
     ],
     "win": {

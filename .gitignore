@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# electron-builder output
+dist/
+dist2/
+
 # Test screenshots
 *.png
 

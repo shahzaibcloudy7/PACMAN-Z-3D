@@ -20,9 +20,12 @@
             <div class="controls">
                 <span>Use WASD or Arrow Keys to move</span>
                 <button id="soundButton" class="sound-button" title="Mute (M)">🔊</button>
+                <button id="viewButton" class="sound-button" title="Toggle 3D View (V)">🧊</button>
             </div>
         </div>
-        <canvas id="gameCanvas" width="672" height="416"></canvas>
+        <div class="canvas-stage" id="canvasStage">
+            <canvas id="gameCanvas" width="672" height="416"></canvas>
+        </div>
         <div class="game-status" id="gameStatus"></div>
         
         <!-- Power Status Display -->
@@ -50,7 +53,7 @@
         <div class="instructions">
             <p>🟡 = Pacman | 👻 = Ghosts | • = Dots | 🍄 = Mushrooms</p>
             <p>Collect all dots to advance to the next stage! Complete all 7 stages to win!</p>
-            <p><strong>Controls:</strong> WASD/Arrows = Move | Space = Shoot (when powered) | P = Pause/Resume | R = Restart | M = Mute/Unmute</p>
+            <p><strong>Controls:</strong> WASD/Arrows = Move | Space = Shoot (when powered) | P = Pause/Resume | R = Restart | M = Mute/Unmute | V = Toggle 3D View</p>
         </div>
     </div>
     <script src="sounds.js"></script>

@@ -243,6 +243,7 @@ class PacmanGame {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
+        this.canvasStage = document.getElementById('canvasStage');
         this.scoreElement = document.getElementById('score');
         this.currentStageElement = document.getElementById('currentStage');
         this.highScoreElement = document.getElementById('highScore');
@@ -312,8 +313,39 @@ class PacmanGame {
         this.placeMushrooms();
         this.setupControls();
         this.setupSoundButton();
+        this.setupViewButton();
+        this.loadViewPreference();
 
         this.gameLoop();
+    }
+
+    loadViewPreference() {
+        try {
+            if (localStorage.getItem('pacmanTiltedView') === 'true') {
+                this.canvasStage.classList.add('tilted');
+            }
+        } catch (e) {
+            console.warn('localStorage not available');
+        }
+    }
+
+    toggleView() {
+        if (!this.canvasStage) return;
+        const tilted = this.canvasStage.classList.toggle('tilted');
+        try {
+            localStorage.setItem('pacmanTiltedView', tilted);
+        } catch (e) {
+            console.warn('localStorage not available');
+        }
+    }
+
+    setupViewButton() {
+        const viewButton = document.getElementById('viewButton');
+        if (viewButton) {
+            viewButton.addEventListener('click', () => {
+                this.toggleView();
+            });
+        }
     }
     
     setupControls() {
@@ -324,7 +356,14 @@ class PacmanGame {
                 event.preventDefault();
                 return;
             }
-            
+
+            // Handle 3D view toggle
+            if (event.key.toLowerCase() === 'v') {
+                this.toggleView();
+                event.preventDefault();
+                return;
+            }
+
             // Handle pause/resume
             if (event.key.toLowerCase() === 'p') {
                 this.togglePause();
@@ -1292,31 +1331,93 @@ class PacmanGame {
         }
     }
     
+    // Draw a single maze wall cell as a beveled 3D block (flat camera, no perspective needed)
+    drawWallBlock(x, y) {
+        const s = this.cellSize;
+        const ctx = this.ctx;
+
+        const grad = ctx.createLinearGradient(x, y, x + s, y + s);
+        grad.addColorStop(0, '#4a4aff');
+        grad.addColorStop(0.55, '#2626e0');
+        grad.addColorStop(1, '#12128f');
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, y, s, s);
+
+        // Raised-edge highlight (top + left)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.28)';
+        ctx.fillRect(x, y, s, 2);
+        ctx.fillRect(x, y, 2, s);
+
+        // Recessed-edge shadow (bottom + right)
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillRect(x, y + s - 3, s, 3);
+        ctx.fillRect(x + s - 3, y, 3, s);
+
+        ctx.strokeStyle = 'rgba(90, 90, 255, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x + 0.5, y + 0.5, s - 1, s - 1);
+    }
+
+    // Lighten/darken a #rrggbb color by a percentage (used for gradient shading)
+    shadeColor(hex, percent) {
+        const num = parseInt(hex.slice(1), 16);
+        const amt = Math.round(2.55 * percent);
+        let r = (num >> 16) + amt;
+        let g = ((num >> 8) & 0x00ff) + amt;
+        let b = (num & 0x0000ff) + amt;
+        r = Math.max(0, Math.min(255, r));
+        g = Math.max(0, Math.min(255, g));
+        b = Math.max(0, Math.min(255, b));
+        return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+    }
+
+    // Soft ambient shadow ellipse drawn beneath a sprite to ground it visually
+    drawDropShadow(centerX, bottomY, radiusX, radiusY) {
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+        ctx.beginPath();
+        ctx.ellipse(centerX, bottomY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.restore();
+    }
+
     render() {
-        // Clear canvas
-        this.ctx.fillStyle = '#000';
+        // Clear canvas with a subtle radial floor gradient for depth
+        if (!this._floorGradient) {
+            this._floorGradient = this.ctx.createRadialGradient(
+                this.canvas.width / 2, this.canvas.height / 2, 0,
+                this.canvas.width / 2, this.canvas.height / 2, this.canvas.width / 1.3
+            );
+            this._floorGradient.addColorStop(0, '#0a0a12');
+            this._floorGradient.addColorStop(1, '#000000');
+        }
+        this.ctx.fillStyle = this._floorGradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
+
         // Draw maze
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 const cell = this.maze[y][x];
                 const drawX = x * this.cellSize;
                 const drawY = y * this.cellSize;
-                
+
                 if (cell === '#') {
-                    // Wall - classic arcade blue with subtle border
-                    this.ctx.fillStyle = '#2121DE';
-                    this.ctx.fillRect(drawX, drawY, this.cellSize, this.cellSize);
-                    // Add border for definition
-                    this.ctx.strokeStyle = '#4848FF';
-                    this.ctx.lineWidth = 1;
-                    this.ctx.strokeRect(drawX, drawY, this.cellSize, this.cellSize);
+                    this.drawWallBlock(drawX, drawY);
                 } else if (cell === '.') {
-                    // Dot - arcade style pellet
-                    this.ctx.fillStyle = '#FFB8AE';
+                    // Dot - glossy 3D pellet
+                    const dotX = drawX + this.cellSize / 2;
+                    const dotY = drawY + this.cellSize / 2;
+                    const dotGradient = this.ctx.createRadialGradient(
+                        dotX - 0.8, dotY - 0.8, 0.2,
+                        dotX, dotY, 2.5
+                    );
+                    dotGradient.addColorStop(0, '#FFFFFF');
+                    dotGradient.addColorStop(0.5, '#FFDCC4');
+                    dotGradient.addColorStop(1, '#D98A75');
+                    this.ctx.fillStyle = dotGradient;
                     this.ctx.beginPath();
-                    this.ctx.arc(drawX + this.cellSize / 2, drawY + this.cellSize / 2, 2.5, 0, 2 * Math.PI);
+                    this.ctx.arc(dotX, dotY, 2.5, 0, 2 * Math.PI);
                     this.ctx.fill();
                 }
             }
@@ -1369,7 +1470,16 @@ class PacmanGame {
                 const topY = centerY - ghostHeight / 2 + ghostRadius;
                 const bottomY = centerY + ghostHeight / 2;
 
-                this.ctx.fillStyle = ghost.color;
+                this.drawDropShadow(centerX, bottomY + 2, ghostRadius * 0.8, ghostRadius * 0.28);
+
+                const ghostGradient = this.ctx.createRadialGradient(
+                    centerX - ghostRadius * 0.35, topY - ghostRadius * 0.25, ghostRadius * 0.1,
+                    centerX, centerY, ghostRadius * 1.4
+                );
+                ghostGradient.addColorStop(0, this.shadeColor(ghost.color, 45));
+                ghostGradient.addColorStop(0.6, ghost.color);
+                ghostGradient.addColorStop(1, this.shadeColor(ghost.color, -25));
+                this.ctx.fillStyle = ghostGradient;
                 this.ctx.beginPath();
 
                 // Rounded dome top (semicircle)
@@ -1450,11 +1560,23 @@ class PacmanGame {
             if (mushroom.active) {
                 const drawX = mushroom.x * this.cellSize;
                 const drawY = mushroom.y * this.cellSize;
-                
-                // Draw mushroom cap with unique color
-                this.ctx.fillStyle = mushroom.color;
+                const capX = drawX + this.cellSize / 2;
+                const capY = drawY + this.cellSize / 2 - 3;
+                const capRadius = this.cellSize / 4;
+
+                this.drawDropShadow(capX, drawY + this.cellSize / 2 + 9, capRadius * 0.7, capRadius * 0.25);
+
+                // Draw mushroom cap with unique color, shaded like a rounded 3D dome
+                const capGradient = this.ctx.createRadialGradient(
+                    capX - capRadius * 0.4, capY - capRadius * 0.4, capRadius * 0.1,
+                    capX, capY, capRadius
+                );
+                capGradient.addColorStop(0, this.shadeColor(mushroom.color, 50));
+                capGradient.addColorStop(0.65, mushroom.color);
+                capGradient.addColorStop(1, this.shadeColor(mushroom.color, -30));
+                this.ctx.fillStyle = capGradient;
                 this.ctx.beginPath();
-                this.ctx.arc(drawX + this.cellSize / 2, drawY + this.cellSize / 2 - 3, this.cellSize / 4, 0, 2 * Math.PI);
+                this.ctx.arc(capX, capY, capRadius, 0, 2 * Math.PI);
                 this.ctx.fill();
                 
                 // Add white spots for visual variety
@@ -1736,8 +1858,17 @@ class PacmanGame {
 
         this.ctx.save();
 
-        // Pure solid yellow - no gradients (arcade style)
-        this.ctx.fillStyle = '#FFFF00';
+        this.drawDropShadow(centerX, centerY + radius * 0.85, radius * 0.9, radius * 0.3);
+
+        // Radial gradient for a shaded, spherical look
+        const pacGradient = this.ctx.createRadialGradient(
+            centerX - radius * 0.3, centerY - radius * 0.3, radius * 0.1,
+            centerX, centerY, radius
+        );
+        pacGradient.addColorStop(0, '#FFFFB0');
+        pacGradient.addColorStop(0.55, '#FFFF00');
+        pacGradient.addColorStop(1, '#D6B800');
+        this.ctx.fillStyle = pacGradient;
 
         // Smooth mouth animation - classic chomp
         const mouthCycle = Math.abs(Math.sin(this.pacman.mouthAnimation));

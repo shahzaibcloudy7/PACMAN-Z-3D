@@ -111,11 +111,26 @@ h1 {
     transform: scale(0.95);
 }
 
+.canvas-stage {
+    perspective: 1300px;
+    perspective-origin: 50% 15%;
+    padding: 10px 0 40px;
+}
+
 #gameCanvas {
     border: 2px solid #333;
     background-color: #000;
     display: block;
     margin: 0 auto;
+    transform: rotateX(0deg);
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.canvas-stage.tilted #gameCanvas {
+    transform: rotateX(28deg) scale(0.97);
+    box-shadow: 0 45px 55px -25px rgba(0, 0, 0, 0.85), 0 0 40px rgba(33, 33, 222, 0.15);
 }
 
 .game-status {
