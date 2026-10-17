@@ -2,7 +2,7 @@
 
 A modern Pacman game with a real 3D view, smart ghost AI, power pellets, mushroom power-ups, shooting mechanics and 14 maze stages. Play it in the browser or as a Windows desktop app.
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![Version](https://img.shields.io/badge/version-1.1.1-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Browser-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -28,7 +28,7 @@ A modern Pacman game with a real 3D view, smart ghost AI, power pellets, mushroo
 **[📦 Download PACMAN3D-Z from the Releases page](https://github.com/shahzaibcloudy7/PACMAN3D-Z/releases/latest)**
 
 Two options:
-- **PACMAN3D-Z-1.1.0-win-x64.exe** (~92 MB) - Installer with desktop and Start menu shortcuts
+- **PACMAN3D-Z-1.1.1-win-x64.exe** (~92 MB) - Installer with desktop and Start menu shortcuts
 - **PACMAN3D-Z-Portable.exe** (~92 MB) - Portable version, no installation needed
 
 **System Requirements:** Windows 10 or later (64-bit), 200 MB RAM, ~180 MB disk space when installed. The 3D view needs WebGL, which any graphics card from the last decade supports.
@@ -214,4 +214,4 @@ MIT License.
 
 ---
 
-**Version:** 1.1.0 · **Platform:** Windows 10+ / Modern Browsers · Made with HTML5 Canvas, Three.js, Web Audio API and Electron
+**Version:** 1.1.1 · **Platform:** Windows 10+ / Modern Browsers · Made with HTML5 Canvas, Three.js, Web Audio API and Electron

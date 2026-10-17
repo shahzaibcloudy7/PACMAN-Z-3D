@@ -1,6 +1,6 @@
 {
   "name": "pacman3d-z",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "PACMAN3D-Z - Modern Pacman game with real 3D view, power-ups and shooting mechanics",
   "main": "main.js",
   "author": "shahzaibcloudy7",

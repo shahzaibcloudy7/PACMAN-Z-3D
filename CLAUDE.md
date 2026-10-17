@@ -117,4 +117,4 @@ No automated test suite is checked in. Verify changes by running `browser/server
 
 ---
 
-**Version**: 1.1.0 · **Built with**: Vanilla JavaScript, HTML5 Canvas, Three.js, Web Audio API, Electron
+**Version**: 1.1.1 · **Built with**: Vanilla JavaScript, HTML5 Canvas, Three.js, Web Audio API, Electron

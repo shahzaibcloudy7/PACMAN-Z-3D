@@ -78,4 +78,4 @@ See the [main README](../README.md) for the full feature list, controls and scor
 
 ---
 
-**Game Version:** 1.1.0
+**Game Version:** 1.1.1
