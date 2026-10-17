@@ -383,8 +383,10 @@ class PacmanGame {
             if (document.hidden && !this.isPaused && !this.gameOver && !this.levelJustCompleted) this.togglePause();
         });
 
-        // Start at Stage 1
-        this.loadStage(1);
+        // Continue from the saved stage (or start at Stage 1)
+        this.restoreProgress();
+        this.loadStage(this.currentLevel);
+        this.scoreElement.textContent = this.score;
         this.updateLivesDisplay();
         this.startReady(2200, true);
 
@@ -398,6 +400,43 @@ class PacmanGame {
             moveProgress: 0, stuckCounter: 0, lastPosition: { x: def.x, y: def.y },
             isDead: false, frightened: false, respawnTimer: 0, homeX: def.x, homeY: def.y
         }));
+    }
+
+    // Checkpoint saved at the start of every stage so the game can continue after closing it
+    saveProgress() {
+        this.saveSetting('pacmanProgress', JSON.stringify({
+            difficulty: this.difficultyKey,
+            stage: this.currentLevel,
+            lap: this.lapCount,
+            score: this.score,
+            lives: this.lives,
+            multiplier: this.difficultyMultiplier,
+            nextExtraLife: this.nextExtraLifeScore
+        }));
+    }
+
+    clearProgress() {
+        try {
+            localStorage.removeItem('pacmanProgress');
+        } catch (e) {
+            console.warn('localStorage not available');
+        }
+    }
+
+    restoreProgress() {
+        try {
+            const saved = JSON.parse(this.loadSetting('pacmanProgress', 'null'));
+            if (!saved || saved.difficulty !== this.difficultyKey) return;
+            if (!(saved.stage >= 1 && saved.stage <= this.maxLevel)) return;
+            this.currentLevel = saved.stage;
+            this.lapCount = Math.max(1, saved.lap | 0);
+            this.score = Math.max(0, saved.score | 0);
+            this.lives = Math.min(Math.max(1, saved.lives | 0), this.difficulty.lives + 5);
+            this.difficultyMultiplier = Math.min(Math.max(1, saved.multiplier || 1), 2.5);
+            this.nextExtraLifeScore = saved.nextExtraLife || EXTRA_LIFE_EVERY;
+        } catch (e) {
+            console.warn('Could not restore saved progress');
+        }
     }
 
     loadSetting(key, fallback) {
@@ -1175,6 +1214,7 @@ class PacmanGame {
 
     endGame() {
         this.gameOver = true;
+        this.clearProgress();
         const newRecord = this.saveHighScore();
         this.statusElement.textContent = newRecord ? `GAME OVER - NEW HIGH SCORE ${this.score}! Press R to restart` : 'GAME OVER! Press R to restart';
         this.statusElement.className = 'game-status lose';
@@ -2872,6 +2912,7 @@ class PacmanGame {
         this.flashStatus(label, 'game-status stage-indicator', 2000);
 
         this.levelJustCompleted = false;
+        this.saveProgress();
 
         // NOTE: Score accumulates - NOT reset!
     }

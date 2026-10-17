@@ -104,7 +104,7 @@ Touching a non-frightened ghost (without a shield) starts a 1.5s death animation
 All sounds are synthesized in `sounds.js`. Music is an original Am-F-C-G chiptune loop scheduled ~250ms ahead on the audio clock (`scheduleMusic`), with a tenser pattern while ghosts are frightened. Music stops during READY!, death, pause and stage transitions. `musicEnabled` persists in localStorage `pacmanMusic`.
 
 ## 💾 Persistence (localStorage)
-`pacmanHighScore`, `pacmanDifficulty`, `pacmanViewMode`, `pacmanMusic`. Always wrap access in try/catch (helpers: `loadSetting` / `saveSetting`).
+`pacmanHighScore`, `pacmanDifficulty`, `pacmanViewMode`, `pacmanMusic`, `pacmanProgress` (checkpoint saved at each stage start: stage, lap, score, lives; restored on launch, cleared on game over or R). Always wrap access in try/catch (helpers: `loadSetting` / `saveSetting`).
 
 ## 🖥️ Desktop Packaging
 - Electron window is resizable (default 1000x820, min 800x700); F11 handled in `main.js`, F via the Fullscreen API in the page.
