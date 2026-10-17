@@ -1,9 +1,9 @@
 {
-  "name": "pacman-z",
-  "version": "1.0.0",
-  "description": "PACMAN3D-Z - Modern Pacman game with power-ups and shooting mechanics",
+  "name": "pacman3d-z",
+  "version": "1.1.0",
+  "description": "PACMAN3D-Z - Modern Pacman game with real 3D view, power-ups and shooting mechanics",
   "main": "main.js",
-  "author": "Your Name",
+  "author": "shahzaibcloudy7",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
@@ -17,10 +17,11 @@
     "electron",
     "desktop"
   ],
-  "dependencies": {},
   "devDependencies": {
     "electron": "^39.2.7",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "rcedit": "^3.1.0",
+    "three": "^0.159.0"
   },
   "build": {
     "appId": "com.pacmanz.game",
@@ -29,25 +30,29 @@
       "output": "dist"
     },
     "files": [
-      "browser/index.html",
-      "browser/pacman.js",
-      "browser/sounds.js",
-      "browser/effects.js",
-      "browser/style.css",
+      "browser/**/*",
+      "!browser/**/*.png",
+      "!browser/server.js",
+      "!browser/README.md",
       "main.js"
     ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
-      "signAndEditExecutable": false
+      "signAndEditExecutable": false,
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -60,6 +65,8 @@
       "artifactName": "PACMAN3D-Z-Portable.exe"
     },
     "compression": "maximum",
-    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "copyright": "Copyright (c) 2026 shahzaibcloudy7",
+    "afterPack": "build/afterPack.js"
   }
 }

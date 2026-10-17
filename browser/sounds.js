@@ -4,6 +4,7 @@ class SoundManager {
         this.isMuted = false;
         this.volume = 0.3;
         this.initAudioContext();
+        this.initMusic();
     }
     
     initAudioContext() {
@@ -314,5 +315,176 @@ class SoundManager {
     // Wall collision sound
     playWallHitSound() {
         this.playTone(200, 0.05, 'square', 0.15);
+    }
+
+    // "READY!" jingle played at the start of a game (~1.9s)
+    playReadyJingle() {
+        const notes = [
+            [523, 0.12], [659, 0.12], [784, 0.12], [1047, 0.24],
+            [988, 0.12], [784, 0.12], [659, 0.24],
+            [587, 0.12], [698, 0.12], [880, 0.12], [784, 0.24],
+            [1047, 0.36]
+        ];
+        this.playSequence(notes.map(([frequency, duration]) => ({ frequency, duration, type: 'square', volume: 0.18 })));
+    }
+
+    // Pac-Man death - a falling warble
+    playDeathSound() {
+        const tones = [];
+        for (let i = 0; i < 12; i++) {
+            tones.push({ frequency: 880 - i * 55, duration: 0.07, type: 'square', volume: 0.2 });
+            tones.push({ frequency: 760 - i * 55, duration: 0.05, type: 'square', volume: 0.2 });
+        }
+        tones.push({ frequency: 130, duration: 0.12, type: 'square', volume: 0.25 });
+        tones.push({ frequency: 98, duration: 0.25, type: 'square', volume: 0.25 });
+        this.playSequence(tones);
+    }
+
+    // Eating a frightened ghost - fast rising sweep
+    playEatGhostSound() {
+        if (!this.audioContext || this.isMuted) return;
+        try {
+            this.resumeAudioContext();
+            const t = this.audioContext.currentTime;
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            oscillator.type = 'square';
+            oscillator.frequency.setValueAtTime(200, t);
+            oscillator.frequency.exponentialRampToValueAtTime(1400, t + 0.25);
+            gainNode.gain.setValueAtTime(0.2, t);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            oscillator.start(t);
+            oscillator.stop(t + 0.3);
+        } catch (err) {
+            console.warn('Error playing sound:', err);
+        }
+    }
+
+    // Bonus fruit collected
+    playFruitSound() {
+        this.playSequence([
+            { frequency: 880, duration: 0.08, type: 'triangle', volume: 0.3 },
+            { frequency: 1320, duration: 0.08, type: 'triangle', volume: 0.3 },
+            { frequency: 1760, duration: 0.15, type: 'triangle', volume: 0.3 }
+        ]);
+    }
+
+    // Extra life awarded
+    playExtraLifeSound() {
+        this.playSequence([523, 659, 784, 1047, 784, 1047].map(frequency => ({ frequency, duration: 0.09, type: 'square', volume: 0.2 })));
+    }
+
+    // ---- Background music: an original chiptune loop (Am - F - C - G) ----
+    // Notes are scheduled slightly ahead on the audio clock so timing stays tight
+    initMusic() {
+        this.musicPlaying = false;
+        this.musicMode = 'normal';
+        this.musicStep = 0;
+        this.nextNoteTime = 0;
+        this.musicTimer = null;
+        this.musicGain = null;
+        try {
+            this.musicEnabled = localStorage.getItem('pacmanMusic') !== 'false';
+        } catch (e) {
+            this.musicEnabled = true;
+        }
+    }
+
+    startMusic() {
+        if (!this.audioContext || this.musicPlaying) return;
+        if (!this.musicGain) {
+            this.musicGain = this.audioContext.createGain();
+            this.musicGain.gain.value = 0.1;
+            this.musicGain.connect(this.audioContext.destination);
+        }
+        this.musicPlaying = true;
+        this.musicStep = 0;
+        this.nextNoteTime = this.audioContext.currentTime + 0.05;
+        this.musicTimer = setInterval(() => this.scheduleMusic(), 50);
+    }
+
+    stopMusic() {
+        this.musicPlaying = false;
+        clearInterval(this.musicTimer);
+        this.musicTimer = null;
+    }
+
+    // 'normal' or 'frightened' (faster, tenser pattern while ghosts are blue)
+    setMusicMode(mode) {
+        this.musicMode = mode;
+    }
+
+    toggleMusic() {
+        this.musicEnabled = !this.musicEnabled;
+        try {
+            localStorage.setItem('pacmanMusic', this.musicEnabled);
+        } catch (e) {
+            console.warn('localStorage not available');
+        }
+        return this.musicEnabled;
+    }
+
+    scheduleMusic() {
+        if (!this.musicPlaying || !this.audioContext) return;
+        const now = this.audioContext.currentTime;
+        // Skip ahead after the tab was throttled instead of playing a burst of late notes
+        if (this.nextNoteTime < now - 0.1) this.nextNoteTime = now + 0.05;
+
+        const frightened = this.musicMode === 'frightened';
+        const stepTime = frightened ? 0.09 : 0.125;
+        while (this.nextNoteTime < now + 0.25) {
+            if (this.musicEnabled && !this.isMuted) {
+                this.playMusicStep(this.musicStep, this.nextNoteTime, stepTime, frightened);
+            }
+            this.nextNoteTime += stepTime;
+            this.musicStep = (this.musicStep + 1) % 64;
+        }
+    }
+
+    playMusicStep(step, time, stepTime, frightened) {
+        const chords = [
+            [110.0, 220.0, 261.63, 329.63],  // Am
+            [87.31, 174.61, 220.0, 261.63],  // F
+            [130.81, 261.63, 329.63, 392.0], // C
+            [98.0, 196.0, 246.94, 293.66]    // G
+        ];
+        const chord = chords[Math.floor(step / 16)];
+        const s = step % 16;
+
+        if (frightened) {
+            // Nervous two-note pulse over a throbbing bass
+            this.playMusicNote(s % 2 === 0 ? 659.25 : 698.46, time, stepTime * 0.8, 'square', 0.35);
+            if (s % 4 === 0) this.playMusicNote(chord[0], time, stepTime * 2, 'triangle', 1);
+            return;
+        }
+
+        // Bass: root on the beat, octave on the off-beat
+        if (s % 4 === 0) this.playMusicNote(chord[0], time, stepTime * 1.8, 'triangle', 1);
+        if (s % 4 === 2) this.playMusicNote(chord[0] * 2, time, stepTime * 0.9, 'triangle', 0.6);
+
+        // Arpeggio on eighth notes
+        if (s % 2 === 0) {
+            const pattern = [1, 2, 3, 2, 1, 2, 3, 2];
+            this.playMusicNote(chord[pattern[s / 2]] * 2, time, stepTime * 0.9, 'square', 0.25);
+        }
+    }
+
+    playMusicNote(frequency, time, duration, type, volume) {
+        try {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, time);
+            gainNode.gain.setValueAtTime(volume, time);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration);
+            oscillator.connect(gainNode);
+            gainNode.connect(this.musicGain);
+            oscillator.start(time);
+            oscillator.stop(time + duration);
+        } catch (err) {
+            console.warn('Error playing music:', err);
+        }
     }
 }

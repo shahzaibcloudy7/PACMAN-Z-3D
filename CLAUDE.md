@@ -1,294 +1,120 @@
-# PACMAN-Z Game
+# PACMAN3D-Z Game
 
-A modern, feature-rich Pacman game built with vanilla JavaScript, featuring power-ups, multiple ghost AI behaviors, and shooting mechanics.
-
-## 🎮 Game Overview
-
-This is a browser-based Pacman game with enhanced gameplay mechanics including collectible mushroom power-ups that grant special abilities like homing missiles, shields, speed boosts, and multi-directional shooting.
-
-## 🚀 Features
-
-### Core Gameplay
-- **Classic Pacman mechanics** with smooth 60 FPS gameplay
-- **5 unique ghosts** with different AI behaviors and point values
-- **Dot collection** system for scoring
-- **Wrap-around edges** for seamless movement
-- **Collision detection** with precise hitboxes
-- **Game timer** tracking elapsed play time
-- **Score tracking** with real-time updates
-
-### Power-Up System
-The game features 5 different mushroom power-ups that respawn every 15 seconds:
-
-1. **Red Mushroom - Homing Missiles** (12s duration)
-   - Bullets automatically track and chase the nearest ghost
-   - Smart targeting system that retargets if ghost is destroyed
-
-2. **Blue Mushroom - Shield** (8s duration)
-   - Grants complete invincibility to ghost collisions
-   - Visual pulsing shield effect around Pacman
-
-3. **Green Mushroom - Speed Boost** (10s duration)
-   - Increases movement speed by 1.5x
-   - Allows for faster dot collection and ghost evasion
-
-4. **Purple Mushroom - Multi-Shot** (15s duration)
-   - Fires bullets in all 4 directions simultaneously
-   - Excellent for crowd control
-
-5. **Golden Mushroom - Super Bullet** (12s duration)
-   - Large piercing bullets that can hit up to 3 ghosts
-   - Passes through ghosts without being destroyed
-
-### Ghost AI Behaviors
-Each ghost has unique movement patterns:
-- **Circle Ghost (Red)** - 70% chance to continue current direction
-- **Square Ghost (Pink)** - Persistent in one direction
-- **Triangle Ghost (Cyan)** - 60% chance to randomly change direction
-- **Diamond Ghost (Orange)** - Alternates between horizontal and vertical movement
-- **Star Ghost (Green)** - Actively chases Pacman (250 points!)
-
-### Visual Features
-- **Arcade-style graphics** with classic Pacman aesthetics
-- **Animated Pacman mouth** with smooth chomping animation
-- **Ghost eye movement** that follows their direction
-- **Dead ghost eyes** that look toward respawn point
-- **Power-up visual indicators** with progress bars
-- **Shield effect** with pulsing animation
-- **Detailed missile graphics** with different designs per power type
-
-### Audio System
-- Mute/Unmute toggle (M key or button)
-- Mushroom collection sounds (unique per type)
-- Ghost death sounds (unique per ghost type)
-- Bullet hit sounds (varies by bullet type)
-- Dot eating sound
-- Win/lose sounds
-
-## 🎯 Controls
-
-| Key | Action |
-|-----|--------|
-| **W / ↑** | Move Up |
-| **S / ↓** | Move Down |
-| **A / ←** | Move Left |
-| **D / →** | Move Right |
-| **Space** | Shoot (when powered) |
-| **P** | Pause/Resume |
-| **R** | Restart Game |
-| **M** | Mute/Unmute |
+A modern Pacman game built with vanilla JavaScript: arcade-style ghost AI, power pellets, lives, bonus fruit, mushroom power-ups with shooting, 14 looping stages, and three views (flat 2D, tilted 2D, real 3D with Three.js). Ships as a browser game and a Windows desktop app (Electron).
 
 ## 📁 Project Structure
 
 ```
-PACMAN-Z/
-├── index.html          # Main HTML file
-├── pacman.js           # Game logic and mechanics
-├── sounds.js           # Audio management system
-├── game.js             # Terminal version (Node.js)
-├── server.js           # Simple HTTP server
-├── style.css           # Game styling
-├── test-game.js        # Puppeteer automated tests
-├── package.json        # NPM dependencies
-└── CLAUDE.md          # This file
+PACMAN3D-Z/
+├── browser/                # The game - shared by the browser and desktop versions
+│   ├── index.html          # Entry point (loads vendor/three.min.js, sounds, effects, renderer3d, pacman)
+│   ├── pacman.js           # PacmanGame class: logic, AI, 2D rendering, input, layout
+│   ├── renderer3d.js       # Renderer3D class: real 3D view (reads game state, no game logic)
+│   ├── sounds.js           # SoundManager: synthesized SFX + music loop (Web Audio API)
+│   ├── effects.js          # EffectsManager: particles, text popups, shake, flash
+│   ├── style.css
+│   ├── vendor/three.min.js # Three.js r159 UMD build (last version with build/three.min.js)
+│   └── server.js           # Static server on port 3000
+├── desktop/README.md       # Desktop docs; the .exe files are published on GitHub Releases, not committed
+├── build/icon.ico          # App icon
+├── build/afterPack.js      # electron-builder hook: rcedit stamps name/version/icon onto the exe
+├── main.js                 # Electron main process
+├── game.js                 # Terminal version (Node.js)
+└── package.json            # Scripts + electron-builder config
 ```
 
-## 🛠️ Technical Details
-
-### Game Constants
-- **Canvas Size**: 672x416 pixels (21x13 grid)
-- **Cell Size**: 32x32 pixels
-- **Frame Rate**: 60 FPS (~16.67ms per frame)
-- **Pacman Speed**: 5 tiles/second (0.083 tiles/frame)
-- **Ghost Speeds**: Range from 0.029 to 0.042 tiles/frame
-
-### Starting Positions
-- **Pacman**: (1, 1) - Top left area
-- **Ghosts**: Clustered in center-top area (rows 5-6, columns 8-12)
-- **Ghost Respawn Point**: (10, 6)
-
-### Power-Up Mechanics
-- **Mushroom Count**: 8 mushrooms placed randomly in open spaces
-- **Respawn Time**: 15 seconds after collection
-- **Score Value**: 50 points per mushroom
-- **Power Duration**: 8-15 seconds depending on type
-- **Timer Display**: Shows remaining time with visual progress bar
-
-### Bullet System
-- **Homing Bullets**: Track nearest ghost with smart retargeting
-- **Multi-Shot**: Fires in all 4 cardinal directions
-- **Super Bullets**: Pierce up to 3 ghosts before disappearing
-- **Wall Collision**: Bullets destroyed on wall impact
-- **Speed**: 0.3-0.45 tiles/frame depending on type
-
-## 🧪 Testing
-
-The project includes comprehensive Puppeteer automated testing:
+## 🚀 Running
 
 ```bash
-npm install
-node test-game.js
+cd browser && node server.js     # http://localhost:3000
+npm start                        # desktop app (Electron) in dev mode
+npm run build                    # dist/PACMAN3D-Z-<version>-win-x64.exe + dist/PACMAN3D-Z-Portable.exe
 ```
 
-### Test Coverage
-- Game loading and initialization
-- Movement in all 4 directions
-- Timer functionality
-- Score tracking
-- Mushroom power-up collection
-- Shooting mechanics
-- Pause/Resume
-- Mute/Unmute
-- Screenshot capture for visual verification
+## 🎯 Controls
 
-## 🚀 Running the Game
+| Key | Controller | Action |
+|-----|------------|--------|
+| W A S D / Arrows | D-pad / left stick | Move |
+| Space | A / RT | Shoot (when powered) |
+| P | Start | Pause / Resume |
+| R | Start / Back after game over | Restart |
+| V | Y | View: flat → tilted → 3D |
+| F / F11 | | Fullscreen |
+| M | | Mute all |
+| N | X | Music on/off |
 
-### Browser Version (Recommended)
-1. Start the HTTP server:
-   ```bash
-   # Using http-server (if installed)
-   npx http-server -p 3001 -c-1
+Difficulty dropdown (Easy / Normal / Hard) restarts the game.
 
-   # Or using Python
-   python -m http.server 3001
-   ```
+## 🛠️ Architecture
 
-2. Open browser to: `http://localhost:3001`
+### Game loop (`gameLoop` / `update` in pacman.js)
+- `requestAnimationFrame` drives drawing; logic runs in **fixed 1/60s steps** via an accumulator (capped at 250ms per frame). All speeds and timers are "per step", so game speed is identical regardless of frame rate. Don't convert speeds to per-frame values.
+- `update()` order: effects → timer → death animation (`dying`) or READY pause (`readyTimer`) short-circuit → ghost mode clock → Pac-Man → ghosts → bullets → power timers → fruit → collisions.
+- Drawing uses logical 672x416 coordinates; `fitToWindow()` sizes the canvas CSS and sets `renderScale` (CSS scale x devicePixelRatio) for a sharp backing store. Use `viewWidth/viewHeight`, not `canvas.width/height`, in drawing code.
 
-### Terminal Version
-```bash
-node game.js
-```
-- Uses keyboard input for movement
-- Text-based rendering
-- Simplified mechanics
+### Views
+- `viewMode` is `'flat' | 'tilt' | '3d'` (saved in localStorage `pacmanViewMode`). Tilt is a CSS transform on the 2D canvas.
+- In 3D, `Renderer3D.render(game)` draws to `#gameCanvas3d`; the 2D canvas is cleared and becomes a transparent overlay for particles/text, with `effectsManager.projector` mapping maze pixels through the 3D camera. Overlay text (READY!, PAUSED, GAME OVER) comes from `drawOverlayText()`.
+- Renderer3D is created lazily; if WebGL/Three.js is unavailable, 3D is skipped.
 
-## 💾 Save Data
+### Ghost AI (`chooseNewTargetForGhost`)
+- At each tile a ghost never reverses (unless at a dead end) and picks the exit closest (Euclidean) to its target tile; ties prefer up, left, down, right.
+- `GHOST_MODE_SCHEDULE` alternates scatter/chase (7/20/7/20/5s then chase forever); mode switches reverse all ghosts. The clock pauses while frightened.
+- Chase targets (`getChaseTarget`): circle = Pac-Man; square = 4 tiles ahead; triangle = red ghost mirrored around 2 tiles ahead; diamond = Pac-Man if > 8 tiles away else its scatter corner. Star never scatters and uses a BFS distance field (`getPacmanDistanceField`, cached per Pac-Man tile + `mazeVersion`).
+- Frightened ghosts move at 55% speed and choose randomly. Ghost speed = `baseSpeed x difficulty.ghostSpeed x difficultyMultiplier(lap)`, capped at 0.12 (`getGhostSpeed`).
+- Dead ghosts (eyes) fly straight to `ghostHome`, wait `respawnTimer`, then respawn at their home tile.
 
-The game currently does not persist scores or progress. Each session is independent.
+### Stage setup (`loadStage`)
+Copies `MAZE_LAYOUTS[n]`, bumps `mazeVersion`, converts the dot nearest each corner into a power pellet `'o'`, resets positions via `resetPositions()` (spawns use `findNearestOpen` because fixed spawn tiles land in walls on some layouts), clears powers, places 8 mushrooms, resets fruit counters. A stage is complete when no `'.'` or `'o'` remains (`countDots`).
 
-## 🎨 Customization
+### Maze data rules
+- Every row must be exactly 21 characters and every open tile must be reachable from (1,1); stages 1-7 previously had short rows and sealed areas that made them impossible to finish. Check new layouts for both.
+- `'#'` wall, `'.'` dot, `'o'` power pellet (added at load), `' '` eaten.
 
-### Adjusting Difficulty
-In `pacman.js`, modify:
-- `this.pacmanSpeed` (line 16) - Pacman movement speed
-- Ghost `speed` values (lines 29-33) - Individual ghost speeds
-- `mushroom.duration` (lines 482-486) - Power-up durations
+## 🎮 Game Rules
 
-### Adding New Power-Ups
-1. Add new mushroom type to `mushroomTypes` array (line 481)
-2. Add power handling in `checkMushroomCollection()` (line 521)
-3. Add shooting behavior in `shoot()` method (line 588)
-4. Add visual rendering in `render()` method
+### Difficulty (`DIFFICULTY_SETTINGS`)
+| Level | Pac-Man speed | Ghost speed | Lives | Fright time |
+|-------|---------------|-------------|-------|-------------|
+| Easy | 1.0x | 1.0x | 5 | 10s |
+| Normal | 1.15x | 1.35x | 3 | 7s |
+| Hard | 1.25x | 1.75x | 2 | 4s |
 
-### Changing Ghost Behavior
-Modify `chooseNewTargetForGhost()` (line 323) to adjust AI logic for each ghost shape.
+Base Pac-Man speed is 5 tiles/s; base ghost speeds 0.029-0.042 tiles/step. Each completed 14-stage lap multiplies ghost speed by 1.12 (max 2.5x) and shortens fright time.
 
-## 🐛 Known Issues & Fixes Applied
+### Lives
+Touching a non-frightened ghost (without a shield) starts a 1.5s death animation, then a READY! pause with positions reset (dots stay). No lives left → game over, high score saved. Extra life every 10,000 points (`addScore` - always use it to change the score).
 
-### Fixed Issues
-1. ✅ **Pacman stuck on spawn** - Changed starting position from (10,10) to (1,1)
-2. ✅ **Edge wrapping collision** - Added proper coordinate wrapping for wall checks
-3. ✅ **Power timer not visible** - Already implemented with progress bar
-4. ✅ **Mushrooms don't respawn** - Added 15-second respawn timer
+### Power-ups
+- **Power pellet:** 50 pts, ghosts frightened; eating them scores 200/400/800/1600.
+- **Mushrooms** (8 per stage, respawn 15s after collection, 50 pts): Red = homing missiles (22s), Blue = shield (18s), Green = speed boost 1.5x (20s), Purple = multi-shot (25s), Golden = piercing super bullet (22s).
+- **Fruit:** spawns near (10,9) at 30% and 70% of dots eaten, lasts 9.5s. Cherry 100 → Strawberry 300 → Orange 500 → Apple 700 → Melon 1000 → Galaxian 2000 → Bell 3000 → Key 5000 by overall stage.
 
-### Current Limitations
-- No high score persistence
-- No difficulty levels
-- No level progression
-- Single maze layout
-
-## 📊 Scoring System
-
+### Scoring
 | Item | Points |
 |------|--------|
 | Dot | 10 |
-| Mushroom | 50 |
-| Circle Ghost | 100 |
-| Triangle Ghost | 120 |
-| Square Ghost | 150 |
-| Diamond Ghost | 180 |
-| Star Ghost | 250 |
+| Power pellet / Mushroom | 50 |
+| Eaten frightened ghost | 200 / 400 / 800 / 1600 |
+| Shot ghost | Circle 100, Triangle 120, Square 150, Diamond 180, Star 250 |
+| Fruit | 100 - 5000 |
 
-## 🎓 Learning Resources
+## 🔊 Audio
+All sounds are synthesized in `sounds.js`. Music is an original Am-F-C-G chiptune loop scheduled ~250ms ahead on the audio clock (`scheduleMusic`), with a tenser pattern while ghosts are frightened. Music stops during READY!, death, pause and stage transitions. `musicEnabled` persists in localStorage `pacmanMusic`.
 
-This project demonstrates:
-- **Canvas API** for 2D rendering
-- **Game loop** implementation with setTimeout
-- **Collision detection** algorithms
-- **Pathfinding** for homing missiles
-- **State management** for game objects
-- **Event handling** for keyboard input
-- **Audio API** integration
-- **Puppeteer** browser automation for testing
+## 💾 Persistence (localStorage)
+`pacmanHighScore`, `pacmanDifficulty`, `pacmanViewMode`, `pacmanMusic`. Always wrap access in try/catch (helpers: `loadSetting` / `saveSetting`).
 
-## 📝 Development Notes
+## 🖥️ Desktop Packaging
+- Electron window is resizable (default 1000x820, min 800x700); F11 handled in `main.js`, F via the Fullscreen API in the page.
+- `signAndEditExecutable` must stay `false`: electron-builder's winCodeSign extraction needs symlink privileges this machine doesn't have. `build/afterPack.js` uses `rcedit` instead to set ProductName/FileDescription/version/icon.
+- `files` includes `browser/**/*` minus `server.js`, `README.md` and `*.png`.
+- Releases: upload `dist/*.exe` to GitHub Releases on the `public` remote (`shahzaibcloudy7/PACMAN3D-Z`); `desktop/*.exe` is gitignored.
 
-### Performance Considerations
-- 60 FPS game loop using setTimeout instead of requestAnimationFrame for better control
-- Efficient collision detection with distance calculations
-- Minimal DOM manipulation for better performance
-- Canvas clearing and redrawing each frame
-
-### Code Organization
-- Object-oriented design with PacmanGame class
-- Separate audio manager for sound effects
-- Modular methods for each game mechanic
-- Clear separation of update and render logic
-
-## 🔮 Future Enhancements
-
-Potential features for future development:
-- [ ] Multiple maze layouts
-- [ ] High score persistence (localStorage)
-- [ ] Difficulty levels
-- [ ] Level progression system
-- [ ] More ghost types
-- [ ] Additional power-up types
-- [ ] Multiplayer support
-- [ ] Mobile touch controls
-- [ ] Game statistics tracking
-- [ ] Achievement system
-
-## 👨‍💻 Development Timeline
-
-### Initial Implementation
-- Core Pacman movement and maze rendering
-- Ghost AI with unique behaviors
-- Collision detection system
-- Scoring mechanism
-
-### Power-Up System
-- Mushroom placement algorithm
-- 5 different power types
-- Shooting mechanics with various bullet types
-- Power status display with timer
-
-### Enhancements
-- Speed reduction for better gameplay (50% slower)
-- Game timer added next to score
-- Mushroom respawning (15 seconds)
-- Comprehensive Puppeteer testing
-
-### Bug Fixes
-- Starting position corrected
-- Edge wrapping collision fixed
-- Timer reset on restart
-- Power display improvements
-
-## 📄 License
-
-This project was created as a learning exercise and demonstration project. Feel free to use, modify, and distribute as needed.
-
-## 🙏 Acknowledgments
-
-- Classic Pacman game for inspiration
-- Modern web technologies for implementation
-- Puppeteer for automated testing capabilities
+## 🧪 Testing
+No automated test suite is checked in. Verify changes by running `browser/server.js` and driving `window.game` from the browser console or Playwright (e.g. `game.activateFrightened()`, `game.spawnFruit()`, `game.setViewMode('3d')`). Note that a backgrounded automated browser window can throttle `requestAnimationFrame` to ~1 fps, which looks like a slow game but isn't.
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: 2025
-**Built with**: Vanilla JavaScript, HTML5 Canvas, Web Audio API
-**Tested with**: Puppeteer automated browser testing
+**Version**: 1.1.0 · **Built with**: Vanilla JavaScript, HTML5 Canvas, Three.js, Web Audio API, Electron

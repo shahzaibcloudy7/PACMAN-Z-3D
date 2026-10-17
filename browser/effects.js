@@ -1,4 +1,4 @@
-// Visual effects system for Pacman-Z
+// Visual effects system for PACMAN3D-Z
 
 class EffectsManager {
     constructor(canvas, ctx) {
@@ -7,6 +7,10 @@ class EffectsManager {
         this.particles = [];
         this.screenShake = { active: false, intensity: 0, duration: 0, elapsed: 0 };
         this.flashEffect = { active: false, color: null, opacity: 0, duration: 0, elapsed: 0 };
+        // Optional (x, y) => {x, y} mapping from maze pixels to screen, set by the 3D view
+        this.projector = null;
+        this.width = canvas.width;
+        this.height = canvas.height;
     }
 
     // Particle class
@@ -168,13 +172,14 @@ class EffectsManager {
 
         // Render particles
         this.particles.forEach(particle => {
+            const pos = this.projector ? this.projector(particle.x, particle.y) : particle;
             if (particle.type === 'text') {
                 this.ctx.save();
                 this.ctx.globalAlpha = particle.opacity;
                 this.ctx.fillStyle = particle.color;
                 this.ctx.font = `bold ${particle.size}px 'Courier New'`;
                 this.ctx.textAlign = 'center';
-                this.ctx.fillText(particle.text, particle.x, particle.y);
+                this.ctx.fillText(particle.text, pos.x, pos.y);
                 this.ctx.restore();
             } else {
                 this.ctx.save();
@@ -182,10 +187,10 @@ class EffectsManager {
                 this.ctx.fillStyle = particle.color;
 
                 if (particle.shape === 'star') {
-                    this.drawStar(particle.x, particle.y, particle.size);
+                    this.drawStar(pos.x, pos.y, particle.size);
                 } else {
                     this.ctx.beginPath();
-                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.arc(pos.x, pos.y, particle.size, 0, Math.PI * 2);
                     this.ctx.fill();
                 }
 
@@ -203,7 +208,7 @@ class EffectsManager {
             this.ctx.save();
             this.ctx.fillStyle = this.flashEffect.color;
             this.ctx.globalAlpha = opacity;
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillRect(0, 0, this.width, this.height);
             this.ctx.restore();
         }
     }

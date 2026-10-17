@@ -1,138 +1,81 @@
-# PACMAN-Z Browser Version
+# PACMAN3D-Z Browser Version
 
-This folder contains the browser-based version of PACMAN-Z.
+This folder contains the game itself. The desktop app packages these same files.
 
 ## Files
 
-- **index.html** - Main HTML file (entry point)
-- **pacman.js** - Game logic and mechanics (1943 lines)
-- **sounds.js** - Audio management (Web Audio API)
-- **effects.js** - Visual effects and particles
-- **style.css** - Game styling and animations
+- **index.html** - Entry point
+- **pacman.js** - Game logic, ghost AI and 2D rendering
+- **renderer3d.js** - Real 3D view (Three.js / WebGL)
+- **sounds.js** - Sound effects and background music (Web Audio API)
+- **effects.js** - Particles, screen shake and flashes
+- **style.css** - Styling and layout
+- **vendor/three.min.js** - Three.js r159, bundled so the game works offline
 - **server.js** - Simple HTTP server for local hosting
 
 ## How to Run
 
-### Method 1: Using Node.js HTTP Server (Recommended)
+### Method 1: Node.js server (Recommended)
 
 ```bash
-# Make sure you're in the browser folder
 cd browser
-
-# Start the server
 node server.js
 ```
 
-Then open your browser to: **http://localhost:3001**
+Then open **http://localhost:3000**
 
-### Method 2: Using npx http-server
+### Method 2: npx http-server
 
 ```bash
 cd browser
 npx http-server -p 3001 -c-1
 ```
 
-Then open your browser to: **http://localhost:3001**
+Then open **http://localhost:3001**
 
-### Method 3: Using Python
+### Method 3: Python
 
 ```bash
 cd browser
 python -m http.server 3001
 ```
 
-Then open your browser to: **http://localhost:3001**
-
-### Method 4: Direct File Open (Limited)
-
-You can try opening `index.html` directly in your browser, but some features may not work due to CORS restrictions.
+Then open **http://localhost:3001**
 
 ## Requirements
 
-- **Node.js** (for Method 1 & 2) OR **Python** (for Method 3)
-- **Modern web browser** (Chrome, Firefox, Edge, Safari)
-- **Supported browsers:**
-  - Chrome 90+
-  - Firefox 88+
-  - Edge 90+
-  - Safari 14+
+- A modern browser (Chrome, Edge, Firefox, Safari) with Canvas, Web Audio and localStorage
+- WebGL for the 3D view (the game falls back to the 2D views without it)
 
 ## Features
 
-- 7 unique maze stages with progressive difficulty
-- 5 different mushroom power-ups:
-  - Red: Homing Missiles (12s)
-  - Blue: Shield (18s)
-  - Green: Speed Boost (20s)
-  - Purple: Multi-Shot (25s)
-  - Golden: Super Bullet (22s)
-- 5 unique ghosts with different AI behaviors
-- Real-time score and timer tracking
-- High score persistence (localStorage)
-- Keyboard controls:
-  - **WASD / Arrow Keys** - Move Pacman
-  - **Space** - Shoot (when powered)
-  - **P** - Pause/Resume
-  - **R** - Restart
-  - **M** - Mute/Unmute
+- Flat, tilted and full 3D views (press **V**)
+- Arcade-style ghost AI with scatter/chase waves
+- Power pellets, frightened ghosts and score chains
+- Lives, death animation, extra life every 10,000 points
+- Bonus fruit, Easy / Normal / Hard difficulty
+- 14 stages that loop with faster ghosts
+- Background music (**N**), mute (**M**), fullscreen (**F**)
+- Gamepad support
+- 5 mushroom power-ups and shooting
 
-## Technical Details
-
-- **Canvas Size:** 672x416 pixels (21x13 grid)
-- **Frame Rate:** 60 FPS
-- **Cell Size:** 32x32 pixels
-- **No external dependencies** - Pure vanilla JavaScript
-- **No build process required** - Works as-is
-
-## Game Mechanics
-
-### Scoring
-- Dot: 10 points
-- Mushroom: 50 points
-- Circle Ghost: 100 points
-- Triangle Ghost: 120 points
-- Square Ghost: 150 points
-- Diamond Ghost: 180 points
-- Star Ghost: 250 points
-
-### Stage Progression
-- Complete all dots to advance to next stage
-- Score accumulates across all 7 stages
-- High score saved to localStorage
-- Restart (R key) always starts from Stage 1
+See the [main README](../README.md) for the full feature list, controls and scoring.
 
 ## Customization
 
-You can modify the game by editing:
-- `pacman.js` - Game logic, speeds, difficulty
-- `style.css` - Colors, layout, animations
-- `sounds.js` - Audio tones and effects
-
-## Browser Compatibility
-
-Works in all modern browsers that support:
-- HTML5 Canvas API
-- Web Audio API
-- ECMAScript 6 (ES6)
-- localStorage
+- `pacman.js` - `DIFFICULTY_SETTINGS`, `GHOST_DEFS`, `GHOST_MODE_SCHEDULE`, `FRUITS` and `MAZE_LAYOUTS` at the top of the file
+- `renderer3d.js` - 3D camera, lights and models
+- `sounds.js` - sound effects and the music loop
+- `style.css` - colors and layout
 
 ## Troubleshooting
 
-**Sounds not playing:**
-- Check browser audio permissions
-- Unmute with M key
-- Check system volume
+**No sound at first:** browsers block audio until you press a key or click - it starts on the first input.
 
-**Game running slow:**
-- Close other browser tabs
-- Try a different browser
-- Check browser hardware acceleration settings
+**3D view missing:** the browser has WebGL disabled; enable hardware acceleration in its settings.
 
-**Controls not working:**
-- Make sure the game canvas is focused (click on it)
-- Check for conflicting browser extensions
+**Arrow keys change the difficulty dropdown:** click the game area first (the dropdown releases focus after a change).
 
 ---
 
-**Game Version:** 1.0.0
-**Technology:** HTML5 Canvas, Web Audio API, Vanilla JavaScript
+**Game Version:** 1.1.0

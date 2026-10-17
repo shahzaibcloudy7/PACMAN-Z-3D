@@ -1,89 +1,60 @@
 # PACMAN3D-Z Desktop Application
 
-This folder contains the Windows desktop executables for PACMAN3D-Z.
+The Windows desktop version of PACMAN3D-Z.
 
-## Files
+## Download
 
-### PACMAN3D-Z-1.0.0-win-x64.exe
-- **Type:** Installer (NSIS)
-- **Size:** ~92 MB
-- **Installation:** Double-click to install
-- **Features:**
-  - Creates desktop shortcut
-  - Creates start menu shortcut
-  - Allows custom installation directory
-  - Includes uninstaller
+The executables are published on the **[Releases page](https://github.com/shahzaibcloudy7/PACMAN3D-Z/releases/latest)** (they are too large to keep in the repository).
+
+### PACMAN3D-Z-1.1.0-win-x64.exe
+- **Type:** Installer (NSIS), ~92 MB
+- Creates desktop and Start menu shortcuts
+- Lets you choose the installation folder
+- Includes an uninstaller
 
 ### PACMAN3D-Z-Portable.exe
-- **Type:** Portable executable
-- **Size:** ~91 MB
-- **Installation:** None required
-- **Features:**
-  - Run from anywhere (USB drive, folder, etc.)
-  - No installation needed
-  - No registry entries
-  - Perfect for sharing
+- **Type:** Portable executable, ~92 MB
+- No installation - run it from anywhere (USB drive, any folder)
+- Nothing written to the registry
 
 ## How to Use
 
-### Option 1: Install (Recommended for permanent installation)
-1. Double-click `PACMAN3D-Z-1.0.0-win-x64.exe`
-2. Follow the installation wizard
-3. Launch from desktop or start menu shortcut
+**Install:** run `PACMAN3D-Z-1.1.0-win-x64.exe`, follow the wizard, then launch from the desktop or Start menu shortcut. Installing over an older PACMAN-Z / PACMAN3D-Z install updates it.
 
-### Option 2: Portable (Recommended for USB or temporary use)
-1. Double-click `PACMAN3D-Z-Portable.exe`
-2. Game starts immediately - no installation!
+**Portable:** double-click `PACMAN3D-Z-Portable.exe` - the game starts immediately.
 
 ## Requirements
 
 - **OS:** Windows 10 or later (64-bit)
 - **RAM:** 200 MB minimum
-- **Disk Space:** 180 MB (installed), 91 MB (portable)
-- **No additional software required**
+- **Disk Space:** ~180 MB installed, ~92 MB portable
+- **Graphics:** WebGL support for the 3D view (any GPU from the last decade)
+- No other software needed - no Node.js, npm or browser required
 
 ## Features
 
-- 7 unique maze stages with progressive difficulty
-- 5 different mushroom power-ups
-- Shooting mechanics with homing missiles
-- Score tracking with localStorage persistence
-- High score tracking across sessions
-- Full keyboard controls (WASD/Arrows, Space, P, R, M)
+- Flat, tilted and full 3D views (**V**)
+- Resizable window and fullscreen (**F** / **F11**) - the board scales to fit
+- Xbox / PlayStation controller support
+- Smart ghost AI, power pellets, lives, bonus fruit
+- Easy / Normal / Hard difficulty
+- 14 maze stages that loop with faster ghosts
+- 5 mushroom power-ups and shooting
+- Background music (**N**) and sound effects (**M** mutes)
+- High score saved between sessions
 
 ## Windows SmartScreen Warning
 
-When you first run the .exe, Windows may show a SmartScreen warning because the application is not code-signed.
-
-**To run the application:**
-1. Click "More info"
-2. Click "Run anyway"
-
-This is normal for unsigned applications and doesn't mean the app is unsafe.
+The app is not code-signed, so Windows may show a SmartScreen warning the first time. Click **More info** → **Run anyway**. This is normal for unsigned applications.
 
 ## Troubleshooting
 
-**Game won't start:**
-- Make sure you have Windows 10 or later
-- Check that you have enough disk space
-- Try running as administrator
+**Game won't start:** make sure you're on 64-bit Windows 10 or later and have enough disk space.
 
-**Performance issues:**
-- Close other applications
-- Check system resources (Task Manager)
+**3D view doesn't appear:** update your graphics driver; the game falls back to the 2D views if WebGL is unavailable.
 
-## Distribution
-
-You can freely distribute these .exe files. Users don't need:
-- Node.js
-- npm
-- A web browser
-- Any dependencies
-
-Just share the .exe file!
+**Controller not detected:** press any button on it once the game window is focused.
 
 ---
 
-**Built with:** Electron 39.2.7
-**Game Version:** 1.0.0
-**Build Date:** December 2025
+**Built with:** Electron 39.2.7 · **Game Version:** 1.1.0

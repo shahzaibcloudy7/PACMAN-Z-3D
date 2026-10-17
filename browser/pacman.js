@@ -4,15 +4,15 @@ const MAZE_LAYOUTS = [
   [
     "#####################",
     "#.........#.........#",
-    "#.##.###.#.###.##.#",
+    "#.##.###.###.###.##.#",
     "#...................#",
-    "#.##.#.#####.#.##.#",
-    "#....#...#...#....#",
-    "####.###.#.###.####",
-    "#....#...#...#....#",
-    "#.##.#.#####.#.##.#",
+    "#.##.#.#######.#.##.#",
+    "#....#...###...#....#",
+    "####.###.###.###.####",
+    "#....#...###...#....#",
+    "#.##.#.#######.#.##.#",
     "#...................#",
-    "#.##.###.#.###.##.#",
+    "#.##.###.###.###.##.#",
     "#.........#.........#",
     "#####################"
   ],
@@ -21,15 +21,15 @@ const MAZE_LAYOUTS = [
   [
     "#####################",
     "#.........#.........#",
-    "#.###.###.###.###.#",
-    "#.#.............#.#",
-    "#.#.###########.#.#",
-    "#.#.............#.#",
-    "#.#.###.###.###.#.#",
-    "#.#.............#.#",
-    "#.#.###########.#.#",
-    "#.#.............#.#",
-    "#.###.###.###.###.#",
+    "#.###.###...###.###.#",
+    "#.#...............#.#",
+    "#.#.#############.#.#",
+    "#.#...............#.#",
+    "#.#.###.#####.###.#.#",
+    "#.#...............#.#",
+    "#.#.#############.#.#",
+    "#.#...............#.#",
+    "#.###.###...###.###.#",
     "#.........#.........#",
     "#####################"
   ],
@@ -37,34 +37,34 @@ const MAZE_LAYOUTS = [
   // STAGE 3 - Central Chamber
   [
     "#####################",
-    "#.#.#.#.....#.#.#.#",
-    "#.#.#.#######.#.#.#",
-    "#.#.#.........#.#.#",
-    "#.#.#.#######.#.#.#",
-    "#.....#.....#.....#",
-    "#.###.#.....#.###.#",
-    "#.....#.....#.....#",
-    "#.#.#.#######.#.#.#",
-    "#.#.#.........#.#.#",
-    "#.#.#.#######.#.#.#",
-    "#.#.#.#.....#.#.#.#",
+    "#.#.#.#.......#.#.#.#",
+    "#.#.#.####.####.#.#.#",
+    "#.#.#...........#.#.#",
+    "#.#.#.####.####.#.#.#",
+    "#.....#.......#.....#",
+    "#.###.#.......#.###.#",
+    "#.....#.......#.....#",
+    "#.#.#.####.####.#.#.#",
+    "#.#.#...........#.#.#",
+    "#.#.#.####.####.#.#.#",
+    "#.#.#.#.......#.#.#.#",
     "#####################"
   ],
 
   // STAGE 4 - Complex Maze
   [
     "#####################",
-    "#...#...#...#...#..#",
-    "#.#.#.#.#.#.#.#.#.#",
-    "#.#...#...#...#...#",
-    "#.#####.#.#.#####.#",
-    "#.......#.#.......#",
-    "###.#####.#####.###",
-    "#.......#.#.......#",
-    "#.#####.#.#.#####.#",
-    "#.#...#...#...#...#",
-    "#.#.#.#.#.#.#.#.#.#",
-    "#...#...#...#...#..#",
+    "#...#...#...#...#...#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#.#...#...#...#...#.#",
+    "#.#####.#...#.#####.#",
+    "#.......#...#.......#",
+    "###.#####...#####.###",
+    "#.......#...#.......#",
+    "#.#####.#...#.#####.#",
+    "#.#...#...#...#...#.#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...#...#...#...#...#",
     "#####################"
   ],
 
@@ -72,15 +72,15 @@ const MAZE_LAYOUTS = [
   [
     "#####################",
     "#...................#",
-    "###.###########.###",
-    "#.#.#.........#.#.#",
-    "#.#.#.#######.#.#.#",
-    "#.#.#.#.....#.#.#.#",
-    "#.#.#.#.###.#.#.#.#",
-    "#.#.#.#.....#.#.#.#",
-    "#.#.#.#######.#.#.#",
-    "#.#.#.........#.#.#",
-    "###.###########.###",
+    "#.#.#############.#.#",
+    "#.#.............#.#.#",
+    "#.#.#.#########.#.#.#",
+    "#.#.#.#.......#.#.#.#",
+    "#.#.#...#####...#.#.#",
+    "#.#.#.#.......#.#.#.#",
+    "#.#.#.#########.#.#.#",
+    "#.#.#.............#.#",
+    "#.#.#############.#.#",
     "#...................#",
     "#####################"
   ],
@@ -88,34 +88,34 @@ const MAZE_LAYOUTS = [
   // STAGE 6 - Four Quadrants
   [
     "#####################",
-    "#.......###.......#",
-    "#.####..###..####.#",
-    "#.#..#.......#..#.#",
-    "#.#..#.#####.#..#.#",
-    "#......#...#......#",
-    "####...#...#...####",
-    "#......#...#......#",
-    "#.#..#.#####.#..#.#",
-    "#.#..#.......#..#.#",
-    "#.####..###..####.#",
-    "#.......###.......#",
+    "#.......#####.......#",
+    "#.####..#####..####.#",
+    "#.#..#.........#..#.#",
+    "#.#..#.#######.#..#.#",
+    "#......#.....#......#",
+    "####.............####",
+    "#......#.....#......#",
+    "#.#..#.#######.#..#.#",
+    "#.#..#.........#..#.#",
+    "#.####..#####..####.#",
+    "#.......#####.......#",
     "#####################"
   ],
 
   // STAGE 7 - Expert Chaos
   [
     "#####################",
-    "#.#.#.#.#.#.#.#.#.#",
-    "#...#...#...#...#..#",
-    "#.#####.#.#.#####.#",
-    "#.#...#.#.#.#...#.#",
-    "#.#.#...#.#...#.#.#",
-    "#...#########...#.#",
-    "#.#.#...#.#...#.#.#",
-    "#.#...#.#.#.#...#.#",
-    "#.#####.#.#.#####.#",
-    "#...#...#...#...#..#",
-    "#.#.#.#.#.#.#.#.#.#",
+    "#.#.#.#.#...#.#.#.#.#",
+    "#...................#",
+    "#.#####.#...#.#####.#",
+    "#.#...#.#...#.#...#.#",
+    "#.#.#...#...#...#.#.#",
+    "#.#...#########...#.#",
+    "#.#.#...#...#...#.#.#",
+    "#.#...#.#...#.#...#.#",
+    "#.#####.#...#.#####.#",
+    "#...................#",
+    "#.#.#.#.#...#.#.#.#.#",
     "#####################"
   ],
 
@@ -239,6 +239,52 @@ const MAZE_LAYOUTS = [
   ]
 ];
 
+// Difficulty presets: speed multipliers, starting lives and power-pellet fright time (ms)
+const DIFFICULTY_SETTINGS = {
+    easy:   { label: 'Easy',   pacmanSpeed: 1.0,  ghostSpeed: 1.0,  lives: 5, frightenedTime: 10000 },
+    normal: { label: 'Normal', pacmanSpeed: 1.15, ghostSpeed: 1.35, lives: 3, frightenedTime: 7000 },
+    hard:   { label: 'Hard',   pacmanSpeed: 1.25, ghostSpeed: 1.75, lives: 2, frightenedTime: 4000 }
+};
+
+// Ghost roster. Each ghost hunts with its own targeting rule (see getChaseTarget);
+// `scatter` is the corner it retreats to during scatter phases.
+const GHOST_DEFS = [
+    { shape: 'circle',   color: '#ff0000', x: 9,  y: 5, direction: 'up',    speed: 0.033, points: 100, scatter: { x: 20, y: -2 } },
+    { shape: 'square',   color: '#ffb8ff', x: 10, y: 5, direction: 'down',  speed: 0.029, points: 150, scatter: { x: 0,  y: -2 } },
+    { shape: 'triangle', color: '#00ffff', x: 11, y: 5, direction: 'left',  speed: 0.038, points: 120, scatter: { x: 20, y: 14 } },
+    { shape: 'diamond',  color: '#ffa500', x: 8,  y: 6, direction: 'right', speed: 0.032, points: 180, scatter: { x: 0,  y: 14 } },
+    { shape: 'star',     color: '#00ff00', x: 12, y: 6, direction: 'up',    speed: 0.042, points: 250, scatter: { x: 10, y: 6 } }
+];
+
+// Scatter/chase rhythm (ms). Ghosts retreat to their corners, then hunt; the last chase lasts forever
+const GHOST_MODE_SCHEDULE = [
+    { mode: 'scatter', time: 7000 },
+    { mode: 'chase', time: 20000 },
+    { mode: 'scatter', time: 7000 },
+    { mode: 'chase', time: 20000 },
+    { mode: 'scatter', time: 5000 },
+    { mode: 'chase', time: Infinity }
+];
+
+// Bonus fruit, arcade style: later stages give rarer, pricier fruit
+const FRUITS = [
+    { name: 'Cherry', points: 100, color: '#ff1a3c' },
+    { name: 'Strawberry', points: 300, color: '#ff3b5c' },
+    { name: 'Orange', points: 500, color: '#ffa500' },
+    { name: 'Apple', points: 700, color: '#e81919' },
+    { name: 'Melon', points: 1000, color: '#3ccf4e' },
+    { name: 'Galaxian', points: 2000, color: '#3a6cff' },
+    { name: 'Bell', points: 3000, color: '#ffd700' },
+    { name: 'Key', points: 5000, color: '#7fe3ff' }
+];
+
+const DIRECTION_VECTORS = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
+const OPPOSITE_DIRECTION = { up: 'down', down: 'up', left: 'right', right: 'left' };
+
+const EXTRA_LIFE_EVERY = 10000;
+const DEATH_ANIMATION_MS = 1500;
+const VIEW_MODES = ['flat', 'tilt', '3d'];
+
 class PacmanGame {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
@@ -270,16 +316,10 @@ class PacmanGame {
 
         this.pacman = { x: 1, y: 1, direction: 'right', nextDirection: 'right', mouthAnimation: 0, mouthOpen: true };
 
-        // Ghost home position for respawning
+        // Ghost home position for respawning (moved to the nearest open tile per stage)
         this.ghostHome = { x: 10, y: 6 };
 
-        this.ghosts = [
-            { x: 9, y: 5, targetX: 9, targetY: 5, direction: 'up', color: '#ff0000', shape: 'circle', speed: 0.033, baseSpeed: 0.033, points: 100, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 9, y: 5 }, isDead: false, respawnTimer: 0, homeX: 9, homeY: 5 },
-            { x: 10, y: 5, targetX: 10, targetY: 5, direction: 'down', color: '#ffb8ff', shape: 'square', speed: 0.029, baseSpeed: 0.029, points: 150, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 10, y: 5 }, isDead: false, respawnTimer: 0, homeX: 10, homeY: 5 },
-            { x: 11, y: 5, targetX: 11, targetY: 5, direction: 'left', color: '#00ffff', shape: 'triangle', speed: 0.038, baseSpeed: 0.038, points: 120, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 11, y: 5 }, isDead: false, respawnTimer: 0, homeX: 11, homeY: 5 },
-            { x: 8, y: 6, targetX: 8, targetY: 6, direction: 'right', color: '#ffa500', shape: 'diamond', speed: 0.032, baseSpeed: 0.032, points: 180, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 8, y: 6 }, isDead: false, respawnTimer: 0, homeX: 8, homeY: 6 },
-            { x: 12, y: 6, targetX: 12, targetY: 6, direction: 'up', color: '#00ff00', shape: 'star', speed: 0.042, baseSpeed: 0.042, points: 250, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 12, y: 6 }, isDead: false, respawnTimer: 0, homeX: 12, homeY: 6 }
-        ];
+        this.ghosts = this.createGhosts();
         this.score = 0;
         this.gameOver = false;
         this.gameWon = false;
@@ -307,49 +347,245 @@ class PacmanGame {
         // High score persistence
         this.highScore = this.loadHighScore();
 
-        // Start at Stage 1
-        this.maze = MAZE_LAYOUTS[0].map(row => row);
-        
-        this.placeMushrooms();
+        // Difficulty, lives and bonus state
+        this.difficultyKey = this.loadSetting('pacmanDifficulty', 'normal');
+        if (!DIFFICULTY_SETTINGS[this.difficultyKey]) this.difficultyKey = 'normal';
+        this.difficulty = DIFFICULTY_SETTINGS[this.difficultyKey];
+        this.lives = this.difficulty.lives;
+        this.nextExtraLifeScore = EXTRA_LIFE_EVERY;
+        this.dying = false;
+        this.deathTimer = 0;
+        this.readyTimer = 0;
+        this.frightenedTimer = 0;
+        this.ghostEatChain = 0;
+        this.ghostModeIndex = 0;
+        this.ghostModeTimer = 0;
+        this.fruit = null;
+        this.mazeVersion = 0;
+
+        // Rendering: logical size stays 672x416; renderScale grows the backing store for sharp scaling
+        this.viewWidth = this.width * this.cellSize;
+        this.viewHeight = this.height * this.cellSize;
+        this.renderScale = 1;
+        this.renderer3d = null;
+        this.gamepadState = {};
+
         this.setupControls();
-        this.setupSoundButton();
-        this.setupViewButton();
+        this.setupButtons();
+        this.setupGamepad();
+        this.setupDifficultySelect();
         this.loadViewPreference();
+        this.fitToWindow();
+        window.addEventListener('resize', () => this.fitToWindow());
+        document.addEventListener('fullscreenchange', () => this.fitToWindow());
+        // Pause automatically when the window is hidden so nobody dies while away
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && !this.isPaused && !this.gameOver && !this.levelJustCompleted) this.togglePause();
+        });
+
+        // Start at Stage 1
+        this.loadStage(1);
+        this.updateLivesDisplay();
+        this.startReady(2200, true);
 
         this.gameLoop();
     }
 
-    loadViewPreference() {
+    createGhosts() {
+        return GHOST_DEFS.map(def => ({
+            x: def.x, y: def.y, targetX: def.x, targetY: def.y, direction: def.direction,
+            color: def.color, shape: def.shape, baseSpeed: def.speed, points: def.points, scatter: def.scatter,
+            moveProgress: 0, stuckCounter: 0, lastPosition: { x: def.x, y: def.y },
+            isDead: false, frightened: false, respawnTimer: 0, homeX: def.x, homeY: def.y
+        }));
+    }
+
+    loadSetting(key, fallback) {
         try {
-            if (localStorage.getItem('pacmanTiltedView') === 'true') {
-                this.canvasStage.classList.add('tilted');
-            }
+            const value = localStorage.getItem(key);
+            return value === null ? fallback : value;
+        } catch (e) {
+            return fallback;
+        }
+    }
+
+    saveSetting(key, value) {
+        try {
+            localStorage.setItem(key, value);
         } catch (e) {
             console.warn('localStorage not available');
         }
+    }
+
+    // ---- View modes: flat 2D, CSS-tilted 2D, and real 3D (Three.js) ----
+
+    loadViewPreference() {
+        let mode = this.loadSetting('pacmanViewMode', null);
+        if (mode === null) mode = this.loadSetting('pacmanTiltedView', 'false') === 'true' ? 'tilt' : 'flat';
+        this.setViewMode(VIEW_MODES.includes(mode) ? mode : 'flat', false);
     }
 
     toggleView() {
-        if (!this.canvasStage) return;
-        const tilted = this.canvasStage.classList.toggle('tilted');
+        const next = VIEW_MODES[(VIEW_MODES.indexOf(this.viewMode) + 1) % VIEW_MODES.length];
+        this.setViewMode(next, true);
+    }
+
+    setViewMode(mode, announce) {
+        if (mode === '3d' && !this.ensureRenderer3d()) mode = 'flat';
+        this.viewMode = mode;
+        this.canvasStage.classList.toggle('tilted', mode === 'tilt');
+        this.canvasStage.classList.toggle('mode-3d', mode === '3d');
+        this.saveSetting('pacmanViewMode', mode);
+
+        const labels = { flat: 'Flat 2D', tilt: 'Tilted 2D', '3d': 'Full 3D' };
+        const viewButton = document.getElementById('viewButton');
+        if (viewButton) viewButton.title = `View: ${labels[mode]} (V to switch)`;
+        if (announce) this.flashStatus(`View: ${labels[mode]}`, 'game-status power-up', 1200);
+        this.fitToWindow();
+    }
+
+    ensureRenderer3d() {
+        if (this.renderer3d) return true;
+        if (typeof Renderer3D === 'undefined' || !Renderer3D.isSupported()) return false;
         try {
-            localStorage.setItem('pacmanTiltedView', tilted);
+            this.renderer3d = new Renderer3D(document.getElementById('gameCanvas3d'), this);
+            return true;
         } catch (e) {
-            console.warn('localStorage not available');
+            console.warn('3D view unavailable:', e);
+            return false;
         }
     }
 
-    setupViewButton() {
-        const viewButton = document.getElementById('viewButton');
-        if (viewButton) {
-            viewButton.addEventListener('click', () => {
-                this.toggleView();
-            });
+    // Scale the board to fill the window (or screen in fullscreen) while keeping its aspect ratio
+    fitToWindow() {
+        const container = document.querySelector('.game-container');
+        if (!container || !this.canvasStage) return;
+        const stageRect = this.canvasStage.getBoundingClientRect();
+        const otherHeight = container.getBoundingClientRect().height - stageRect.height;
+        const stagePadding = 50; // .canvas-stage vertical padding
+        const availableWidth = window.innerWidth - 80;
+        const availableHeight = window.innerHeight - otherHeight - stagePadding - 50;
+        // Height may push the help text below the fold, but never shrinks the board below 1x;
+        // only a narrow window can make it smaller than its original size.
+        const heightScale = Math.max(1, availableHeight / this.viewHeight);
+        const scale = Math.max(0.5, Math.min(availableWidth / this.viewWidth, heightScale, 3));
+
+        const cssWidth = Math.floor(this.viewWidth * scale);
+        const cssHeight = Math.floor(this.viewHeight * scale);
+        this.renderScale = scale * (window.devicePixelRatio || 1);
+        this.canvas.width = Math.round(this.viewWidth * this.renderScale);
+        this.canvas.height = Math.round(this.viewHeight * this.renderScale);
+        this.canvas.style.width = `${cssWidth}px`;
+        this.canvas.style.height = `${cssHeight}px`;
+        if (this.renderer3d) this.renderer3d.resize(cssWidth, cssHeight);
+    }
+
+    toggleFullscreen() {
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+        } else if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(err => console.warn('Fullscreen refused:', err));
         }
     }
-    
+
+    setupButtons() {
+        const bind = (id, handler) => {
+            const button = document.getElementById(id);
+            if (!button) return;
+            button.addEventListener('click', () => {
+                handler();
+                button.blur(); // Keep Space for shooting instead of re-clicking the button
+            });
+        };
+        bind('soundButton', () => this.toggleSound());
+        bind('musicButton', () => this.toggleMusic());
+        bind('viewButton', () => this.toggleView());
+        bind('fullscreenButton', () => this.toggleFullscreen());
+        this.updateMusicButton();
+    }
+
+    setupDifficultySelect() {
+        const select = document.getElementById('difficultySelect');
+        if (!select) return;
+        select.value = this.difficultyKey;
+        select.addEventListener('change', () => {
+            this.difficultyKey = select.value;
+            this.difficulty = DIFFICULTY_SETTINGS[this.difficultyKey];
+            this.saveSetting('pacmanDifficulty', this.difficultyKey);
+            select.blur(); // Arrow keys should move Pac-Man, not change the dropdown
+            this.restart();
+        });
+    }
+
+    // ---- Controller support (standard gamepad mapping: Xbox / PlayStation) ----
+
+    setupGamepad() {
+        window.addEventListener('gamepadconnected', (e) => {
+            this.flashStatus(`Controller connected`, 'game-status power-up', 1500);
+            console.log('Gamepad connected:', e.gamepad.id);
+        });
+    }
+
+    pollGamepad() {
+        if (!navigator.getGamepads) return;
+        for (const pad of navigator.getGamepads()) {
+            if (!pad) continue;
+            const prev = this.gamepadState[pad.index] || {};
+            const pressed = (i) => !!(pad.buttons[i] && pad.buttons[i].pressed);
+            const justPressed = (i) => pressed(i) && !prev[i];
+
+            // D-pad or left stick steers
+            const ax = pad.axes[0] || 0;
+            const ay = pad.axes[1] || 0;
+            let dir = null;
+            if (pressed(12)) dir = 'up';
+            else if (pressed(13)) dir = 'down';
+            else if (pressed(14)) dir = 'left';
+            else if (pressed(15)) dir = 'right';
+            else if (Math.abs(ax) > 0.5 || Math.abs(ay) > 0.5) {
+                dir = Math.abs(ax) > Math.abs(ay) ? (ax > 0 ? 'right' : 'left') : (ay > 0 ? 'down' : 'up');
+            }
+            if (dir && !this.gameOver && !this.isPaused) this.pacman.nextDirection = dir;
+
+            if (justPressed(0) || justPressed(7)) this.fireWeapon();           // A / RT: shoot
+            if (justPressed(9)) this.gameOver ? this.restart() : this.togglePause(); // Start
+            if (justPressed(8) && this.gameOver) this.restart();               // Back/Select
+            if (justPressed(3)) this.toggleView();                              // Y: switch view
+            if (justPressed(2)) this.toggleMusic();                             // X: music
+
+            const state = {};
+            pad.buttons.forEach((b, i) => { state[i] = b.pressed; });
+            this.gamepadState[pad.index] = state;
+            if (pad.buttons.some(b => b.pressed)) this.soundManager.resumeAudioContext();
+        }
+    }
+
+    fireWeapon() {
+        if (!this.hasShootingPower || this.gameOver || this.isPaused || this.dying || this.readyTimer > 0) return;
+        this.shoot();
+        this.shoot(); // Allow shooting multiple bullets
+        this.shoot();
+    }
+
+    // Shows a temporary status message, then clears it (unless something more important replaced it)
+    flashStatus(text, className, duration) {
+        this.statusElement.textContent = text;
+        this.statusElement.className = className;
+        clearTimeout(this.statusTimeout);
+        this.statusTimeout = setTimeout(() => {
+            if (!this.gameOver && !this.isPaused && this.statusElement.textContent === text) {
+                this.statusElement.textContent = '';
+                this.statusElement.className = 'game-status';
+            }
+        }, duration);
+    }
+
     setupControls() {
         document.addEventListener('keydown', (event) => {
+            // Ignore keys typed into the difficulty dropdown
+            if (event.target && event.target.tagName === 'SELECT') return;
+            this.soundManager.resumeAudioContext();
+
             // Handle mute toggle
             if (event.key.toLowerCase() === 'm') {
                 this.toggleSound();
@@ -357,7 +593,21 @@ class PacmanGame {
                 return;
             }
 
-            // Handle 3D view toggle
+            // Handle music toggle
+            if (event.key.toLowerCase() === 'n') {
+                this.toggleMusic();
+                event.preventDefault();
+                return;
+            }
+
+            // Handle fullscreen toggle
+            if (event.key.toLowerCase() === 'f' || event.key === 'F11') {
+                this.toggleFullscreen();
+                event.preventDefault();
+                return;
+            }
+
+            // Handle view mode switch (flat -> tilted -> 3D)
             if (event.key.toLowerCase() === 'v') {
                 this.toggleView();
                 event.preventDefault();
@@ -404,24 +654,11 @@ class PacmanGame {
                     event.preventDefault();
                     break;
                 case ' ':
-                    if (this.hasShootingPower) {
-                        this.shoot();
-                        this.shoot(); // Allow shooting multiple bullets
-                        this.shoot();
-                    }
+                    this.fireWeapon();
                     event.preventDefault();
                     break;
             }
         });
-    }
-    
-    setupSoundButton() {
-        const soundButton = document.getElementById('soundButton');
-        if (soundButton) {
-            soundButton.addEventListener('click', () => {
-                this.toggleSound();
-            });
-        }
     }
 
     loadHighScore() {
@@ -451,7 +688,8 @@ class PacmanGame {
         // CLASSIC GRID-BASED MOVEMENT WITH STRICT CORRIDOR ALIGNMENT
 
         // Calculate speed (boosted if speed power is active)
-        const currentSpeed = this.hasSpeedBoost ? this.pacmanSpeed * 1.5 : this.pacmanSpeed;
+        const baseSpeed = this.pacmanSpeed * this.difficulty.pacmanSpeed;
+        const currentSpeed = this.hasSpeedBoost ? baseSpeed * 1.5 : baseSpeed;
 
         // Get current grid cell (the tile Pacman is in/near)
         const currentGridX = Math.round(this.pacman.x);
@@ -566,18 +804,27 @@ class PacmanGame {
         let collectX = gridX < 0 ? this.width - 1 : (gridX >= this.width ? 0 : gridX);
         let collectY = gridY < 0 ? this.height - 1 : (gridY >= this.height ? 0 : gridY);
 
-        if (this.maze[collectY][collectX] === '.') {
-            this.score += 10;
-            this.scoreElement.textContent = this.score;
+        const cell = this.maze[collectY][collectX];
+        if (cell === '.' || cell === 'o') {
             let row = this.maze[collectY].split('');
             row[collectX] = ' ';
             this.maze[collectY] = row.join('');
-            this.soundManager.playDotSound();
 
-            // Add sparkle effect for dot collection
             const pixelX = collectX * this.cellSize + this.cellSize / 2;
             const pixelY = collectY * this.cellSize + this.cellSize / 2;
-            this.effectsManager.sparkle(pixelX, pixelY, '#ffff00', 5);
+            if (cell === 'o') {
+                // Power pellet: ghosts turn blue and can be eaten
+                this.addScore(50);
+                this.soundManager.playPowerPelletSound();
+                this.effectsManager.ring(pixelX, pixelY, '#ffffff', 2);
+                this.activateFrightened();
+            } else {
+                this.addScore(10);
+                this.soundManager.playDotSound();
+                // Add sparkle effect for dot collection
+                this.effectsManager.sparkle(pixelX, pixelY, '#ffff00', 5);
+            }
+            this.onDotEaten();
         }
 
         // Animate mouth continuously
@@ -611,6 +858,7 @@ class PacmanGame {
             if (ghost.respawnTimer <= 0) {
                 // Respawn ghost
                 ghost.isDead = false;
+                ghost.frightened = false;
                 ghost.respawnTimer = 0;
                 ghost.x = ghost.homeX;
                 ghost.y = ghost.homeY;
@@ -618,8 +866,8 @@ class PacmanGame {
                 ghost.targetY = ghost.homeY;
             }
         } else {
-            // Move towards home at 2x speed
-            const moveSpeed = ghost.speed * 2;
+            // Eyes fly home fast
+            const moveSpeed = Math.min(0.15, distance);
             ghost.x += (dx / distance) * moveSpeed;
             ghost.y += (dy / distance) * moveSpeed;
         }
@@ -659,173 +907,435 @@ class PacmanGame {
         if (ghost.targetX !== ghost.x || ghost.targetY !== ghost.y) {
             const dx = ghost.targetX - ghost.x;
             const dy = ghost.targetY - ghost.y;
+            const speed = this.getGhostSpeed(ghost);
 
             // Determine movement direction
             const isMovingHorizontal = Math.abs(dx) > Math.abs(dy);
 
             if (isMovingHorizontal) {
                 // Moving left or right - keep Y aligned to grid center
-                ghost.x += (dx > 0 ? 1 : -1) * Math.min(Math.abs(dx), ghost.speed);
+                ghost.x += (dx > 0 ? 1 : -1) * Math.min(Math.abs(dx), speed);
                 ghost.y = currentGridY; // LANE DISCIPLINE: Lock Y to grid
             } else {
                 // Moving up or down - keep X aligned to grid center
-                ghost.y += (dy > 0 ? 1 : -1) * Math.min(Math.abs(dy), ghost.speed);
+                ghost.y += (dy > 0 ? 1 : -1) * Math.min(Math.abs(dy), speed);
                 ghost.x = currentGridX; // LANE DISCIPLINE: Lock X to grid
             }
         }
     }
-    
+
+    getGhostSpeed(ghost) {
+        let speed = ghost.baseSpeed * this.difficulty.ghostSpeed * this.difficultyMultiplier;
+        if (ghost.frightened) speed *= 0.55;
+        return Math.min(speed, 0.12);
+    }
+
+    // Out-of-bounds counts as wall for ghosts (they don't use the wrap-around edges)
+    isWall(x, y) {
+        const row = this.maze[y];
+        return !row || row[x] === undefined || row[x] === '#';
+    }
+
+    get ghostMode() {
+        return GHOST_MODE_SCHEDULE[this.ghostModeIndex].mode;
+    }
+
+    // Arcade-style decision at each tile: never reverse (unless at a dead end), then take the
+    // exit that brings the ghost closest to its target tile. Frightened ghosts wander randomly.
     chooseNewTargetForGhost(ghost) {
-        const directions = ['up', 'down', 'left', 'right'];
-        let newTargetX = Math.round(ghost.x);
-        let newTargetY = Math.round(ghost.y);
-        
-        // First, get all valid directions from current position
-        const validDirections = [];
-        for (let dir of directions) {
-            let testX = newTargetX;
-            let testY = newTargetY;
-            
-            switch (dir) {
-                case 'up': testY--; break;
-                case 'down': testY++; break;
-                case 'left': testX--; break;
-                case 'right': testX++; break;
-            }
-            
-            if (testX >= 0 && testX < this.width && testY >= 0 && testY < this.height && 
-                this.maze[testY][testX] !== '#') {
-                validDirections.push(dir);
-            }
-        }
-        
+        const gx = Math.round(ghost.x);
+        const gy = Math.round(ghost.y);
+
+        // Tie-break order matches the arcade: up, left, down, right
+        const options = ['up', 'left', 'down', 'right'].filter(dir => {
+            const v = DIRECTION_VECTORS[dir];
+            return !this.isWall(gx + v.x, gy + v.y);
+        });
+
         // If no valid directions, stay in place
-        if (validDirections.length === 0) {
-            ghost.targetX = newTargetX;
-            ghost.targetY = newTargetY;
+        if (options.length === 0) {
+            ghost.targetX = gx;
+            ghost.targetY = gy;
             return;
         }
-        
-        // Choose direction based on ghost behavior, but only from valid options
-        let chosenDirection = ghost.direction;
-        
+
+        let choices = options.filter(dir => dir !== OPPOSITE_DIRECTION[ghost.direction]);
+        if (choices.length === 0) choices = options;
+
+        const pickBest = (score) => choices.reduce((best, dir) => (score(dir) < score(best) ? dir : best));
+        let chosenDirection;
+
+        if (ghost.frightened) {
+            chosenDirection = choices[Math.floor(Math.random() * choices.length)];
+        } else if (ghost.shape === 'star') {
+            // Star ghost never scatters and follows the true shortest path through the maze
+            const distances = this.getPacmanDistanceField();
+            chosenDirection = pickBest(dir => {
+                const v = DIRECTION_VECTORS[dir];
+                const d = distances[gy + v.y][gx + v.x];
+                return d === -1 ? Infinity : d;
+            });
+        } else {
+            const target = this.ghostMode === 'scatter' ? ghost.scatter : this.getChaseTarget(ghost);
+            chosenDirection = pickBest(dir => {
+                const v = DIRECTION_VECTORS[dir];
+                return (gx + v.x - target.x) ** 2 + (gy + v.y - target.y) ** 2;
+            });
+        }
+
+        ghost.direction = chosenDirection;
+        const v = DIRECTION_VECTORS[chosenDirection];
+        ghost.targetX = gx + v.x;
+        ghost.targetY = gy + v.y;
+    }
+
+    // Each ghost has its own personality while chasing
+    getChaseTarget(ghost) {
+        const px = Math.round(this.pacman.x);
+        const py = Math.round(this.pacman.y);
+        const v = DIRECTION_VECTORS[this.pacman.direction];
+
         switch (ghost.shape) {
             case 'circle':
-                // 70% chance to continue current direction if valid
-                if (validDirections.includes(ghost.direction) && Math.random() < 0.7) {
-                    chosenDirection = ghost.direction;
-                } else {
-                    chosenDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
-                }
-                break;
-                
+                // Red: hunts Pac-Man's current tile directly
+                return { x: px, y: py };
             case 'square':
-                // Continue in same direction if possible, otherwise choose randomly
-                if (validDirections.includes(ghost.direction)) {
-                    chosenDirection = ghost.direction;
-                } else {
-                    chosenDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
-                }
-                break;
-                
-            case 'triangle':
-                // 60% chance to change direction
-                if (Math.random() < 0.6) {
-                    chosenDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
-                } else if (validDirections.includes(ghost.direction)) {
-                    chosenDirection = ghost.direction;
-                } else {
-                    chosenDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
-                }
-                break;
-                
-            case 'diamond':
-                // Alternates between horizontal and vertical
-                const horizontalDirs = validDirections.filter(d => d === 'left' || d === 'right');
-                const verticalDirs = validDirections.filter(d => d === 'up' || d === 'down');
-                
-                if (!ghost.lastMoveWasHorizontal && horizontalDirs.length > 0) {
-                    chosenDirection = horizontalDirs[Math.floor(Math.random() * horizontalDirs.length)];
-                    ghost.lastMoveWasHorizontal = true;
-                } else if (ghost.lastMoveWasHorizontal && verticalDirs.length > 0) {
-                    chosenDirection = verticalDirs[Math.floor(Math.random() * verticalDirs.length)];
-                    ghost.lastMoveWasHorizontal = false;
-                } else {
-                    // Fallback to any valid direction
-                    chosenDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
-                    ghost.lastMoveWasHorizontal = (chosenDirection === 'left' || chosenDirection === 'right');
-                }
-                break;
-                
-            case 'star':
-                // Moves toward Pacman, but only if path is clear
-                const dx = this.pacman.x - newTargetX;
-                const dy = this.pacman.y - newTargetY;
-                
-                let preferredDir = null;
-                if (Math.abs(dx) > Math.abs(dy)) {
-                    preferredDir = dx > 0 ? 'right' : 'left';
-                } else {
-                    preferredDir = dy > 0 ? 'down' : 'up';
-                }
-                
-                if (validDirections.includes(preferredDir)) {
-                    chosenDirection = preferredDir;
-                } else {
-                    // If can't move toward Pacman, choose randomly
-                    chosenDirection = validDirections[Math.floor(Math.random() * validDirections.length)];
-                }
-                break;
+                // Pink: ambushes 4 tiles ahead of Pac-Man
+                return { x: px + v.x * 4, y: py + v.y * 4 };
+            case 'triangle': {
+                // Cyan: flanks - mirrors the red ghost around a point 2 tiles ahead of Pac-Man
+                const red = this.ghosts.find(g => g.shape === 'circle' && !g.isDead);
+                const ax = px + v.x * 2;
+                const ay = py + v.y * 2;
+                if (!red) return { x: ax, y: ay };
+                return { x: ax * 2 - Math.round(red.x), y: ay * 2 - Math.round(red.y) };
+            }
+            case 'diamond': {
+                // Orange: chases from afar but loses its nerve within 8 tiles
+                const distSq = (ghost.x - px) ** 2 + (ghost.y - py) ** 2;
+                return distSq > 64 ? { x: px, y: py } : ghost.scatter;
+            }
+            default:
+                return { x: px, y: py };
         }
-        
-        // Set new target based on chosen direction
-        ghost.direction = chosenDirection;
-        let testX = newTargetX;
-        let testY = newTargetY;
-        
-        switch (chosenDirection) {
-            case 'up': testY--; break;
-            case 'down': testY++; break;
-            case 'left': testX--; break;
-            case 'right': testX++; break;
-        }
-        
-        ghost.targetX = testX;
-        ghost.targetY = testY;
     }
-    
+
+    // Breadth-first distances from Pac-Man to every tile (-1 = unreachable), cached per tile
+    getPacmanDistanceField() {
+        const px = Math.round(this.pacman.x);
+        const py = Math.round(this.pacman.y);
+        const key = `${px},${py},${this.mazeVersion}`;
+        if (this._distanceKey === key) return this._distanceField;
+
+        const field = Array.from({ length: this.height }, () => new Array(this.width).fill(-1));
+        if (!this.isWall(px, py)) {
+            field[py][px] = 0;
+            const queue = [[px, py]];
+            for (let head = 0; head < queue.length; head++) {
+                const [x, y] = queue[head];
+                for (const v of Object.values(DIRECTION_VECTORS)) {
+                    const nx = x + v.x;
+                    const ny = y + v.y;
+                    if (!this.isWall(nx, ny) && field[ny][nx] === -1) {
+                        field[ny][nx] = field[y][x] + 1;
+                        queue.push([nx, ny]);
+                    }
+                }
+            }
+        }
+        this._distanceKey = key;
+        this._distanceField = field;
+        return field;
+    }
+
+    // Turn a ghost around toward the tile it just left (used on mode changes, like the arcade)
+    reverseGhost(ghost) {
+        const back = OPPOSITE_DIRECTION[ghost.direction];
+        const v = DIRECTION_VECTORS[back];
+        const fromX = ghost.targetX + v.x;
+        const fromY = ghost.targetY + v.y;
+        if (!this.isWall(fromX, fromY)) {
+            ghost.direction = back;
+            ghost.targetX = fromX;
+            ghost.targetY = fromY;
+        }
+    }
+
+    updateGhostMode() {
+        if (this.frightenedTimer > 0) {
+            // The scatter/chase clock pauses while ghosts are frightened
+            this.frightenedTimer -= this.frameTime;
+            if (this.frightenedTimer <= 0) this.endFrightened();
+            return;
+        }
+        if (this.ghostModeIndex >= GHOST_MODE_SCHEDULE.length - 1) return;
+        this.ghostModeTimer += this.frameTime;
+        if (this.ghostModeTimer >= GHOST_MODE_SCHEDULE[this.ghostModeIndex].time) {
+            this.ghostModeIndex++;
+            this.ghostModeTimer = 0;
+            this.ghosts.forEach(ghost => {
+                if (!ghost.isDead) this.reverseGhost(ghost);
+            });
+        }
+    }
+
+    activateFrightened() {
+        // Fright time shrinks on later laps
+        this.frightenedTimer = this.difficulty.frightenedTime / Math.min(this.difficultyMultiplier, 2);
+        this.frightenedDuration = this.frightenedTimer;
+        this.ghostEatChain = 0;
+        this.ghosts.forEach(ghost => {
+            if (!ghost.isDead) {
+                ghost.frightened = true;
+                this.reverseGhost(ghost);
+            }
+        });
+        this.soundManager.setMusicMode('frightened');
+    }
+
+    endFrightened() {
+        this.frightenedTimer = 0;
+        this.ghosts.forEach(ghost => { ghost.frightened = false; });
+        this.soundManager.setMusicMode('normal');
+    }
+
+    // True while frightened ghosts should blink white as a warning that time is nearly up
+    isFrightenedEnding() {
+        return this.frightenedTimer > 0 && this.frightenedTimer < 2000 && Math.floor(this.frightenedTimer / 200) % 2 === 0;
+    }
+
+    eatGhost(ghost) {
+        const points = 200 * Math.pow(2, Math.min(this.ghostEatChain, 3)); // 200, 400, 800, 1600
+        this.ghostEatChain++;
+        ghost.isDead = true;
+        ghost.frightened = false;
+        ghost.respawnTimer = 2000;
+        this.addScore(points);
+
+        const pixelX = ghost.x * this.cellSize + this.cellSize / 2;
+        const pixelY = ghost.y * this.cellSize + this.cellSize / 2;
+        this.effectsManager.sparkle(pixelX, pixelY, '#2121ff', 15);
+        this.effectsManager.textPopup(pixelX, pixelY - 10, `${points}`, '#00ffff', 18);
+        this.soundManager.playEatGhostSound();
+    }
+
+    addScore(points) {
+        this.score += points;
+        this.scoreElement.textContent = this.score;
+        if (this.score >= this.nextExtraLifeScore) {
+            this.nextExtraLifeScore += EXTRA_LIFE_EVERY;
+            this.lives++;
+            this.updateLivesDisplay();
+            this.soundManager.playExtraLifeSound();
+            const pixelX = this.pacman.x * this.cellSize + this.cellSize / 2;
+            const pixelY = this.pacman.y * this.cellSize + this.cellSize / 2;
+            this.effectsManager.textPopup(pixelX, pixelY - 24, '1UP!', '#ffff00', 20);
+        }
+    }
+
+    updateLivesDisplay() {
+        const livesElement = document.getElementById('lives');
+        if (!livesElement) return;
+        const shown = Math.min(this.lives, 6);
+        livesElement.innerHTML = '<span class="life-icon"></span>'.repeat(shown) + (this.lives > 6 ? ` x${this.lives}` : '');
+        livesElement.title = `${this.lives} ${this.lives === 1 ? 'life' : 'lives'} left`;
+    }
+
+    // ---- Lives, death and the READY! pause ----
+
+    loseLife() {
+        this.lives--;
+        this.updateLivesDisplay();
+        this.dying = true;
+        this.deathTimer = 0;
+        this.bullets = [];
+        this.endFrightened();
+        this.soundManager.stopMusic();
+        this.soundManager.playDeathSound();
+
+        // Add death effects
+        const pacmanPixelX = this.pacman.x * this.cellSize + this.cellSize / 2;
+        const pacmanPixelY = this.pacman.y * this.cellSize + this.cellSize / 2;
+        this.effectsManager.startScreenShake(8, 0.5);
+        this.effectsManager.startFlash('#ff0000', 0.4, 0.5);
+        setTimeout(() => this.effectsManager.explosion(pacmanPixelX, pacmanPixelY, '#ffff00', 40, 4), 1100);
+    }
+
+    updateDeath() {
+        this.deathTimer += this.frameTime;
+        if (this.deathTimer < DEATH_ANIMATION_MS) return;
+        this.dying = false;
+        if (this.lives > 0) {
+            this.resetPositions();
+            this.startReady(1800, false);
+        } else {
+            this.endGame();
+        }
+    }
+
+    endGame() {
+        this.gameOver = true;
+        const newRecord = this.saveHighScore();
+        this.statusElement.textContent = newRecord ? `GAME OVER - NEW HIGH SCORE ${this.score}! Press R to restart` : 'GAME OVER! Press R to restart';
+        this.statusElement.className = 'game-status lose';
+        this.soundManager.stopMusic();
+        this.soundManager.playGameOverSound();
+    }
+
+    // Freeze play briefly with READY! on screen (start of game, new stage, after losing a life)
+    startReady(duration, withJingle) {
+        this.readyTimer = duration;
+        this.soundManager.stopMusic();
+        this.soundManager.setMusicMode('normal');
+        if (withJingle) this.soundManager.playReadyJingle();
+    }
+
+    updateReady() {
+        this.readyTimer -= this.frameTime;
+        if (this.readyTimer <= 0) {
+            this.readyTimer = 0;
+            this.soundManager.startMusic();
+        }
+    }
+
+    // Put Pac-Man and the ghosts back at their starting tiles (maze and dots stay as they are)
+    resetPositions() {
+        const start = this.findNearestOpen(1, 1);
+        this.pacman.x = start.x;
+        this.pacman.y = start.y;
+        this.pacman.direction = 'right';
+        this.pacman.nextDirection = 'right';
+        this.ghostHome = this.findNearestOpen(10, 6);
+
+        this.ghosts.forEach((ghost, i) => {
+            const def = GHOST_DEFS[i];
+            const spawn = this.findNearestOpen(def.x, def.y);
+            ghost.homeX = spawn.x;
+            ghost.homeY = spawn.y;
+            ghost.x = spawn.x;
+            ghost.y = spawn.y;
+            ghost.targetX = spawn.x;
+            ghost.targetY = spawn.y;
+            ghost.direction = def.direction;
+            ghost.lastPosition = { x: spawn.x, y: spawn.y };
+            ghost.stuckCounter = 0;
+            ghost.isDead = false;
+            ghost.frightened = false;
+            ghost.respawnTimer = 0;
+        });
+
+        this.bullets = [];
+        this.frightenedTimer = 0;
+        this.ghostEatChain = 0;
+        this.ghostModeIndex = 0;
+        this.ghostModeTimer = 0;
+    }
+
+    // Closest non-wall tile to (x, y) - stage layouts differ, so fixed spawn points can land in walls
+    findNearestOpen(x, y) {
+        let best = null;
+        let bestDist = Infinity;
+        for (let ty = 0; ty < this.height; ty++) {
+            for (let tx = 0; tx < this.width; tx++) {
+                if (this.isWall(tx, ty)) continue;
+                const d = (tx - x) ** 2 + (ty - y) ** 2;
+                if (d < bestDist) {
+                    bestDist = d;
+                    best = { x: tx, y: ty };
+                }
+            }
+        }
+        return best || { x, y };
+    }
+
+    // ---- Power pellets and bonus fruit ----
+
+    // Turn the dot nearest each corner into a power pellet (skipping Pac-Man's start area)
+    placePowerPellets() {
+        const anchors = [{ x: 1, y: 3 }, { x: 19, y: 3 }, { x: 1, y: 9 }, { x: 19, y: 9 }];
+        for (const anchor of anchors) {
+            let best = null;
+            let bestDist = Infinity;
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    if (this.maze[y][x] !== '.' || (x <= 2 && y <= 2)) continue;
+                    const d = Math.abs(x - anchor.x) + Math.abs(y - anchor.y);
+                    if (d < bestDist) {
+                        bestDist = d;
+                        best = { x, y };
+                    }
+                }
+            }
+            if (best) {
+                const row = this.maze[best.y].split('');
+                row[best.x] = 'o';
+                this.maze[best.y] = row.join('');
+            }
+        }
+    }
+
+    countDots() {
+        return this.maze.join('').replace(/[^.o]/g, '').length;
+    }
+
+    onDotEaten() {
+        this.dotsEaten++;
+        const fraction = this.dotsEaten / this.totalDots;
+        // Two fruits per stage, at 30% and 70% of the dots
+        if ((this.fruitsSpawned === 0 && fraction >= 0.3) || (this.fruitsSpawned === 1 && fraction >= 0.7)) {
+            this.spawnFruit();
+        }
+    }
+
+    spawnFruit() {
+        this.fruitsSpawned++;
+        const overallStage = (this.lapCount - 1) * this.maxLevel + this.currentLevel;
+        const index = overallStage === 1 ? 0 : overallStage === 2 ? 1 : Math.min(Math.floor((overallStage + 1) / 2), FRUITS.length - 1);
+        const spot = this.findNearestOpen(10, 9);
+        this.fruit = { ...FRUITS[index], x: spot.x, y: spot.y, timer: 9500 };
+    }
+
+    updateFruit() {
+        if (!this.fruit) return;
+        this.fruit.timer -= this.frameTime;
+        if (this.fruit.timer <= 0) {
+            this.fruit = null;
+            return;
+        }
+        if (Math.abs(this.fruit.x - this.pacman.x) < 0.6 && Math.abs(this.fruit.y - this.pacman.y) < 0.6) {
+            const pixelX = this.fruit.x * this.cellSize + this.cellSize / 2;
+            const pixelY = this.fruit.y * this.cellSize + this.cellSize / 2;
+            this.addScore(this.fruit.points);
+            this.effectsManager.sparkle(pixelX, pixelY, this.fruit.color, 20);
+            this.effectsManager.textPopup(pixelX, pixelY - 16, `${this.fruit.name} +${this.fruit.points}`, '#ffb8ff', 16);
+            this.soundManager.playFruitSound();
+            this.fruit = null;
+        }
+    }
+
     checkCollisions() {
         // Check ghost collisions with tolerance for fractional positions (only living ghosts)
-        if (!this.hasShield) {
-            for (let ghost of this.ghosts) {
-                if (ghost.isDead) continue; // Skip dead ghosts
+        for (let ghost of this.ghosts) {
+            if (ghost.isDead) continue; // Skip dead ghosts
 
-                const dx = Math.abs(ghost.x - this.pacman.x);
-                const dy = Math.abs(ghost.y - this.pacman.y);
+            const dx = Math.abs(ghost.x - this.pacman.x);
+            const dy = Math.abs(ghost.y - this.pacman.y);
 
-                // Collision if within 0.7 units (about 70% of a cell)
-                if (dx < 0.7 && dy < 0.7) {
-                    this.gameOver = true;
-                    this.statusElement.textContent = 'GAME OVER! Press R to restart';
-                    this.statusElement.className = 'game-status lose';
-
-                    // Add death effects
-                    const pacmanPixelX = this.pacman.x * this.cellSize + this.cellSize / 2;
-                    const pacmanPixelY = this.pacman.y * this.cellSize + this.cellSize / 2;
-                    this.effectsManager.explosion(pacmanPixelX, pacmanPixelY, '#ffff00', 40, 4);
-                    this.effectsManager.startScreenShake(8, 0.5);
-                    this.effectsManager.startFlash('#ff0000', 0.4, 0.5);
-
-                    // Play game over sound
-                    this.soundManager.playGameOverSound();
-                    return;
+            // Collision if within 0.7 units (about 70% of a cell)
+            if (dx < 0.7 && dy < 0.7) {
+                if (ghost.frightened) {
+                    this.eatGhost(ghost);
+                    continue;
                 }
+                if (this.hasShield) continue;
+                this.loseLife();
+                return;
             }
         }
 
         // Check win condition (only if game is not already over)
         if (!this.gameOver) {
-            let dotsLeft = this.maze.join('').split('.').length - 1;
+            let dotsLeft = this.countDots();
             if (dotsLeft === 0) {
                 this.levelJustCompleted = true;
                 this.saveHighScore();
@@ -879,8 +1389,7 @@ class PacmanGame {
             const dy = Math.abs(mushroom.y - this.pacman.y);
             if (mushroom.active && dx < 0.5 && dy < 0.5) {
                 mushroom.active = false;
-                this.score += 50;
-                this.scoreElement.textContent = this.score;
+                this.addScore(50);
 
                 // Handle different power types
                 if (mushroom.type === 'blue') {
@@ -1207,9 +1716,9 @@ class PacmanGame {
                     // Mark ghost as dead and award points
                     const points = ghost.points || 100;
                     ghost.isDead = true;
+                    ghost.frightened = false;
                     ghost.respawnTimer = 5000; // 5 seconds respawn time
-                    this.score += points;
-                    this.scoreElement.textContent = this.score;
+                    this.addScore(points);
 
                     // Add explosion effect for ghost death
                     const pixelX = ghost.x * this.cellSize + this.cellSize / 2;
@@ -1382,18 +1891,128 @@ class PacmanGame {
         ctx.restore();
     }
 
+    // Simple arcade-style fruit sprites, drawn around the tile centre
+    drawFruit(fruit) {
+        // Blink during the last 2 seconds before it disappears
+        if (fruit.timer < 2000 && Math.floor(fruit.timer / 150) % 2 === 0) return;
+
+        const ctx = this.ctx;
+        const cx = fruit.x * this.cellSize + this.cellSize / 2;
+        const cy = fruit.y * this.cellSize + this.cellSize / 2 + Math.sin(performance.now() / 250) * 1.5;
+
+        ctx.save();
+        this.drawDropShadow(cx, cy + 11, 9, 3);
+        const ball = (x, y, r, color) => {
+            const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.35, r * 0.1, x, y, r);
+            g.addColorStop(0, this.shadeColor(color, 45));
+            g.addColorStop(0.6, color);
+            g.addColorStop(1, this.shadeColor(color, -30));
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, 2 * Math.PI);
+            ctx.fill();
+        };
+        const stem = (x1, y1, x2, y2, color = '#5a3a1a') => {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.quadraticCurveTo((x1 + x2) / 2, y2 - 3, x2, y2);
+            ctx.stroke();
+        };
+
+        switch (fruit.name) {
+            case 'Cherry':
+                stem(cx - 4, cy + 2, cx + 4, cy - 10, '#3a8a2a');
+                stem(cx + 5, cy + 4, cx + 4, cy - 10, '#3a8a2a');
+                ball(cx - 4, cy + 4, 5, fruit.color);
+                ball(cx + 5, cy + 6, 5, fruit.color);
+                break;
+            case 'Strawberry':
+                ctx.fillStyle = fruit.color;
+                ctx.beginPath();
+                ctx.moveTo(cx - 8, cy - 4);
+                ctx.quadraticCurveTo(cx, cy - 10, cx + 8, cy - 4);
+                ctx.quadraticCurveTo(cx + 6, cy + 6, cx, cy + 10);
+                ctx.quadraticCurveTo(cx - 6, cy + 6, cx - 8, cy - 4);
+                ctx.fill();
+                ctx.fillStyle = '#fff6a0';
+                [[-3, -2], [3, -2], [0, 2], [-3, 5], [3, 5]].forEach(([dx, dy]) => ctx.fillRect(cx + dx, cy + dy, 1.5, 1.5));
+                ctx.fillStyle = '#3ccf4e';
+                ctx.fillRect(cx - 5, cy - 9, 10, 3);
+                break;
+            case 'Galaxian':
+                ctx.fillStyle = fruit.color;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - 10);
+                ctx.lineTo(cx + 10, cy + 6);
+                ctx.lineTo(cx, cy + 2);
+                ctx.lineTo(cx - 10, cy + 6);
+                ctx.closePath();
+                ctx.fill();
+                ctx.fillStyle = '#ffd700';
+                ctx.fillRect(cx - 2, cy - 6, 4, 10);
+                ctx.fillStyle = '#ff3030';
+                ctx.fillRect(cx - 1, cy - 9, 2, 3);
+                break;
+            case 'Bell':
+                ctx.fillStyle = fruit.color;
+                ctx.beginPath();
+                ctx.moveTo(cx - 9, cy + 6);
+                ctx.quadraticCurveTo(cx - 8, cy - 10, cx, cy - 10);
+                ctx.quadraticCurveTo(cx + 8, cy - 10, cx + 9, cy + 6);
+                ctx.closePath();
+                ctx.fill();
+                ball(cx, cy + 7, 2.5, '#7fe3ff');
+                break;
+            case 'Key':
+                ctx.strokeStyle = fruit.color;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(cx, cy - 5, 5, 0, 2 * Math.PI);
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(cx, cy + 10);
+                ctx.moveTo(cx, cy + 5);
+                ctx.lineTo(cx + 4, cy + 5);
+                ctx.moveTo(cx, cy + 9);
+                ctx.lineTo(cx + 4, cy + 9);
+                ctx.stroke();
+                break;
+            default: {
+                // Orange, Apple, Melon: a round fruit with a stem and leaf
+                ball(cx, cy + 1, 9, fruit.color);
+                if (fruit.name === 'Melon') {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                    ctx.lineWidth = 1;
+                    for (const dx of [-4, 0, 4]) {
+                        ctx.beginPath();
+                        ctx.moveTo(cx + dx, cy - 7);
+                        ctx.quadraticCurveTo(cx + dx * 1.6, cy + 1, cx + dx, cy + 9);
+                        ctx.stroke();
+                    }
+                }
+                stem(cx, cy - 7, cx + 1, cy - 12);
+                ctx.fillStyle = '#3ccf4e';
+                ctx.beginPath();
+                ctx.ellipse(cx + 5, cy - 10, 4, 2, -0.5, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+        ctx.restore();
+    }
+
     render() {
         // Clear canvas with a subtle radial floor gradient for depth
         if (!this._floorGradient) {
             this._floorGradient = this.ctx.createRadialGradient(
-                this.canvas.width / 2, this.canvas.height / 2, 0,
-                this.canvas.width / 2, this.canvas.height / 2, this.canvas.width / 1.3
+                this.viewWidth / 2, this.viewHeight / 2, 0,
+                this.viewWidth / 2, this.viewHeight / 2, this.viewWidth / 1.3
             );
             this._floorGradient.addColorStop(0, '#0a0a12');
             this._floorGradient.addColorStop(1, '#000000');
         }
         this.ctx.fillStyle = this._floorGradient;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillRect(0, 0, this.viewWidth, this.viewHeight);
 
         // Draw maze
         for (let y = 0; y < this.height; y++) {
@@ -1419,12 +2038,31 @@ class PacmanGame {
                     this.ctx.beginPath();
                     this.ctx.arc(dotX, dotY, 2.5, 0, 2 * Math.PI);
                     this.ctx.fill();
+                } else if (cell === 'o') {
+                    // Power pellet - big pulsing glossy orb
+                    const pelletX = drawX + this.cellSize / 2;
+                    const pelletY = drawY + this.cellSize / 2;
+                    const pulse = 6 + Math.sin(performance.now() / 150) * 1.5;
+                    const pelletGradient = this.ctx.createRadialGradient(
+                        pelletX - 2, pelletY - 2, 0.5,
+                        pelletX, pelletY, pulse
+                    );
+                    pelletGradient.addColorStop(0, '#FFFFFF');
+                    pelletGradient.addColorStop(0.5, '#FFDCC4');
+                    pelletGradient.addColorStop(1, '#D98A75');
+                    this.ctx.fillStyle = pelletGradient;
+                    this.ctx.beginPath();
+                    this.ctx.arc(pelletX, pelletY, pulse, 0, 2 * Math.PI);
+                    this.ctx.fill();
                 }
             }
         }
         
         // Draw ghosts with classic Pacman ghost shape
+        // Ghosts vanish while Pac-Man's death animation plays
+        const hideGhosts = this.dying && this.deathTimer > 300;
         for (let ghost of this.ghosts) {
+            if (hideGhosts) break;
             const drawX = ghost.x * this.cellSize;
             const drawY = ghost.y * this.cellSize;
             const centerX = drawX + this.cellSize / 2;
@@ -1464,7 +2102,8 @@ class PacmanGame {
                 this.ctx.arc(centerX + size/3 + pupilOffsetX, centerY + pupilOffsetY, size/15, 0, 2 * Math.PI);
                 this.ctx.fill();
             } else {
-                // Draw classic arcade ghost
+                // Draw classic arcade ghost (blue, or blinking white near the end, while frightened)
+                const bodyColor = ghost.frightened ? (this.isFrightenedEnding() ? '#dddddd' : '#2121ff') : ghost.color;
                 const ghostRadius = this.cellSize / 2.2;
                 const ghostHeight = ghostRadius * 1.3;
                 const topY = centerY - ghostHeight / 2 + ghostRadius;
@@ -1476,9 +2115,9 @@ class PacmanGame {
                     centerX - ghostRadius * 0.35, topY - ghostRadius * 0.25, ghostRadius * 0.1,
                     centerX, centerY, ghostRadius * 1.4
                 );
-                ghostGradient.addColorStop(0, this.shadeColor(ghost.color, 45));
-                ghostGradient.addColorStop(0.6, ghost.color);
-                ghostGradient.addColorStop(1, this.shadeColor(ghost.color, -25));
+                ghostGradient.addColorStop(0, this.shadeColor(bodyColor, 45));
+                ghostGradient.addColorStop(0.6, bodyColor);
+                ghostGradient.addColorStop(1, this.shadeColor(bodyColor, -25));
                 this.ctx.fillStyle = ghostGradient;
                 this.ctx.beginPath();
 
@@ -1504,6 +2143,26 @@ class PacmanGame {
 
                 this.ctx.closePath();
                 this.ctx.fill();
+
+                if (ghost.frightened) {
+                    // Scared face: small eyes and a wobbly mouth
+                    const faceColor = this.isFrightenedEnding() ? '#ff0000' : '#ffb8a0';
+                    this.ctx.fillStyle = faceColor;
+                    this.ctx.fillRect(centerX - ghostRadius / 2 - 2, topY - 2, 4, 4);
+                    this.ctx.fillRect(centerX + ghostRadius / 2 - 2, topY - 2, 4, 4);
+                    this.ctx.strokeStyle = faceColor;
+                    this.ctx.lineWidth = 1.5;
+                    this.ctx.beginPath();
+                    const mouthY = topY + ghostRadius * 0.55;
+                    for (let i = 0; i <= 6; i++) {
+                        const mx = centerX - ghostRadius * 0.6 + (i * ghostRadius * 1.2) / 6;
+                        const my = mouthY + (i % 2 === 0 ? 0 : -3);
+                        if (i === 0) this.ctx.moveTo(mx, my);
+                        else this.ctx.lineTo(mx, my);
+                    }
+                    this.ctx.stroke();
+                    continue;
+                }
 
                 // Classic arcade ghost eyes - white ovals with blue pupils
                 const eyeWidth = ghostRadius / 3.5;
@@ -1602,6 +2261,8 @@ class PacmanGame {
             }
         }
         
+        if (this.fruit) this.drawFruit(this.fruit);
+
         // Draw missiles with realistic rocket appearance
         for (let bullet of this.bullets) {
             const drawX = bullet.x * this.cellSize + this.cellSize / 2;
@@ -1858,7 +2519,14 @@ class PacmanGame {
 
         this.ctx.save();
 
-        this.drawDropShadow(centerX, centerY + radius * 0.85, radius * 0.9, radius * 0.3);
+        // Death animation: Pac-Man turns upward and his mouth opens until he folds away
+        const deathProgress = this.dying ? Math.min(1, Math.max(0, (this.deathTimer - 300) / 1000)) : 0;
+        if (deathProgress >= 1) {
+            this.ctx.restore();
+            return;
+        }
+
+        this.drawDropShadow(centerX, centerY + radius * 0.85, radius * 0.9 * (1 - deathProgress), radius * 0.3);
 
         // Radial gradient for a shaded, spherical look
         const pacGradient = this.ctx.createRadialGradient(
@@ -1873,7 +2541,8 @@ class PacmanGame {
         // Smooth mouth animation - classic chomp
         const mouthCycle = Math.abs(Math.sin(this.pacman.mouthAnimation));
         const maxMouthAngle = 0.4; // Maximum mouth opening (in radians, roughly 45 degrees)
-        const mouthOpenAmount = mouthCycle * maxMouthAngle;
+        let mouthOpenAmount = mouthCycle * maxMouthAngle;
+        if (this.dying) mouthOpenAmount = maxMouthAngle * 0.5 + deathProgress * (Math.PI - maxMouthAngle * 0.5);
 
         let rotation = 0;
         switch (this.pacman.direction) {
@@ -1890,6 +2559,7 @@ class PacmanGame {
                 rotation = -Math.PI / 2;
                 break;
         }
+        if (this.dying) rotation = -Math.PI / 2;
 
         // Draw Pac-Man as a pie with mouth opening/closing
         this.ctx.beginPath();
@@ -1899,7 +2569,7 @@ class PacmanGame {
         this.ctx.fill();
 
         // Draw shield effect if active
-        if (this.hasShield) {
+        if (this.hasShield && !this.dying) {
             const shieldPulse = Math.abs(Math.sin(Date.now() / 200));
             this.ctx.strokeStyle = `rgba(100, 150, 255, ${0.5 + shieldPulse * 0.5})`;
             this.ctx.lineWidth = 3;
@@ -1917,36 +2587,95 @@ class PacmanGame {
     }
     
     gameLoop() {
-        // Fixed-timestep updates: setTimeout rarely hits a true 60 FPS, so run as many
-        // 1/60s steps as real time has passed. Keeps speeds correct on slower machines.
+        // Fixed-timestep updates: rendering runs at the display's refresh rate, while game logic
+        // runs as many 1/60s steps as real time has passed. Keeps speeds correct on any machine.
         const now = performance.now();
         if (this.lastLoopTime === undefined) this.lastLoopTime = now;
         this.loopAccumulator = (this.loopAccumulator || 0) + Math.min(now - this.lastLoopTime, 250);
         this.lastLoopTime = now;
 
+        this.pollGamepad();
         while (this.loopAccumulator >= this.frameTime) {
             this.loopAccumulator -= this.frameTime;
-            if (!this.gameOver && !this.isPaused && !this.levelJustCompleted) {
-                this.movePacman();
-                this.moveGhosts();
-                this.updateBullets();
-                this.updateShootingPower();
-                this.updatePacmanAnimation();
-                this.checkCollisions();
-                this.updateTimer();
-                this.effectsManager.update(this.frameTime / 1000); // Convert to seconds
-            }
+            this.update();
         }
 
-        this.render();
+        // Draw in logical 672x416 coordinates; the transform scales up to the real backing size
+        this.ctx.setTransform(this.renderScale, 0, 0, this.renderScale, 0, 0);
+        if (this.viewMode === '3d' && this.renderer3d) {
+            // WebGL draws the scene underneath; this canvas becomes a transparent overlay for effects
+            this.renderer3d.render(this);
+            this.ctx.clearRect(0, 0, this.viewWidth, this.viewHeight);
+            this.effectsManager.projector = (x, y) => this.renderer3d.projectToOverlay(x, y);
+        } else {
+            this.render();
+            this.effectsManager.projector = null;
+        }
         this.effectsManager.render();
+        this.drawOverlayText();
         this.updatePowerStatusDisplay();
 
         // Update UI displays
         if (this.currentStageElement) this.currentStageElement.textContent = this.lapCount > 1 ? `${this.currentLevel} (Lap ${this.lapCount})` : this.currentLevel;
         if (this.highScoreElement) this.highScoreElement.textContent = this.highScore;
 
-        setTimeout(() => this.gameLoop(), this.frameTime);
+        requestAnimationFrame(() => this.gameLoop());
+    }
+
+    // One fixed 1/60s step of game logic
+    update() {
+        if (this.isPaused) return;
+        this.effectsManager.update(this.frameTime / 1000); // Convert to seconds
+        if (this.gameOver || this.levelJustCompleted) return;
+
+        this.updateTimer();
+        if (this.dying) {
+            this.updateDeath();
+            return;
+        }
+        if (this.readyTimer > 0) {
+            this.updateReady();
+            return;
+        }
+
+        this.updateGhostMode();
+        this.movePacman();
+        this.moveGhosts();
+        this.updateBullets();
+        this.updateShootingPower();
+        this.updateFruit();
+        this.updatePacmanAnimation();
+        this.checkCollisions();
+    }
+
+    // Big centred messages drawn on top of the board (both 2D and 3D views)
+    drawOverlayText() {
+        let text = null;
+        let color = '#ffff00';
+        if (this.gameOver) {
+            text = 'GAME OVER';
+            color = '#ff3030';
+        } else if (this.isPaused) {
+            text = 'PAUSED';
+        } else if (this.readyTimer > 0 && !this.levelJustCompleted) {
+            text = 'READY!';
+        }
+        if (!text) return;
+
+        const ctx = this.ctx;
+        const cx = this.viewWidth / 2;
+        const cy = this.viewHeight / 2;
+        ctx.save();
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+        ctx.fillRect(cx - 130, cy - 26, 260, 52);
+        ctx.font = "bold 34px 'Courier New', monospace";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = color;
+        ctx.fillText(text, cx, cy + 2);
+        ctx.restore();
     }
 
     updateTimer() {
@@ -1968,18 +2697,18 @@ class PacmanGame {
     
     togglePause() {
         // Don't allow pause during stage transition
-        if (this.levelJustCompleted) return;
+        if (this.levelJustCompleted || this.gameOver) return;
 
         this.isPaused = !this.isPaused;
 
         if (this.isPaused) {
             this.statusElement.textContent = 'PAUSED - Press P to Resume';
             this.statusElement.className = 'game-status paused';
+            this.soundManager.stopMusic();
         } else {
-            if (!this.gameOver) {
-                this.statusElement.textContent = '';
-                this.statusElement.className = 'game-status';
-            }
+            this.statusElement.textContent = '';
+            this.statusElement.className = 'game-status';
+            if (!this.dying && this.readyTimer <= 0) this.soundManager.startMusic();
         }
     }
     
@@ -1992,7 +2721,7 @@ class PacmanGame {
 
         // Display active power status
         if (this.hasShootingPower && this.currentPowerType) {
-            powerStatusDiv.style.display = 'block';
+            powerStatusDiv.style.visibility = 'visible';
 
             const powerNames = {
                 'red': 'Homing Missiles',
@@ -2019,7 +2748,7 @@ class PacmanGame {
             this.headerPowerName.textContent = powerNames[this.currentPowerType] || 'Unknown';
             this.headerPowerTime.textContent = `${Math.ceil(this.shootingPowerTimer / 1000)}s`;
         } else if (this.hasShield) {
-            powerStatusDiv.style.display = 'block';
+            powerStatusDiv.style.visibility = 'visible';
             powerNameElement.textContent = 'Shield';
             powerTimerElement.textContent = `${Math.ceil(this.shieldTimer / 1000)}s`;
             powerTypeElement.textContent = 'Invincibility';
@@ -2033,7 +2762,7 @@ class PacmanGame {
             this.headerPowerName.textContent = 'Shield';
             this.headerPowerTime.textContent = `${Math.ceil(this.shieldTimer / 1000)}s`;
         } else if (this.hasSpeedBoost) {
-            powerStatusDiv.style.display = 'block';
+            powerStatusDiv.style.visibility = 'visible';
             powerNameElement.textContent = 'Speed Boost';
             powerTimerElement.textContent = `${Math.ceil(this.speedBoostTimer / 1000)}s`;
             powerTypeElement.textContent = '1.5x speed';
@@ -2047,7 +2776,7 @@ class PacmanGame {
             this.headerPowerName.textContent = 'Speed Boost';
             this.headerPowerTime.textContent = `${Math.ceil(this.speedBoostTimer / 1000)}s`;
         } else {
-            powerStatusDiv.style.display = 'none';
+            powerStatusDiv.style.visibility = 'hidden';
             // Hide header power timer when no power is active
             this.headerPowerTimer.style.display = 'none';
         }
@@ -2062,9 +2791,24 @@ class PacmanGame {
         }
     }
 
+    toggleMusic() {
+        const enabled = this.soundManager.toggleMusic();
+        this.updateMusicButton();
+        this.flashStatus(enabled ? 'Music On' : 'Music Off', 'game-status power-up', 1000);
+    }
+
+    updateMusicButton() {
+        const musicButton = document.getElementById('musicButton');
+        if (!musicButton) return;
+        const enabled = this.soundManager.musicEnabled;
+        musicButton.classList.toggle('off', !enabled);
+        musicButton.title = enabled ? 'Music off (N)' : 'Music on (N)';
+    }
+
     advanceToNextStage() {
         const completedStage = this.currentLevel;
         this.currentLevel++;
+        this.soundManager.stopMusic();
 
         if (this.currentLevel > this.maxLevel) {
             // Completed a full lap through all stages - loop back to Stage 1
@@ -2072,9 +2816,6 @@ class PacmanGame {
             this.currentLevel = 1;
             this.lapCount++;
             this.difficultyMultiplier = Math.min(this.difficultyMultiplier * 1.12, 2.5);
-            this.ghosts.forEach(ghost => {
-                ghost.speed = ghost.baseSpeed * this.difficultyMultiplier;
-            });
             this.statusElement.textContent = `ALL STAGES COMPLETE! Lap ${this.lapCount} - ghosts are faster now. Loading Stage 1...`;
         } else {
             this.statusElement.textContent = `STAGE ${completedStage} COMPLETE! Loading Stage ${this.currentLevel}...`;
@@ -2089,30 +2830,21 @@ class PacmanGame {
         this.soundManager.playLevelUpSound();
 
         // Pause 1.5s for transition
-        setTimeout(() => {
+        clearTimeout(this.stageTransition);
+        this.stageTransition = setTimeout(() => {
             this.loadStage(this.currentLevel);
+            this.startReady(1500, false);
         }, 1500);
     }
 
     loadStage(stageNumber) {
         // Load new maze (deep copy)
         this.maze = MAZE_LAYOUTS[stageNumber - 1].map(row => row);
+        this.mazeVersion++;
+        this.placePowerPellets();
 
-        // Reset Pacman to (1, 1)
-        this.pacman.x = 1;
-        this.pacman.y = 1;
-        this.pacman.direction = 'right';
-        this.pacman.nextDirection = 'right';
-
-        // Reset ghosts to home positions
-        this.ghosts.forEach(ghost => {
-            ghost.x = ghost.homeX;
-            ghost.y = ghost.homeY;
-            ghost.targetX = ghost.homeX;
-            ghost.targetY = ghost.homeY;
-            ghost.isDead = false;
-            ghost.respawnTimer = 0;
-        });
+        // Reset Pac-Man and ghosts to their starting tiles for this layout
+        this.resetPositions();
 
         // Clear bullets and power-ups
         this.bullets = [];
@@ -2123,22 +2855,21 @@ class PacmanGame {
         this.shieldTimer = 0;
         this.hasSpeedBoost = false;
         this.speedBoostTimer = 0;
+        this.endFrightened();
 
         // Re-place mushrooms
         this.mushrooms = [];
         this.placeMushrooms();
 
-        // Update UI - show stage number
-        this.statusElement.textContent = this.lapCount > 1 ? `Stage ${this.currentLevel} (Lap ${this.lapCount})` : `Stage ${this.currentLevel}`;
-        this.statusElement.className = 'game-status stage-indicator';
+        // Bonus fruit bookkeeping
+        this.fruit = null;
+        this.fruitsSpawned = 0;
+        this.dotsEaten = 0;
+        this.totalDots = this.countDots();
 
-        // Clear stage indicator after 2s
-        setTimeout(() => {
-            if (!this.gameOver) {
-                this.statusElement.textContent = '';
-                this.statusElement.className = 'game-status';
-            }
-        }, 2000);
+        // Update UI - show stage number
+        const label = this.lapCount > 1 ? `Stage ${this.currentLevel} (Lap ${this.lapCount})` : `Stage ${this.currentLevel}`;
+        this.flashStatus(label, 'game-status stage-indicator', 2000);
 
         this.levelJustCompleted = false;
 
@@ -2146,6 +2877,8 @@ class PacmanGame {
     }
 
     restart() {
+        clearTimeout(this.stageTransition);
+
         // Reset to STAGE 1
         this.currentLevel = 1;
         this.levelJustCompleted = false;
@@ -2154,44 +2887,27 @@ class PacmanGame {
 
         // Reset game state
         this.pacman = { x: 1, y: 1, direction: 'right', nextDirection: 'right', mouthAnimation: 0, mouthOpen: true };
-        this.ghosts = [
-            { x: 9, y: 5, targetX: 9, targetY: 5, direction: 'up', color: '#ff0000', shape: 'circle', speed: 0.033, baseSpeed: 0.033, points: 100, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 9, y: 5 }, isDead: false, respawnTimer: 0, homeX: 9, homeY: 5 },
-            { x: 10, y: 5, targetX: 10, targetY: 5, direction: 'down', color: '#ffb8ff', shape: 'square', speed: 0.029, baseSpeed: 0.029, points: 150, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 10, y: 5 }, isDead: false, respawnTimer: 0, homeX: 10, homeY: 5 },
-            { x: 11, y: 5, targetX: 11, targetY: 5, direction: 'left', color: '#00ffff', shape: 'triangle', speed: 0.038, baseSpeed: 0.038, points: 120, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 11, y: 5 }, isDead: false, respawnTimer: 0, homeX: 11, homeY: 5 },
-            { x: 8, y: 6, targetX: 8, targetY: 6, direction: 'right', color: '#ffa500', shape: 'diamond', speed: 0.032, baseSpeed: 0.032, points: 180, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 8, y: 6 }, isDead: false, respawnTimer: 0, homeX: 8, homeY: 6 },
-            { x: 12, y: 6, targetX: 12, targetY: 6, direction: 'up', color: '#00ff00', shape: 'star', speed: 0.042, baseSpeed: 0.042, points: 250, moveProgress: 0, stuckCounter: 0, lastPosition: { x: 12, y: 6 }, isDead: false, respawnTimer: 0, homeX: 12, homeY: 6 }
-        ];
+        this.ghosts = this.createGhosts();
         this.score = 0;
         this.gameOver = false;
         this.gameWon = false;
-        this.hasShootingPower = false;
-        this.shootingPowerTimer = 0;
-        this.currentPowerType = null;
         this.isPaused = false;
-        this.bullets = [];
-        this.mushrooms = [];
+        this.dying = false;
+        this.lives = this.difficulty.lives;
+        this.nextExtraLifeScore = EXTRA_LIFE_EVERY;
+        this.effectsManager.clear();
 
         // Reset timer
         this.gameStartTime = Date.now();
         this.timerElement.textContent = '0:00';
 
-        // Load stage 1 maze
-        this.maze = MAZE_LAYOUTS[0].map(row => row);
+        // Load stage 1 maze, power-ups and positions
+        this.loadStage(1);
 
-        // Place new mushrooms
-        this.placeMushrooms();
-
-        // Reset UI with stage indicator
+        // Reset UI
         this.scoreElement.textContent = this.score;
-        this.statusElement.textContent = 'Stage 1';
-        this.statusElement.className = 'game-status stage-indicator';
-
-        setTimeout(() => {
-            if (!this.gameOver) {
-                this.statusElement.textContent = '';
-                this.statusElement.className = 'game-status';
-            }
-        }, 2000);
+        this.updateLivesDisplay();
+        this.startReady(2200, true);
     }
 }
 

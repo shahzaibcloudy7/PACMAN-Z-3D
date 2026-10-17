@@ -3,61 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pacman Game</title>
+    <title>PACMAN3D-Z</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>Pacman Game</h1>
+        <h1>PACMAN3D-Z</h1>
         <div class="game-info">
             <div class="stage">Stage: <span id="currentStage">1</span></div>
             <div class="score">Score: <span id="score">0</span></div>
             <div class="high-score">High Score: <span id="highScore">0</span></div>
+            <div class="lives-display">Lives: <span id="lives"></span></div>
             <div class="timer">Time: <span id="timer">0:00</span></div>
             <div class="power-timer" id="headerPowerTimer" style="display: none;">
                 Power: <span id="headerPowerName">None</span> (<span id="headerPowerTime">0s</span>)
             </div>
             <div class="controls">
-                <span>Use WASD or Arrow Keys to move</span>
+                <label class="difficulty" title="Changing difficulty starts a new game">
+                    <select id="difficultySelect">
+                        <option value="easy">Easy</option>
+                        <option value="normal">Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </label>
                 <button id="soundButton" class="sound-button" title="Mute (M)">🔊</button>
-                <button id="viewButton" class="sound-button" title="Toggle 3D View (V)">🧊</button>
+                <button id="musicButton" class="sound-button" title="Music off (N)">🎵</button>
+                <button id="viewButton" class="sound-button" title="Switch view (V)">🧊</button>
+                <button id="fullscreenButton" class="sound-button" title="Fullscreen (F)">⛶</button>
             </div>
         </div>
         <div class="canvas-stage" id="canvasStage">
-            <canvas id="gameCanvas" width="672" height="416"></canvas>
+            <div class="canvas-frame">
+                <canvas id="gameCanvas3d" width="672" height="416"></canvas>
+                <canvas id="gameCanvas" width="672" height="416"></canvas>
+            </div>
         </div>
         <div class="game-status" id="gameStatus"></div>
-        
+
         <!-- Power Status Display -->
-        <div class="power-status" id="powerStatus" style="display: none;">
-            <h3>Active Power</h3>
-            <table>
-                <tr>
-                    <td><strong>Power:</strong></td>
-                    <td id="powerName">None</td>
-                </tr>
-                <tr>
-                    <td><strong>Time Left:</strong></td>
-                    <td id="powerTimer">0s</td>
-                </tr>
-                <tr>
-                    <td><strong>Type:</strong></td>
-                    <td id="powerType">-</td>
-                </tr>
-            </table>
+        <div class="power-status" id="powerStatus">
+            <span class="power-label">Active Power:</span>
+            <span id="powerName">None</span>
+            <span class="power-type">(<span id="powerType">-</span>)</span>
             <div class="power-timer-bar">
                 <div class="power-timer-fill" id="powerTimerFill" style="width: 100%;"></div>
             </div>
+            <span id="powerTimer">0s</span>
         </div>
-        
+
         <div class="instructions">
-            <p>🟡 = Pacman | 👻 = Ghosts | • = Dots | 🍄 = Mushrooms</p>
-            <p>Collect all dots to advance to the next stage! Complete all 7 stages to win!</p>
-            <p><strong>Controls:</strong> WASD/Arrows = Move | Space = Shoot (when powered) | P = Pause/Resume | R = Restart | M = Mute/Unmute | V = Toggle 3D View</p>
+            <p>🟡 = Pacman | 👻 = Ghosts | • = Dots | ⚪ = Power Pellets (eat the ghosts!) | 🍄 = Mushrooms | 🍒 = Bonus Fruit</p>
+            <p>Clear all dots to advance through 14 stages - then the maze loops with faster ghosts. Extra life every 10,000 points.</p>
+            <p><strong>Keys:</strong> WASD/Arrows = Move | Space = Shoot (when powered) | P = Pause | R = Restart | M = Mute | N = Music | V = View (Flat / Tilted / 3D) | F = Fullscreen</p>
+            <p><strong>Controller:</strong> D-pad/Stick = Move | A/RT = Shoot | Start = Pause | Y = View | X = Music</p>
         </div>
     </div>
+    <script src="vendor/three.min.js"></script>
     <script src="sounds.js"></script>
     <script src="effects.js"></script>
+    <script src="renderer3d.js"></script>
     <script src="pacman.js"></script>
 </body>
 </html>

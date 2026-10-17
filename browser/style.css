@@ -26,9 +26,41 @@ h1 {
 
 .game-info {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
+    gap: 10px 20px;
     margin-bottom: 20px;
     padding: 0 20px;
+}
+
+.lives-display {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffff00;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Little Pac-Man icons (mouth wedge cut out with a conic gradient) */
+.life-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: conic-gradient(#ffff00 0deg 60deg, transparent 60deg 120deg, #ffff00 120deg 360deg);
+}
+
+.difficulty select {
+    background: #333;
+    color: #fff;
+    border: 2px solid #555;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 5px 6px;
+    cursor: pointer;
 }
 
 .score {
@@ -111,13 +143,42 @@ h1 {
     transform: scale(0.95);
 }
 
+.sound-button.off {
+    opacity: 0.4;
+}
+
 .canvas-stage {
     perspective: 1300px;
     perspective-origin: 50% 15%;
     padding: 10px 0 40px;
 }
 
+.canvas-frame {
+    position: relative;
+    display: inline-block;
+}
+
+/* WebGL canvas sits underneath; in 3D mode the 2D canvas becomes a transparent overlay for effects */
+#gameCanvas3d {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 2px solid #333;
+    background-color: #000;
+    display: none;
+}
+
+.canvas-stage.mode-3d #gameCanvas3d {
+    display: block;
+}
+
+.canvas-stage.mode-3d #gameCanvas {
+    background-color: transparent;
+    border-color: transparent;
+}
+
 #gameCanvas {
+    position: relative;
     border: 2px solid #333;
     background-color: #000;
     display: block;
@@ -160,40 +221,43 @@ h1 {
 }
 
 .power-status {
-    margin-top: 15px;
-    padding: 10px;
+    margin: 10px auto 0;
+    max-width: 680px;
+    padding: 6px 12px;
     background-color: rgba(255, 255, 0, 0.1);
     border: 2px solid #ffff00;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    /* Hidden with visibility (not display) so the board doesn't jump when a power starts or ends */
+    visibility: hidden;
+}
+
+.power-label {
+    font-weight: bold;
+    color: #ffff00;
+}
+
+.power-type {
+    color: #ccc;
+}
+
+/* Fullscreen: give the board the room the help text would take */
+html:fullscreen .instructions {
     display: none;
 }
 
-.power-status table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.power-status td {
-    padding: 5px 10px;
-    text-align: left;
-}
-
-.power-status td:first-child {
-    font-weight: bold;
-    color: #ffff00;
-    width: 40%;
-}
-
-.power-status td:last-child {
-    color: #fff;
+html:fullscreen body {
+    padding: 0;
 }
 
 .power-timer-bar {
-    width: 100%;
+    flex: 1;
     height: 8px;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 4px;
-    margin-top: 8px;
     overflow: hidden;
 }
 
@@ -241,11 +305,6 @@ h1 {
 
     .game-container {
         padding: 10px;
-    }
-
-    #gameCanvas {
-        max-width: 100%;
-        height: auto;
     }
 
     .game-info {

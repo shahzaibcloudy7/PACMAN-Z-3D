@@ -13,3 +13,9 @@ nul
 
 # Auto Claude data directory
 .auto-claude/
+
+# Built executables are published on GitHub Releases, not committed
+desktop/*.exe
+
+# Playwright MCP output
+.playwright-mcp/

@@ -5,13 +5,12 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 700,
+    width: 1000,
+    height: 820,
     minWidth: 800,
     minHeight: 700,
-    maxWidth: 800,
-    maxHeight: 700,
-    resizable: false,
+    resizable: true,
+    fullscreenable: true,
     backgroundColor: '#000000',
     title: 'PACMAN3D-Z',
     icon: path.join(__dirname, 'build', 'icon.ico'), // Optional
@@ -32,7 +31,13 @@ function createWindow() {
     mainWindow = null;
   });
 
-  mainWindow.setResizable(false);
+  // F11 toggles fullscreen at the window level too (the game also handles F / F11 itself)
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.type === 'keyDown' && input.key === 'F11') {
+      mainWindow.setFullScreen(!mainWindow.isFullScreen());
+      event.preventDefault();
+    }
+  });
 }
 
 app.whenReady().then(() => {
