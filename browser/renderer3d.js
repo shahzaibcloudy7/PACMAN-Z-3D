@@ -1,6 +1,9 @@
-// Real 3D renderer for PACMAN3D-Z (Three.js / WebGL).
+// Real 3D renderer for PACMAN-Z-3D (Three.js / WebGL).
 // It only reads game state each frame - all game logic stays in pacman.js.
 // Maze tile (x, y) maps to world position (x, 0, y); walls rise along +Y.
+
+const WALL_HEIGHT = 0.6;
+const SCENE_COLOR = 0x05051a;
 
 class Renderer3D {
     static isSupported() {
@@ -25,17 +28,14 @@ class Renderer3D {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x02020a);
-        this.scene.fog = new THREE.Fog(0x02020a, 22, 40);
+        this.scene.background = new THREE.Color(SCENE_COLOR);
+        this.scene.fog = new THREE.Fog(SCENE_COLOR, 24, 46);
 
-        // Angled overview camera that keeps the whole 21x13 maze in frame
+        // Angled overview camera, pulled back just far enough to keep the whole maze in frame
         const centerX = (game.width - 1) / 2;
         const centerZ = (game.height - 1) / 2;
-        this.camera = new THREE.PerspectiveCamera(40, game.viewWidth / game.viewHeight, 0.1, 100);
-        this.cameraBase = new THREE.Vector3(centerX, 18, centerZ + 8.5);
-        this.cameraTarget = new THREE.Vector3(centerX, 0, centerZ + 0.4);
-        this.camera.position.copy(this.cameraBase);
-        this.camera.lookAt(this.cameraTarget);
+        this.camera = new THREE.PerspectiveCamera(36, game.viewWidth / game.viewHeight, 0.1, 100);
+        this.fitCamera(game, centerX, centerZ);
 
         this.buildLights(centerX, centerZ);
         this.buildFloor(game, centerX, centerZ);
@@ -51,11 +51,39 @@ class Renderer3D {
         this.resize(game.viewWidth, game.viewHeight);
     }
 
-    buildLights(centerX, centerZ) {
-        this.scene.add(new THREE.AmbientLight(0x8090c0, 0.55));
-        this.scene.add(new THREE.HemisphereLight(0x8899ff, 0x110022, 0.35));
+    // Back the camera off along a fixed viewing angle until every corner of the maze is on screen
+    fitCamera(game, centerX, centerZ) {
+        const elevation = THREE.MathUtils.degToRad(55);
+        const direction = new THREE.Vector3(0, Math.sin(elevation), Math.cos(elevation));
+        const target = new THREE.Vector3(centerX, 0, centerZ + 0.3);
+        const corner = new THREE.Vector3();
+        const margin = 0.96;
 
-        const sun = new THREE.DirectionalLight(0xffffff, 1.1);
+        let distance = 12;
+        for (; distance < 45; distance += 0.25) {
+            this.camera.position.copy(target).addScaledVector(direction, distance);
+            this.camera.lookAt(target);
+            this.camera.updateMatrixWorld(true);
+            let fits = true;
+            for (const x of [-0.5, game.width - 0.5]) {
+                for (const y of [0, WALL_HEIGHT + 0.1]) {
+                    for (const z of [-0.5, game.height - 0.5]) {
+                        corner.set(x, y, z).project(this.camera);
+                        if (Math.abs(corner.x) > margin || Math.abs(corner.y) > margin) fits = false;
+                    }
+                }
+            }
+            if (fits) break;
+        }
+        this.cameraBase = this.camera.position.clone();
+        this.cameraTarget = target;
+    }
+
+    buildLights(centerX, centerZ) {
+        this.scene.add(new THREE.AmbientLight(0x8090c0, 0.5));
+        this.scene.add(new THREE.HemisphereLight(0x99aaff, 0x110022, 0.45));
+
+        const sun = new THREE.DirectionalLight(0xffffff, 1.25);
         sun.position.set(centerX - 6, 18, centerZ + 8);
         sun.target.position.set(centerX, 0, centerZ);
         sun.castShadow = true;
@@ -74,9 +102,26 @@ class Renderer3D {
     }
 
     buildFloor(game, centerX, centerZ) {
+        // Faint tile grid so lanes read clearly; the plane is far larger than the maze so no edge shows
+        const tile = document.createElement('canvas');
+        tile.width = tile.height = 64;
+        const tctx = tile.getContext('2d');
+        tctx.fillStyle = '#0a0a24';
+        tctx.fillRect(0, 0, 64, 64);
+        tctx.strokeStyle = '#16164a';
+        tctx.lineWidth = 3;
+        tctx.strokeRect(0, 0, 64, 64);
+        const texture = new THREE.CanvasTexture(tile);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.anisotropy = 4;
+        const floorW = game.width + 30;
+        const floorH = game.height + 30;
+        texture.repeat.set(floorW, floorH);
+
         const floor = new THREE.Mesh(
-            new THREE.PlaneGeometry(game.width + 6, game.height + 6),
-            new THREE.MeshStandardMaterial({ color: 0x07071a, roughness: 0.85, metalness: 0.1 })
+            new THREE.PlaneGeometry(floorW, floorH),
+            new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8, metalness: 0.15 })
         );
         floor.rotation.x = -Math.PI / 2;
         floor.position.set(centerX, 0, centerZ);
@@ -88,55 +133,58 @@ class Renderer3D {
         const cells = game.width * game.height;
 
         this.wallMaterial = new THREE.MeshStandardMaterial({ color: 0x2b2bff, emissive: 0x0a0a55, roughness: 0.35, metalness: 0.2 });
-        this.walls = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.9, 1), this.wallMaterial, cells);
+        this.walls = new THREE.InstancedMesh(new THREE.BoxGeometry(1, WALL_HEIGHT, 1), this.wallMaterial, cells);
         this.walls.castShadow = true;
         this.walls.receiveShadow = true;
         this.scene.add(this.walls);
 
-        // Glowing top edge on every wall block for the neon arcade look
+        // Glowing inset top on every wall block: a neon panel framed by the darker wall body
         this.wallCaps = new THREE.InstancedMesh(
-            new THREE.BoxGeometry(1.001, 0.06, 1.001),
-            new THREE.MeshBasicMaterial({ color: 0x6f6fff }),
+            new THREE.BoxGeometry(0.84, 0.05, 0.84),
+            new THREE.MeshBasicMaterial({ color: 0x4444ff }),
             cells
         );
         this.scene.add(this.wallCaps);
 
         this.dots = new THREE.InstancedMesh(
-            new THREE.SphereGeometry(0.09, 10, 8),
-            new THREE.MeshStandardMaterial({ color: 0xffdcc4, emissive: 0x664433, roughness: 0.3 }),
+            new THREE.SphereGeometry(0.11, 12, 10),
+            new THREE.MeshStandardMaterial({ color: 0xfff0d8, emissive: 0xaa8855, roughness: 0.3 }),
             cells
         );
         this.scene.add(this.dots);
 
         this.pellets = new THREE.InstancedMesh(
-            new THREE.SphereGeometry(0.22, 18, 14),
-            new THREE.MeshStandardMaterial({ color: 0xffe6d6, emissive: 0xaa7766, roughness: 0.2 }),
+            new THREE.SphereGeometry(0.26, 18, 14),
+            new THREE.MeshStandardMaterial({ color: 0xfff0e0, emissive: 0xcc9977, roughness: 0.2 }),
             16
         );
         this.pellets.castShadow = true;
         this.scene.add(this.pellets);
     }
 
-    // Two hemispheres hinged at the back form the chomping mouth
+    // Two half-spheres hinged on the vertical axis form the chomping mouth: the wedge opens
+    // sideways, so it stays visible from the high camera (Pac-Man faces +X)
     buildPacman() {
         const group = new THREE.Group();
-        const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xffee00, emissive: 0x443300, roughness: 0.35 });
-        const mouthMaterial = new THREE.MeshStandardMaterial({ color: 0x551100, roughness: 0.8, side: THREE.DoubleSide });
-        const r = 0.42;
+        const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xffe600, emissive: 0x806600, roughness: 0.3 });
+        const mouthMaterial = new THREE.MeshStandardMaterial({ color: 0xaa2200, emissive: 0x330800, roughness: 0.7, side: THREE.DoubleSide });
+        const eyeMaterial = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2 });
+        const r = 0.48;
 
-        const upper = new THREE.Group();
-        const upperShell = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), bodyMaterial);
-        const upperCap = new THREE.Mesh(new THREE.CircleGeometry(r, 32), mouthMaterial);
-        upperCap.rotation.x = Math.PI / 2;
-        upper.add(upperShell, upperCap);
-
-        const lower = new THREE.Group();
-        const lowerShell = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), bodyMaterial);
-        const lowerCap = new THREE.Mesh(new THREE.CircleGeometry(r, 32), mouthMaterial);
-        lowerCap.rotation.x = -Math.PI / 2;
-        lower.add(lowerShell, lowerCap);
-
-        [upperShell, lowerShell].forEach(m => { m.castShadow = true; });
+        // phi 0..PI is the z > 0 half of the sphere, PI..2PI the z < 0 half
+        const buildJaw = (phiStart, side) => {
+            const jaw = new THREE.Group();
+            const shell = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 20, phiStart, Math.PI), bodyMaterial);
+            shell.castShadow = true;
+            const cut = new THREE.Mesh(new THREE.CircleGeometry(r, 32), mouthMaterial);
+            cut.rotation.y = side > 0 ? Math.PI : 0;
+            const eye = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 10), eyeMaterial);
+            eye.position.set(r * 0.35, r * 0.82, side * r * 0.32);
+            jaw.add(shell, cut, eye);
+            return jaw;
+        };
+        const upper = buildJaw(0, 1);
+        const lower = buildJaw(Math.PI, -1);
         group.add(upper, lower);
 
         // Translucent bubble shown while the shield power is active
@@ -152,7 +200,7 @@ class Renderer3D {
 
     buildGhost(color) {
         const group = new THREE.Group();
-        const bodyMaterial = new THREE.MeshStandardMaterial({ color, emissive: new THREE.Color(color).multiplyScalar(0.25), roughness: 0.4 });
+        const bodyMaterial = new THREE.MeshStandardMaterial({ color, emissive: new THREE.Color(color).multiplyScalar(0.35), roughness: 0.4 });
 
         const body = new THREE.Group();
         const skirt = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.42, 0.42, 24, 1, true), bodyMaterial);
@@ -210,6 +258,7 @@ class Renderer3D {
         stem.castShadow = true;
         cap.castShadow = true;
         group.add(stem, cap);
+        group.scale.setScalar(1.4);
         this.scene.add(group);
         return { group, capMaterial };
     }
@@ -225,6 +274,7 @@ class Renderer3D {
         );
         stem.position.y = 0.28;
         group.add(ball, stem);
+        group.scale.setScalar(1.25);
         group.visible = false;
         this.scene.add(group);
         return { group, material };
@@ -264,12 +314,12 @@ class Renderer3D {
         for (let y = 0; y < game.height; y++) {
             for (let x = 0; x < game.width; x++) {
                 if (game.maze[y][x] !== '#') continue;
-                m.position.set(x, 0.45, y);
+                m.position.set(x, WALL_HEIGHT / 2, y);
                 m.rotation.set(0, 0, 0);
                 m.scale.set(1, 1, 1);
                 m.updateMatrix();
                 this.walls.setMatrixAt(count, m.matrix);
-                m.position.y = 0.92;
+                m.position.y = WALL_HEIGHT + 0.025;
                 m.updateMatrix();
                 this.wallCaps.setMatrixAt(count, m.matrix);
                 count++;
@@ -282,9 +332,9 @@ class Renderer3D {
 
         // A different wall tint on each lap
         const hue = (0.66 + (game.lapCount - 1) * 0.13) % 1;
-        this.wallMaterial.color.setHSL(hue, 0.85, 0.42);
-        this.wallMaterial.emissive.setHSL(hue, 0.9, 0.12);
-        this.wallCaps.material.color.setHSL(hue, 1, 0.6);
+        this.wallMaterial.color.setHSL(hue, 0.8, 0.3);
+        this.wallMaterial.emissive.setHSL(hue, 0.9, 0.1);
+        this.wallCaps.material.color.setHSL(hue, 1, 0.5);
     }
 
     syncDots(game, time) {
@@ -320,7 +370,8 @@ class Renderer3D {
         p.group.visible = deathProgress < 1;
         p.group.position.set(game.pacman.x, p.radius, game.pacman.y);
 
-        let mouth = Math.abs(Math.sin(game.pacman.mouthAnimation)) * 0.55;
+        // Never fully closed, so the mouth always reads as Pac-Man
+        let mouth = 0.14 + Math.abs(Math.sin(game.pacman.mouthAnimation)) * 0.62;
         let yaw = this.directionYaw(game.pacman.direction);
         if (game.dying) {
             // Spin, gape and shrink away
@@ -329,8 +380,8 @@ class Renderer3D {
         }
         p.group.rotation.set(0, yaw, 0);
         p.group.scale.setScalar(1 - deathProgress * 0.9);
-        p.upper.rotation.z = mouth;
-        p.lower.rotation.z = -mouth;
+        p.upper.rotation.y = -mouth;
+        p.lower.rotation.y = mouth;
 
         p.shield.visible = game.hasShield && !game.dying;
         if (p.shield.visible) p.shield.material.opacity = 0.18 + Math.abs(Math.sin(performance.now() / 200)) * 0.2;
@@ -358,12 +409,12 @@ class Renderer3D {
             mesh.eyes.visible = !ghost.frightened;
             mesh.scaredFace.visible = ghost.frightened && !ghost.isDead;
             if (ghost.frightened) {
-                mesh.bodyMaterial.color.set(ending ? 0xdddddd : 0x2121ff);
-                mesh.bodyMaterial.emissive.set(ending ? 0x444444 : 0x080840);
+                mesh.bodyMaterial.color.set(ending ? 0xeeeeee : 0x4466ff);
+                mesh.bodyMaterial.emissive.set(ending ? 0x666666 : 0x1a2a99);
                 mesh.scaredMaterial.color.set(ending ? 0xff2020 : 0xffc8b0);
             } else {
                 mesh.bodyMaterial.color.copy(mesh.color);
-                mesh.bodyMaterial.emissive.copy(mesh.color).multiplyScalar(0.25);
+                mesh.bodyMaterial.emissive.copy(mesh.color).multiplyScalar(0.35);
             }
         });
     }

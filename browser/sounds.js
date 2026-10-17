@@ -3,6 +3,13 @@ class SoundManager {
         this.audioContext = null;
         this.isMuted = false;
         this.volume = 0.3;
+        // Master volume slider level (0-1), shared by effects and music; 0.67 matches the original loudness
+        this.masterLevel = 0.67;
+        try {
+            const saved = parseFloat(localStorage.getItem('pacmanVolume'));
+            if (!isNaN(saved)) this.masterLevel = Math.max(0, Math.min(1, saved));
+        } catch (e) { /* storage unavailable */ }
+        this.masterGain = null;
         this.initAudioContext();
         this.initMusic();
     }
@@ -18,6 +25,24 @@ class SoundManager {
         }
     }
     
+    // Everything plays through one master gain so the volume control affects all sound
+    get output() {
+        if (!this.masterGain) {
+            this.masterGain = this.audioContext.createGain();
+            this.masterGain.gain.value = this.masterLevel * 1.5;
+            this.masterGain.connect(this.audioContext.destination);
+        }
+        return this.masterGain;
+    }
+
+    // Set the master volume from 0 (silent) to 1 (loudest)
+    setMasterVolume(level) {
+        this.masterLevel = Math.max(0, Math.min(1, level));
+        if (this.masterGain) this.masterGain.gain.value = this.masterLevel * 1.5;
+        try { localStorage.setItem('pacmanVolume', String(this.masterLevel)); } catch (e) { /* storage unavailable */ }
+        return this.masterLevel;
+    }
+
     // Resume audio context (required by browsers after user interaction)
     resumeAudioContext() {
         if (this.audioContext && this.audioContext.state === 'suspended') {
@@ -38,7 +63,7 @@ class SoundManager {
             const gainNode = this.audioContext.createGain();
 
             oscillator.connect(gainNode);
-            gainNode.connect(this.audioContext.destination);
+            gainNode.connect(this.output);
 
             oscillator.frequency.setValueAtTime(frequency, this.audioContext.currentTime);
             oscillator.type = type;
@@ -66,7 +91,7 @@ class SoundManager {
                 const gainNode = this.audioContext.createGain();
 
                 oscillator.connect(gainNode);
-                gainNode.connect(this.audioContext.destination);
+                gainNode.connect(this.output);
 
                 oscillator.frequency.setValueAtTime(tone.frequency, startTime);
                 oscillator.type = tone.type || 'square';
@@ -354,7 +379,7 @@ class SoundManager {
             gainNode.gain.setValueAtTime(0.2, t);
             gainNode.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
             oscillator.connect(gainNode);
-            gainNode.connect(this.audioContext.destination);
+            gainNode.connect(this.output);
             oscillator.start(t);
             oscillator.stop(t + 0.3);
         } catch (err) {
@@ -397,7 +422,7 @@ class SoundManager {
         if (!this.musicGain) {
             this.musicGain = this.audioContext.createGain();
             this.musicGain.gain.value = 0.1;
-            this.musicGain.connect(this.audioContext.destination);
+            this.musicGain.connect(this.output);
         }
         this.musicPlaying = true;
         this.musicStep = 0;

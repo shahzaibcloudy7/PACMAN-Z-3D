@@ -285,6 +285,18 @@ const EXTRA_LIFE_EVERY = 10000;
 const DEATH_ANIMATION_MS = 1500;
 const VIEW_MODES = ['flat', 'tilt', '3d'];
 
+// Active-power HUD rows: how to read each power's remaining/total time from the game
+const POWER_DISPLAY = [
+    { key: 'frightened', icon: '👻', color: '#4488ff', read: g => ({ label: 'Ghosts Scared', remaining: g.frightenedTimer, total: g.frightenedDuration || 1 }) },
+    { key: 'shoot', icon: '🔫', color: '#ff5555', read: g => {
+        if (!g.hasShootingPower) return null;
+        const labels = { red: 'Missiles', purple: 'Multi-Shot', golden: 'Super Bullet' };
+        return { label: labels[g.currentPowerType] || 'Shooting', remaining: g.shootingPowerTimer, total: g.shootingPowerDuration || 1 };
+    } },
+    { key: 'shield', icon: '🛡️', color: '#44aaff', read: g => g.hasShield ? { label: 'Shield', remaining: g.shieldTimer, total: g.shieldDuration || 1 } : null },
+    { key: 'speed', icon: '⚡', color: '#44dd66', read: g => g.hasSpeedBoost ? { label: 'Speed Boost', remaining: g.speedBoostTimer, total: g.speedBoostDuration || 1 } : null }
+];
+
 class PacmanGame {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
@@ -295,9 +307,6 @@ class PacmanGame {
         this.highScoreElement = document.getElementById('highScore');
         this.timerElement = document.getElementById('timer');
         this.statusElement = document.getElementById('gameStatus');
-        this.headerPowerTimer = document.getElementById('headerPowerTimer');
-        this.headerPowerName = document.getElementById('headerPowerName');
-        this.headerPowerTime = document.getElementById('headerPowerTime');
         this.soundManager = new SoundManager();
         this.effectsManager = new EffectsManager(this.canvas, this.ctx);
 
@@ -537,6 +546,14 @@ class PacmanGame {
             });
         };
         bind('soundButton', () => this.toggleSound());
+        const slider = document.getElementById('volumeSlider');
+        if (slider) {
+            slider.value = Math.round(this.soundManager.masterLevel * 100);
+            slider.addEventListener('input', () => this.setVolume(slider.value / 100));
+            // Hand the arrow keys back to Pac-Man once the slider is released
+            slider.addEventListener('change', () => slider.blur());
+        }
+        this.updateSoundButton();
         bind('musicButton', () => this.toggleMusic());
         bind('viewButton', () => this.toggleView());
         bind('fullscreenButton', () => this.toggleFullscreen());
@@ -624,6 +641,15 @@ class PacmanGame {
             // Ignore keys typed into the difficulty dropdown
             if (event.target && event.target.tagName === 'SELECT') return;
             this.soundManager.resumeAudioContext();
+
+            // Volume down / up
+            if (event.key === '-' || event.key === '_' || event.key === '=' || event.key === '+') {
+                const delta = (event.key === '-' || event.key === '_') ? -0.1 : 0.1;
+                this.setVolume(this.soundManager.masterLevel + delta);
+                this.flashStatus(`Volume ${Math.round(this.soundManager.masterLevel * 100)}%`, 'game-status power-up', 800);
+                event.preventDefault();
+                return;
+            }
 
             // Handle mute toggle
             if (event.key.toLowerCase() === 'm') {
@@ -723,117 +749,86 @@ class PacmanGame {
         return false;
     }
 
+    // True if the tile is not a wall (the board wraps around its edges)
+    isOpenTile(tx, ty) {
+        const x = (tx + this.width) % this.width;
+        const y = (ty + this.height) % this.height;
+        return this.maze[y][x] !== '#';
+    }
+
     movePacman() {
-        // CLASSIC GRID-BASED MOVEMENT WITH STRICT CORRIDOR ALIGNMENT
+        const p = this.pacman;
 
         // Calculate speed (boosted if speed power is active)
         const baseSpeed = this.pacmanSpeed * this.difficulty.pacmanSpeed;
-        const currentSpeed = this.hasSpeedBoost ? baseSpeed * 1.5 : baseSpeed;
+        let remaining = this.hasSpeedBoost ? baseSpeed * 1.5 : baseSpeed;
 
-        // Get current grid cell (the tile Pacman is in/near)
-        const currentGridX = Math.round(this.pacman.x);
-        const currentGridY = Math.round(this.pacman.y);
-
-        // Calculate distance from grid center
-        const distFromCenterX = this.pacman.x - currentGridX;
-        const distFromCenterY = this.pacman.y - currentGridY;
-
-        // TURN LOGIC: Only allow turns when reasonably centered in current tile
-        if (this.pacman.nextDirection !== this.pacman.direction) {
-            const isMovingHorizontal = (this.pacman.direction === 'left' || this.pacman.direction === 'right');
-            const isMovingVertical = (this.pacman.direction === 'up' || this.pacman.direction === 'down');
-            const isTurningToVertical = (this.pacman.nextDirection === 'up' || this.pacman.nextDirection === 'down');
-            const isTurningToHorizontal = (this.pacman.nextDirection === 'left' || this.pacman.nextDirection === 'right');
-
-            // Check if we're centered enough to turn (classic Pacman: must be near tile center)
-            let canTurn = false;
-            if (isMovingHorizontal && isTurningToVertical) {
-                // Horizontal to vertical: check if Y is centered
-                canTurn = Math.abs(distFromCenterY) < 0.3;
-            } else if (isMovingVertical && isTurningToHorizontal) {
-                // Vertical to horizontal: check if X is centered
-                canTurn = Math.abs(distFromCenterX) < 0.3;
+        // TURNING. A queued turn waits for the next junction (the centre of the tile Pac-Man is in)
+        // in that direction. Early presses run straight to the junction centre and turn there;
+        // presses up to half a tile late turn at once and curve back into the lane - no snapping.
+        if (p.nextDirection !== p.direction) {
+            if (p.nextDirection === OPPOSITE_DIRECTION[p.direction]) {
+                p.direction = p.nextDirection; // reversing is always allowed
             } else {
-                // Reversing direction (180 turn) - always allowed
-                canTurn = true;
-            }
-
-            if (canTurn) {
-                // Check if the turn leads to a valid path
-                let nextGridX = currentGridX;
-                let nextGridY = currentGridY;
-
-                switch (this.pacman.nextDirection) {
-                    case 'up': nextGridY--; break;
-                    case 'down': nextGridY++; break;
-                    case 'left': nextGridX--; break;
-                    case 'right': nextGridX++; break;
-                }
-
-                // Wrap coordinates
-                if (nextGridX < 0) nextGridX = this.width - 1;
-                if (nextGridX >= this.width) nextGridX = 0;
-                if (nextGridY < 0) nextGridY = this.height - 1;
-                if (nextGridY >= this.height) nextGridY = 0;
-
-                // Allow turn if path is clear
-                if (this.maze[nextGridY][nextGridX] !== '#') {
-                    this.pacman.direction = this.pacman.nextDirection;
-                    // CLASSIC SNAP: Lock to corridor center when turning
-                    if (isTurningToVertical) {
-                        this.pacman.x = currentGridX; // Lock X to corridor center
-                    } else if (isTurningToHorizontal) {
-                        this.pacman.y = currentGridY; // Lock Y to corridor center
+                const heading = DIRECTION_VECTORS[p.direction];
+                const turn = DIRECTION_VECTORS[p.nextDirection];
+                const jx = Math.round(p.x);
+                const jy = Math.round(p.y);
+                if (this.isOpenTile(jx + turn.x, jy + turn.y)) {
+                    const ahead = (jx - p.x) * heading.x + (jy - p.y) * heading.y; // > 0: junction still ahead
+                    if (ahead > 0) {
+                        const run = Math.min(ahead, remaining);
+                        p.x += heading.x * run;
+                        p.y += heading.y * run;
+                        remaining -= run;
+                        if (ahead - run < 1e-9) {
+                            p.x = jx;
+                            p.y = jy;
+                            p.direction = p.nextDirection;
+                        }
+                    } else {
+                        p.direction = p.nextDirection;
                     }
                 }
             }
         }
 
-        // MOVEMENT: Move in current direction with STRICT corridor locking
-        let newX = this.pacman.x;
-        let newY = this.pacman.y;
+        // MOVEMENT in the current direction, easing sideways back to the lane centre
+        if (remaining > 0) {
+            const v = DIRECTION_VECTORS[p.direction];
+            const gridX = Math.round(p.x);
+            const gridY = Math.round(p.y);
+            let newX = p.x + v.x * remaining;
+            let newY = p.y + v.y * remaining;
+            if (v.x !== 0) {
+                const off = gridY - p.y;
+                newY = p.y + Math.sign(off) * Math.min(Math.abs(off), remaining);
+            } else {
+                const off = gridX - p.x;
+                newX = p.x + Math.sign(off) * Math.min(Math.abs(off), remaining);
+            }
 
-        switch (this.pacman.direction) {
-            case 'up':
-                newY -= currentSpeed;
-                newX = currentGridX; // STRICT: Lock X to corridor center
-                break;
-            case 'down':
-                newY += currentSpeed;
-                newX = currentGridX; // STRICT: Lock X to corridor center
-                break;
-            case 'left':
-                newX -= currentSpeed;
-                newY = currentGridY; // STRICT: Lock Y to corridor center
-                break;
-            case 'right':
-                newX += currentSpeed;
-                newY = currentGridY; // STRICT: Lock Y to corridor center
-                break;
+            // WALL STOP: if the tile ahead is a wall, never go past the centre of the current tile
+            // (rounding alone would let Pac-Man slide almost half a tile into the wall)
+            if (!this.isOpenTile(gridX + v.x, gridY + v.y)) {
+                if (v.x > 0) newX = Math.min(newX, Math.max(gridX, p.x));
+                else if (v.x < 0) newX = Math.max(newX, Math.min(gridX, p.x));
+                if (v.y > 0) newY = Math.min(newY, Math.max(gridY, p.y));
+                else if (v.y < 0) newY = Math.max(newY, Math.min(gridY, p.y));
+            }
+
+            // Wrap around edges
+            if (newX < 0) newX = this.width - 1;
+            if (newX >= this.width) newX = 0;
+            if (newY < 0) newY = this.height - 1;
+            if (newY >= this.height) newY = 0;
+
+            // Only update position if the destination tile is not a wall
+            if (this.isOpenTile(Math.round(newX), Math.round(newY))) {
+                p.x = newX;
+                p.y = newY;
+            }
         }
-
-        // Wrap around edges
-        if (newX < 0) newX = this.width - 1;
-        if (newX >= this.width) newX = 0;
-        if (newY < 0) newY = this.height - 1;
-        if (newY >= this.height) newY = 0;
-
-        // WALL COLLISION: Check if destination is clear
-        let checkX = Math.round(newX);
-        let checkY = Math.round(newY);
-
-        // Wrap check coordinates
-        if (checkX < 0) checkX = this.width - 1;
-        if (checkX >= this.width) checkX = 0;
-        if (checkY < 0) checkY = this.height - 1;
-        if (checkY >= this.height) checkY = 0;
-
-        // Only update position if destination is not a wall
-        if (this.maze[checkY][checkX] !== '#') {
-            this.pacman.x = newX;
-            this.pacman.y = newY;
-        }
-        // If blocked by wall, position stays the same (no movement)
 
         // DOT COLLECTION
         const gridX = Math.round(this.pacman.x);
@@ -885,17 +880,27 @@ class PacmanGame {
         }
     }
 
+    // Eyes travel back to the ghost house along the shortest maze path (never through walls)
     moveDeadGhost(ghost) {
-        // Move towards ghost home at faster speed
-        const dx = this.ghostHome.x - ghost.x;
-        const dy = this.ghostHome.y - ghost.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const field = this.getHomeDistanceField();
+        const gx = Math.round(ghost.x);
+        const gy = Math.round(ghost.y);
+        const here = field[gy] ? field[gy][gx] : -1;
 
-        if (distance < 0.5) {
+        if (here === -1) {
+            // Not on a connected tile (should not happen) - just put the eyes back home
+            ghost.x = this.ghostHome.x;
+            ghost.y = this.ghostHome.y;
+            ghost.targetX = ghost.x;
+            ghost.targetY = ghost.y;
+            return;
+        }
+
+        const atTarget = Math.abs(ghost.x - ghost.targetX) < 0.01 && Math.abs(ghost.y - ghost.targetY) < 0.01;
+        if (here === 0 && atTarget) {
             // Reached home, start respawn timer
             ghost.respawnTimer -= this.frameTime;
             if (ghost.respawnTimer <= 0) {
-                // Respawn ghost
                 ghost.isDead = false;
                 ghost.frightened = false;
                 ghost.respawnTimer = 0;
@@ -904,14 +909,42 @@ class PacmanGame {
                 ghost.targetX = ghost.homeX;
                 ghost.targetY = ghost.homeY;
             }
+            return;
+        }
+
+        if (atTarget || this.isWall(ghost.targetX, ghost.targetY)) {
+            // Snap to the tile and head for the neighbour closest to home
+            ghost.x = gx;
+            ghost.y = gy;
+            let best = null;
+            for (const v of Object.values(DIRECTION_VECTORS)) {
+                const nx = gx + v.x;
+                const ny = gy + v.y;
+                if (this.isWall(nx, ny) || field[ny][nx] === -1) continue;
+                if (!best || field[ny][nx] < best.d) best = { x: nx, y: ny, d: field[ny][nx] };
+            }
+            if (!best || best.d >= here) {
+                ghost.targetX = gx;
+                ghost.targetY = gy;
+                return;
+            }
+            ghost.targetX = best.x;
+            ghost.targetY = best.y;
+        }
+
+        // Eyes fly home fast, one lane at a time
+        const dx = ghost.targetX - ghost.x;
+        const dy = ghost.targetY - ghost.y;
+        const step = 0.15;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            ghost.x += Math.sign(dx) * Math.min(Math.abs(dx), step);
+            ghost.y = Math.round(ghost.y);
         } else {
-            // Eyes fly home fast
-            const moveSpeed = Math.min(0.15, distance);
-            ghost.x += (dx / distance) * moveSpeed;
-            ghost.y += (dy / distance) * moveSpeed;
+            ghost.y += Math.sign(dy) * Math.min(Math.abs(dy), step);
+            ghost.x = Math.round(ghost.x);
         }
     }
-    
+
     updateGhostMovement(ghost) {
         // Get current grid position
         const currentGridX = Math.round(ghost.x);
@@ -1059,17 +1092,12 @@ class PacmanGame {
         }
     }
 
-    // Breadth-first distances from Pac-Man to every tile (-1 = unreachable), cached per tile
-    getPacmanDistanceField() {
-        const px = Math.round(this.pacman.x);
-        const py = Math.round(this.pacman.y);
-        const key = `${px},${py},${this.mazeVersion}`;
-        if (this._distanceKey === key) return this._distanceField;
-
+    // Breadth-first distances from a tile to every tile (-1 = unreachable)
+    computeDistanceField(sx, sy) {
         const field = Array.from({ length: this.height }, () => new Array(this.width).fill(-1));
-        if (!this.isWall(px, py)) {
-            field[py][px] = 0;
-            const queue = [[px, py]];
+        if (!this.isWall(sx, sy)) {
+            field[sy][sx] = 0;
+            const queue = [[sx, sy]];
             for (let head = 0; head < queue.length; head++) {
                 const [x, y] = queue[head];
                 for (const v of Object.values(DIRECTION_VECTORS)) {
@@ -1082,9 +1110,29 @@ class PacmanGame {
                 }
             }
         }
-        this._distanceKey = key;
-        this._distanceField = field;
         return field;
+    }
+
+    // Distances from Pac-Man's tile, cached per tile
+    getPacmanDistanceField() {
+        const px = Math.round(this.pacman.x);
+        const py = Math.round(this.pacman.y);
+        const key = `${px},${py},${this.mazeVersion}`;
+        if (this._distanceKey !== key) {
+            this._distanceKey = key;
+            this._distanceField = this.computeDistanceField(px, py);
+        }
+        return this._distanceField;
+    }
+
+    // Distances from the ghost house, cached per maze (used by eyes returning home)
+    getHomeDistanceField() {
+        const key = `${this.ghostHome.x},${this.ghostHome.y},${this.mazeVersion}`;
+        if (this._homeKey !== key) {
+            this._homeKey = key;
+            this._homeField = this.computeDistanceField(this.ghostHome.x, this.ghostHome.y);
+        }
+        return this._homeField;
     }
 
     // Turn a ghost around toward the tile it just left (used on mode changes, like the arcade)
@@ -2752,83 +2800,74 @@ class PacmanGame {
         }
     }
     
+    // One chip per active power (several can run at once), each with its own countdown
     updatePowerStatusDisplay() {
-        const powerStatusDiv = document.getElementById('powerStatus');
-        const powerNameElement = document.getElementById('powerName');
-        const powerTimerElement = document.getElementById('powerTimer');
-        const powerTypeElement = document.getElementById('powerType');
-        const powerTimerFill = document.getElementById('powerTimerFill');
-
-        // Display active power status
-        if (this.hasShootingPower && this.currentPowerType) {
-            powerStatusDiv.style.visibility = 'visible';
-
-            const powerNames = {
-                'red': 'Homing Missiles',
-                'purple': 'Multi-Shot',
-                'golden': 'Super Bullet'
-            };
-
-            const powerTypes = {
-                'red': 'Tracks targets',
-                'purple': 'Shoots all 4 directions',
-                'golden': 'Large piercing shot'
-            };
-
-            powerNameElement.textContent = powerNames[this.currentPowerType] || 'Unknown';
-            powerTimerElement.textContent = `${Math.ceil(this.shootingPowerTimer / 1000)}s`;
-            powerTypeElement.textContent = powerTypes[this.currentPowerType] || '-';
-
-            // Update timer bar
-            const percentage = (this.shootingPowerTimer / this.shootingPowerDuration) * 100;
-            powerTimerFill.style.width = `${Math.max(0, percentage)}%`;
-
-            // Update header power timer
-            this.headerPowerTimer.style.display = 'block';
-            this.headerPowerName.textContent = powerNames[this.currentPowerType] || 'Unknown';
-            this.headerPowerTime.textContent = `${Math.ceil(this.shootingPowerTimer / 1000)}s`;
-        } else if (this.hasShield) {
-            powerStatusDiv.style.visibility = 'visible';
-            powerNameElement.textContent = 'Shield';
-            powerTimerElement.textContent = `${Math.ceil(this.shieldTimer / 1000)}s`;
-            powerTypeElement.textContent = 'Invincibility';
-
-            // Update timer bar
-            const percentage = (this.shieldTimer / this.shieldDuration) * 100;
-            powerTimerFill.style.width = `${Math.max(0, percentage)}%`;
-
-            // Update header power timer
-            this.headerPowerTimer.style.display = 'block';
-            this.headerPowerName.textContent = 'Shield';
-            this.headerPowerTime.textContent = `${Math.ceil(this.shieldTimer / 1000)}s`;
-        } else if (this.hasSpeedBoost) {
-            powerStatusDiv.style.visibility = 'visible';
-            powerNameElement.textContent = 'Speed Boost';
-            powerTimerElement.textContent = `${Math.ceil(this.speedBoostTimer / 1000)}s`;
-            powerTypeElement.textContent = '1.5x speed';
-
-            // Update timer bar
-            const percentage = (this.speedBoostTimer / this.speedBoostDuration) * 100;
-            powerTimerFill.style.width = `${Math.max(0, percentage)}%`;
-
-            // Update header power timer
-            this.headerPowerTimer.style.display = 'block';
-            this.headerPowerName.textContent = 'Speed Boost';
-            this.headerPowerTime.textContent = `${Math.ceil(this.speedBoostTimer / 1000)}s`;
-        } else {
-            powerStatusDiv.style.visibility = 'hidden';
-            // Hide header power timer when no power is active
-            this.headerPowerTimer.style.display = 'none';
+        const panel = document.getElementById('powerStatus');
+        if (!panel) return;
+        if (!this.powerChips) {
+            this.powerChips = {};
+            this.powerEmpty = document.createElement('span');
+            this.powerEmpty.className = 'power-empty';
+            this.powerEmpty.textContent = 'No active powers - grab a mushroom or power pellet';
+            panel.appendChild(this.powerEmpty);
+            POWER_DISPLAY.forEach(def => {
+                const chip = document.createElement('div');
+                chip.className = 'power-chip';
+                chip.style.setProperty('--power-color', def.color);
+                chip.style.display = 'none';
+                chip.innerHTML = '<div class="power-chip-head"><span class="power-chip-name"></span><span class="power-chip-time"></span></div>' +
+                    '<div class="power-chip-bar"><div class="power-chip-fill"></div></div>';
+                panel.appendChild(chip);
+                this.powerChips[def.key] = {
+                    el: chip,
+                    name: chip.querySelector('.power-chip-name'),
+                    time: chip.querySelector('.power-chip-time'),
+                    fill: chip.querySelector('.power-chip-fill'),
+                    label: null, seconds: null
+                };
+            });
         }
+
+        let activeCount = 0;
+        POWER_DISPLAY.forEach(def => {
+            const chip = this.powerChips[def.key];
+            const state = def.read(this);
+            if (!state || state.remaining <= 0) {
+                if (chip.el.style.display !== 'none') chip.el.style.display = 'none';
+                return;
+            }
+            activeCount++;
+            if (chip.el.style.display === 'none') chip.el.style.display = '';
+            if (chip.label !== state.label) { chip.label = state.label; chip.name.textContent = `${def.icon} ${state.label}`; }
+            const seconds = Math.ceil(state.remaining / 1000);
+            if (chip.seconds !== seconds) { chip.seconds = seconds; chip.time.textContent = `${seconds}s`; }
+            chip.fill.style.width = `${Math.min(100, Math.max(0, (state.remaining / state.total) * 100))}%`;
+            chip.el.classList.toggle('ending', state.remaining < 3000);
+        });
+        this.powerEmpty.style.display = activeCount ? 'none' : '';
     }
-    
+
     toggleSound() {
-        const isMuted = this.soundManager.toggleMute();
+        this.soundManager.toggleMute();
+        this.updateSoundButton();
+    }
+
+    // Change the master volume; moving it while muted unmutes
+    setVolume(level) {
+        const applied = this.soundManager.setMasterVolume(level);
+        if (this.soundManager.isMuted && applied > 0) this.soundManager.toggleMute();
+        const slider = document.getElementById('volumeSlider');
+        if (slider) slider.value = Math.round(applied * 100);
+        this.updateSoundButton();
+    }
+
+    updateSoundButton() {
         const soundButton = document.getElementById('soundButton');
-        if (soundButton) {
-            soundButton.textContent = isMuted ? '🔇' : '🔊';
-            soundButton.title = isMuted ? 'Unmute (M)' : 'Mute (M)';
-        }
+        if (!soundButton) return;
+        const level = this.soundManager.masterLevel;
+        const silent = this.soundManager.isMuted || level === 0;
+        soundButton.textContent = silent ? '🔇' : (level < 0.4 ? '🔉' : '🔊');
+        soundButton.title = this.soundManager.isMuted ? 'Unmute (M)' : 'Mute (M)';
     }
 
     toggleMusic() {

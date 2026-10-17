@@ -1,4 +1,4 @@
-// Visual effects system for PACMAN3D-Z
+// Visual effects system for PACMAN-Z-3D
 
 class EffectsManager {
     constructor(canvas, ctx) {

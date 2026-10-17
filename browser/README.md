@@ -1,4 +1,4 @@
-# PACMAN3D-Z Browser Version
+# PACMAN-Z-3D Browser Version
 
 This folder contains the game itself. The desktop app packages these same files.
 
@@ -78,4 +78,4 @@ See the [main README](../README.md) for the full feature list, controls and scor
 
 ---
 
-**Game Version:** 1.1.1
+**Game Version:** 1.1.2

@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PACMAN3D-Z</title>
+    <title>PACMAN-Z-3D</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>PACMAN3D-Z</h1>
+        <h1>PACMAN-Z-3D</h1>
         <div class="game-info">
             <div class="stage">Stage: <span id="currentStage">1</span></div>
             <div class="score">Score: <span id="score">0</span></div>
             <div class="high-score">High Score: <span id="highScore">0</span></div>
             <div class="lives-display">Lives: <span id="lives"></span></div>
             <div class="timer">Time: <span id="timer">0:00</span></div>
-            <div class="power-timer" id="headerPowerTimer" style="display: none;">
-                Power: <span id="headerPowerName">None</span> (<span id="headerPowerTime">0s</span>)
-            </div>
             <div class="controls">
                 <label class="difficulty" title="Changing difficulty starts a new game">
                     <select id="difficultySelect">
@@ -26,12 +23,18 @@
                         <option value="hard">Hard</option>
                     </select>
                 </label>
-                <button id="soundButton" class="sound-button" title="Mute (M)">🔊</button>
+                <span class="volume-control">
+                    <button id="soundButton" class="sound-button" title="Mute (M)">🔊</button>
+                    <input type="range" id="volumeSlider" min="0" max="100" step="5" value="67" title="Volume (- / +)" aria-label="Volume">
+                </span>
                 <button id="musicButton" class="sound-button" title="Music off (N)">🎵</button>
                 <button id="viewButton" class="sound-button" title="Switch view (V)">🧊</button>
                 <button id="fullscreenButton" class="sound-button" title="Fullscreen (F)">⛶</button>
             </div>
         </div>
+        <!-- Active powers and their timers -->
+        <div class="power-status" id="powerStatus" aria-live="off"></div>
+
         <div class="canvas-stage" id="canvasStage">
             <div class="canvas-frame">
                 <canvas id="gameCanvas3d" width="672" height="416"></canvas>
@@ -40,16 +43,6 @@
         </div>
         <div class="game-status" id="gameStatus"></div>
 
-        <!-- Power Status Display -->
-        <div class="power-status" id="powerStatus">
-            <span class="power-label">Active Power:</span>
-            <span id="powerName">None</span>
-            <span class="power-type">(<span id="powerType">-</span>)</span>
-            <div class="power-timer-bar">
-                <div class="power-timer-fill" id="powerTimerFill" style="width: 100%;"></div>
-            </div>
-            <span id="powerTimer">0s</span>
-        </div>
 
         <div class="instructions">
             <p>🟡 = Pacman | 👻 = Ghosts | • = Dots | ⚪ = Power Pellets (eat the ghosts!) | 🍄 = Mushrooms | 🍒 = Bonus Fruit</p>

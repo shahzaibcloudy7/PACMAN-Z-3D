@@ -1,6 +1,9 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
+// Keep using the data folder of earlier versions so the saved high score and progress carry over
+app.setPath('userData', path.join(app.getPath('appData'), 'pacman3d-z'));
+
 let mainWindow;
 
 function createWindow() {
@@ -12,7 +15,7 @@ function createWindow() {
     resizable: true,
     fullscreenable: true,
     backgroundColor: '#000000',
-    title: 'PACMAN3D-Z',
+    title: 'PACMAN-Z-3D',
     icon: path.join(__dirname, 'build', 'icon.ico'), // Optional
     webPreferences: {
       nodeIntegration: false,

@@ -1,27 +1,27 @@
-# PACMAN3D-Z Desktop Application
+# PACMAN-Z-3D Desktop Application
 
-The Windows desktop version of PACMAN3D-Z.
+The Windows desktop version of PACMAN-Z-3D.
 
 ## Download
 
-The executables are published on the **[Releases page](https://github.com/shahzaibcloudy7/PACMAN3D-Z/releases/latest)** (they are too large to keep in the repository).
+The executables are published on the **[Releases page](https://github.com/shahzaibcloudy7/PACMAN-Z-3D/releases/latest)** (they are too large to keep in the repository).
 
-### PACMAN3D-Z-1.1.1-win-x64.exe
+### PACMAN-Z-3D-1.1.2-win-x64.exe
 - **Type:** Installer (NSIS), ~92 MB
 - Creates desktop and Start menu shortcuts
 - Lets you choose the installation folder
 - Includes an uninstaller
 
-### PACMAN3D-Z-Portable.exe
+### PACMAN-Z-3D-Portable.exe
 - **Type:** Portable executable, ~92 MB
 - No installation - run it from anywhere (USB drive, any folder)
 - Nothing written to the registry
 
 ## How to Use
 
-**Install:** run `PACMAN3D-Z-1.1.1-win-x64.exe`, follow the wizard, then launch from the desktop or Start menu shortcut. Installing over an older PACMAN-Z / PACMAN3D-Z install updates it.
+**Install:** run `PACMAN-Z-3D-1.1.2-win-x64.exe`, follow the wizard, then launch from the desktop or Start menu shortcut. Installing over an older PACMAN-Z / PACMAN-Z-3D install updates it.
 
-**Portable:** double-click `PACMAN3D-Z-Portable.exe` - the game starts immediately.
+**Portable:** double-click `PACMAN-Z-3D-Portable.exe` - the game starts immediately.
 
 ## Requirements
 
@@ -57,4 +57,4 @@ The app is not code-signed, so Windows may show a SmartScreen warning the first 
 
 ---
 
-**Built with:** Electron 39.2.7 · **Game Version:** 1.1.1
+**Built with:** Electron 39.2.7 · **Game Version:** 1.1.2

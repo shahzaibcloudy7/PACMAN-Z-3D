@@ -102,13 +102,6 @@ h1 {
     50% { opacity: 0.7; transform: scale(1.05); }
 }
 
-.power-timer {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff44ff;
-    animation: powerPulse 1s ease-in-out infinite;
-}
-
 @keyframes powerPulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
@@ -143,6 +136,18 @@ h1 {
     transform: scale(0.95);
 }
 
+.volume-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#volumeSlider {
+    width: 90px;
+    accent-color: #ffff00;
+    cursor: pointer;
+}
+
 .sound-button.off {
     opacity: 0.4;
 }
@@ -170,6 +175,9 @@ h1 {
 
 .canvas-stage.mode-3d #gameCanvas3d {
     display: block;
+    border-color: #2a2a8a;
+    border-radius: 6px;
+    box-shadow: 0 0 35px rgba(60, 60, 255, 0.25);
 }
 
 .canvas-stage.mode-3d #gameCanvas {
@@ -221,27 +229,77 @@ h1 {
 }
 
 .power-status {
-    margin: 10px auto 0;
+    margin: 0 auto 10px;
     max-width: 680px;
-    padding: 6px 12px;
-    background-color: rgba(255, 255, 0, 0.1);
-    border: 2px solid #ffff00;
+    /* Reserve one row so the board doesn't jump when powers start or end */
+    min-height: 44px;
+    padding: 5px 8px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 0, 0.35);
     border-radius: 5px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
-    font-size: 15px;
-    /* Hidden with visibility (not display) so the board doesn't jump when a power starts or ends */
-    visibility: hidden;
+    gap: 6px;
+    font-size: 13px;
 }
 
-.power-label {
+.power-empty {
+    color: #777;
+    width: 100%;
+    text-align: center;
+}
+
+.power-chip {
+    --power-color: #ffff00;
+    flex: 1 1 0;
+    min-width: 130px;
+    overflow: hidden;
+    padding: 3px 6px;
+    border: 1px solid var(--power-color);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.power-chip-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    color: var(--power-color);
     font-weight: bold;
-    color: #ffff00;
+    white-space: nowrap;
+    font-size: 12px;
 }
 
-.power-type {
-    color: #ccc;
+.power-chip-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.power-chip-time {
+    flex: none;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+
+.power-chip-bar {
+    height: 5px;
+    margin-top: 2px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.power-chip-fill {
+    height: 100%;
+    background: var(--power-color);
+    transition: width 0.1s linear;
+}
+
+.power-chip.ending {
+    animation: pulse 0.5s ease-in-out infinite alternate;
 }
 
 /* Fullscreen: give the board the room the help text would take */
@@ -251,21 +309,6 @@ html:fullscreen .instructions {
 
 html:fullscreen body {
     padding: 0;
-}
-
-.power-timer-bar {
-    flex: 1;
-    height: 8px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.power-timer-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #00ff00, #ffff00, #ff8800);
-    transition: width 0.1s linear;
-    border-radius: 4px;
 }
 
 .game-status.power-up {

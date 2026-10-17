@@ -1,11 +1,11 @@
-# PACMAN3D-Z Game
+# PACMAN-Z-3D Game
 
 A modern Pacman game built with vanilla JavaScript: arcade-style ghost AI, power pellets, lives, bonus fruit, mushroom power-ups with shooting, 14 looping stages, and three views (flat 2D, tilted 2D, real 3D with Three.js). Ships as a browser game and a Windows desktop app (Electron).
 
 ## 📁 Project Structure
 
 ```
-PACMAN3D-Z/
+PACMAN-Z-3D/
 ├── browser/                # The game - shared by the browser and desktop versions
 │   ├── index.html          # Entry point (loads vendor/three.min.js, sounds, effects, renderer3d, pacman)
 │   ├── pacman.js           # PacmanGame class: logic, AI, 2D rendering, input, layout
@@ -28,7 +28,7 @@ PACMAN3D-Z/
 ```bash
 cd browser && node server.js     # http://localhost:3000
 npm start                        # desktop app (Electron) in dev mode
-npm run build                    # dist/PACMAN3D-Z-<version>-win-x64.exe + dist/PACMAN3D-Z-Portable.exe
+npm run build                    # dist/PACMAN-Z-3D-<version>-win-x64.exe + dist/PACMAN-Z-3D-Portable.exe
 ```
 
 ## 🎯 Controls
@@ -43,6 +43,7 @@ npm run build                    # dist/PACMAN3D-Z-<version>-win-x64.exe + dist/
 | F / F11 | | Fullscreen |
 | M | | Mute all |
 | N | X | Music on/off |
+| - / + | | Volume down / up (slider in the header) |
 
 Difficulty dropdown (Easy / Normal / Hard) restarts the game.
 
@@ -52,6 +53,10 @@ Difficulty dropdown (Easy / Normal / Hard) restarts the game.
 - `requestAnimationFrame` drives drawing; logic runs in **fixed 1/60s steps** via an accumulator (capped at 250ms per frame). All speeds and timers are "per step", so game speed is identical regardless of frame rate. Don't convert speeds to per-frame values.
 - `update()` order: effects → timer → death animation (`dying`) or READY pause (`readyTimer`) short-circuit → ghost mode clock → Pac-Man → ghosts → bullets → power timers → fruit → collisions.
 - Drawing uses logical 672x416 coordinates; `fitToWindow()` sizes the canvas CSS and sets `renderScale` (CSS scale x devicePixelRatio) for a sharp backing store. Use `viewWidth/viewHeight`, not `canvas.width/height`, in drawing code.
+
+### Pac-Man movement (`movePacman`)
+- A turn key is queued in `nextDirection` until the next junction in that direction. An early press runs straight to the junction centre then turns; a press up to half a tile late turns at once and eases back into the lane (no snapping). Reversing is always allowed.
+- Wall stop: Pac-Man never passes the centre of the last open tile, so he doesn't sink into walls. Don't use `Math.round` of the next position alone as the wall test.
 
 ### Views
 - `viewMode` is `'flat' | 'tilt' | '3d'` (saved in localStorage `pacmanViewMode`). Tilt is a CSS transform on the 2D canvas.
@@ -104,17 +109,17 @@ Touching a non-frightened ghost (without a shield) starts a 1.5s death animation
 All sounds are synthesized in `sounds.js`. Music is an original Am-F-C-G chiptune loop scheduled ~250ms ahead on the audio clock (`scheduleMusic`), with a tenser pattern while ghosts are frightened. Music stops during READY!, death, pause and stage transitions. `musicEnabled` persists in localStorage `pacmanMusic`.
 
 ## 💾 Persistence (localStorage)
-`pacmanHighScore`, `pacmanDifficulty`, `pacmanViewMode`, `pacmanMusic`, `pacmanProgress` (checkpoint saved at each stage start: stage, lap, score, lives; restored on launch, cleared on game over or R). Always wrap access in try/catch (helpers: `loadSetting` / `saveSetting`).
+`pacmanHighScore`, `pacmanDifficulty`, `pacmanViewMode`, `pacmanMusic`, `pacmanVolume` (master volume 0-1), `pacmanProgress` (checkpoint saved at each stage start: stage, lap, score, lives; restored on launch, cleared on game over or R). Always wrap access in try/catch (helpers: `loadSetting` / `saveSetting`).
 
 ## 🖥️ Desktop Packaging
 - Electron window is resizable (default 1000x820, min 800x700); F11 handled in `main.js`, F via the Fullscreen API in the page.
 - `signAndEditExecutable` must stay `false`: electron-builder's winCodeSign extraction needs symlink privileges this machine doesn't have. `build/afterPack.js` uses `rcedit` instead to set ProductName/FileDescription/version/icon.
 - `files` includes `browser/**/*` minus `server.js`, `README.md` and `*.png`.
-- Releases: upload `dist/*.exe` to GitHub Releases on the `public` remote (`shahzaibcloudy7/PACMAN3D-Z`); `desktop/*.exe` is gitignored.
+- Releases: upload `dist/*.exe` to GitHub Releases on the `public` remote (`shahzaibcloudy7/PACMAN-Z-3D`); `desktop/*.exe` is gitignored.
 
 ## 🧪 Testing
 No automated test suite is checked in. Verify changes by running `browser/server.js` and driving `window.game` from the browser console or Playwright (e.g. `game.activateFrightened()`, `game.spawnFruit()`, `game.setViewMode('3d')`). Note that a backgrounded automated browser window can throttle `requestAnimationFrame` to ~1 fps, which looks like a slow game but isn't.
 
 ---
 
-**Version**: 1.1.1 · **Built with**: Vanilla JavaScript, HTML5 Canvas, Three.js, Web Audio API, Electron
+**Version**: 1.1.2 · **Built with**: Vanilla JavaScript, HTML5 Canvas, Three.js, Web Audio API, Electron

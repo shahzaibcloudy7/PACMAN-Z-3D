@@ -1,8 +1,8 @@
-# PACMAN3D-Z
+# PACMAN-Z-3D
 
 A modern Pacman game with a real 3D view, smart ghost AI, power pellets, mushroom power-ups, shooting mechanics and 14 maze stages. Play it in the browser or as a Windows desktop app.
 
-![Version](https://img.shields.io/badge/version-1.1.1-blue)
+![Version](https://img.shields.io/badge/version-1.1.2-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Browser-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -19,17 +19,19 @@ A modern Pacman game with a real 3D view, smart ghost AI, power pellets, mushroo
 - **Background music** and a READY! jingle, all synthesized live
 - **Controller support** - Xbox / PlayStation pads
 - **Fullscreen and resizable window** - the board scales to fit and stays sharp
+- **Active power panel** - every power you have, with its own countdown
+- **Volume slider** and **continue where you left off** (stage, score and lives are saved)
 - **High score persistence**
 
 ## 📥 Download & Play
 
 ### Windows Desktop Application (Recommended)
 
-**[📦 Download PACMAN3D-Z from the Releases page](https://github.com/shahzaibcloudy7/PACMAN3D-Z/releases/latest)**
+**[📦 Download PACMAN-Z-3D from the Releases page](https://github.com/shahzaibcloudy7/PACMAN-Z-3D/releases/latest)**
 
 Two options:
-- **PACMAN3D-Z-1.1.1-win-x64.exe** (~92 MB) - Installer with desktop and Start menu shortcuts
-- **PACMAN3D-Z-Portable.exe** (~92 MB) - Portable version, no installation needed
+- **PACMAN-Z-3D-1.1.2-win-x64.exe** (~92 MB) - Installer with desktop and Start menu shortcuts
+- **PACMAN-Z-3D-Portable.exe** (~92 MB) - Portable version, no installation needed
 
 **System Requirements:** Windows 10 or later (64-bit), 200 MB RAM, ~180 MB disk space when installed. The 3D view needs WebGL, which any graphics card from the last decade supports.
 
@@ -37,8 +39,8 @@ Two options:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/shahzaibcloudy7/PACMAN3D-Z.git
-   cd PACMAN3D-Z/browser
+   git clone https://github.com/shahzaibcloudy7/PACMAN-Z-3D.git
+   cd PACMAN-Z-3D/browser
    ```
 
 2. Start a local server:
@@ -67,6 +69,7 @@ See [browser/README.md](browser/README.md) for more details.
 | **F** / **F11** | | Fullscreen |
 | **M** | | Mute all sound |
 | **N** | X | Music on / off |
+| **- / +** | | Volume down / up (slider in the header) |
 
 Difficulty is picked from the dropdown in the header (changing it starts a new game).
 
@@ -129,7 +132,7 @@ Mushrooms respawn 15 seconds after being collected.
 ## 🏗️ Project Structure
 
 ```
-PACMAN3D-Z/
+PACMAN-Z-3D/
 ├── browser/               # The game (shared by browser and desktop versions)
 │   ├── index.html         # Entry point
 │   ├── pacman.js          # Game logic, AI, 2D rendering
@@ -156,8 +159,8 @@ PACMAN3D-Z/
 **Prerequisites:** Node.js 18+ and npm.
 
 ```bash
-git clone https://github.com/shahzaibcloudy7/PACMAN3D-Z.git
-cd PACMAN3D-Z
+git clone https://github.com/shahzaibcloudy7/PACMAN-Z-3D.git
+cd PACMAN-Z-3D
 npm install
 npm start          # run the desktop app in development mode
 ```
@@ -176,7 +179,7 @@ npm run build      # installer + portable .exe in dist/
 | `npm run build:dir` | Quick test build (unpacked) |
 | `npm run dist` | Alternative build command |
 
-Built executables are published on the [Releases page](https://github.com/shahzaibcloudy7/PACMAN3D-Z/releases) rather than committed to the repository.
+Built executables are published on the [Releases page](https://github.com/shahzaibcloudy7/PACMAN-Z-3D/releases) rather than committed to the repository.
 
 ## 📊 Technical Details
 
@@ -206,12 +209,12 @@ MIT License.
 
 ## 🔗 Links
 
-- **Releases:** [github.com/shahzaibcloudy7/PACMAN3D-Z/releases](https://github.com/shahzaibcloudy7/PACMAN3D-Z/releases)
-- **Issues:** [github.com/shahzaibcloudy7/PACMAN3D-Z/issues](https://github.com/shahzaibcloudy7/PACMAN3D-Z/issues)
+- **Releases:** [github.com/shahzaibcloudy7/PACMAN-Z-3D/releases](https://github.com/shahzaibcloudy7/PACMAN-Z-3D/releases)
+- **Issues:** [github.com/shahzaibcloudy7/PACMAN-Z-3D/issues](https://github.com/shahzaibcloudy7/PACMAN-Z-3D/issues)
 - **Browser Version Guide:** [browser/README.md](browser/README.md)
 - **Desktop Version Guide:** [desktop/README.md](desktop/README.md)
 - **Development Guide:** [CLAUDE.md](CLAUDE.md)
 
 ---
 
-**Version:** 1.1.1 · **Platform:** Windows 10+ / Modern Browsers · Made with HTML5 Canvas, Three.js, Web Audio API and Electron
+**Version:** 1.1.2 · **Platform:** Windows 10+ / Modern Browsers · Made with HTML5 Canvas, Three.js, Web Audio API and Electron
