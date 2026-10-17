@@ -1,10 +1,10 @@
-# PACMAN-Z Desktop Application
+# PACMAN3D-Z Desktop Application
 
-This folder contains the Windows desktop executables for PACMAN-Z.
+This folder contains the Windows desktop executables for PACMAN3D-Z.
 
 ## Files
 
-### PACMAN-Z-1.0.0-win-x64.exe
+### PACMAN3D-Z-1.0.0-win-x64.exe
 - **Type:** Installer (NSIS)
 - **Size:** ~92 MB
 - **Installation:** Double-click to install
@@ -14,7 +14,7 @@ This folder contains the Windows desktop executables for PACMAN-Z.
   - Allows custom installation directory
   - Includes uninstaller
 
-### PACMAN-Z-Portable.exe
+### PACMAN3D-Z-Portable.exe
 - **Type:** Portable executable
 - **Size:** ~91 MB
 - **Installation:** None required
@@ -27,12 +27,12 @@ This folder contains the Windows desktop executables for PACMAN-Z.
 ## How to Use
 
 ### Option 1: Install (Recommended for permanent installation)
-1. Double-click `PACMAN-Z-1.0.0-win-x64.exe`
+1. Double-click `PACMAN3D-Z-1.0.0-win-x64.exe`
 2. Follow the installation wizard
 3. Launch from desktop or start menu shortcut
 
 ### Option 2: Portable (Recommended for USB or temporary use)
-1. Double-click `PACMAN-Z-Portable.exe`
+1. Double-click `PACMAN3D-Z-Portable.exe`
 2. Game starts immediately - no installation!
 
 ## Requirements

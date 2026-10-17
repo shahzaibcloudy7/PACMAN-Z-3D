@@ -1,7 +1,7 @@
 {
   "name": "pacman-z",
   "version": "1.0.0",
-  "description": "PACMAN-Z - Modern Pacman game with power-ups and shooting mechanics",
+  "description": "PACMAN3D-Z - Modern Pacman game with power-ups and shooting mechanics",
   "main": "main.js",
   "author": "Your Name",
   "license": "MIT",
@@ -24,7 +24,7 @@
   },
   "build": {
     "appId": "com.pacmanz.game",
-    "productName": "PACMAN-Z",
+    "productName": "PACMAN3D-Z",
     "directories": {
       "output": "dist"
     },
@@ -54,10 +54,10 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "PACMAN-Z"
+      "shortcutName": "PACMAN3D-Z"
     },
     "portable": {
-      "artifactName": "PACMAN-Z-Portable.exe"
+      "artifactName": "PACMAN3D-Z-Portable.exe"
     },
     "compression": "maximum",
     "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"

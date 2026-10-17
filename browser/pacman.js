@@ -1917,15 +1917,25 @@ class PacmanGame {
     }
     
     gameLoop() {
-        if (!this.gameOver && !this.isPaused && !this.levelJustCompleted) {
-            this.movePacman();
-            this.moveGhosts();
-            this.updateBullets();
-            this.updateShootingPower();
-            this.updatePacmanAnimation();
-            this.checkCollisions();
-            this.updateTimer();
-            this.effectsManager.update(this.frameTime / 1000); // Convert to seconds
+        // Fixed-timestep updates: setTimeout rarely hits a true 60 FPS, so run as many
+        // 1/60s steps as real time has passed. Keeps speeds correct on slower machines.
+        const now = performance.now();
+        if (this.lastLoopTime === undefined) this.lastLoopTime = now;
+        this.loopAccumulator = (this.loopAccumulator || 0) + Math.min(now - this.lastLoopTime, 250);
+        this.lastLoopTime = now;
+
+        while (this.loopAccumulator >= this.frameTime) {
+            this.loopAccumulator -= this.frameTime;
+            if (!this.gameOver && !this.isPaused && !this.levelJustCompleted) {
+                this.movePacman();
+                this.moveGhosts();
+                this.updateBullets();
+                this.updateShootingPower();
+                this.updatePacmanAnimation();
+                this.checkCollisions();
+                this.updateTimer();
+                this.effectsManager.update(this.frameTime / 1000); // Convert to seconds
+            }
         }
 
         this.render();

@@ -13,7 +13,7 @@ function createWindow() {
     maxHeight: 700,
     resizable: false,
     backgroundColor: '#000000',
-    title: 'PACMAN-Z',
+    title: 'PACMAN3D-Z',
     icon: path.join(__dirname, 'build', 'icon.ico'), // Optional
     webPreferences: {
       nodeIntegration: false,
@@ -24,6 +24,9 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, 'browser', 'index.html'));
   Menu.setApplicationMenu(null); // Remove menu bar
+
+  // Keep the app name in the title bar instead of the page's <title>
+  mainWindow.on('page-title-updated', (e) => e.preventDefault());
 
   mainWindow.on('closed', function () {
     mainWindow = null;

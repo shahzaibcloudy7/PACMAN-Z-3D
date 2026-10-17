@@ -26,8 +26,8 @@ Download the latest release:
 **[📦 Download PACMAN-Z v1.0.0](https://github.com/shahzaibcloudy7/PACMAN-Z/releases/latest)**
 
 **Two options available:**
-- **PACMAN-Z-1.0.0-win-x64.exe** (92 MB) - Full installer with shortcuts
-- **PACMAN-Z-Portable.exe** (92 MB) - Portable version, no installation needed
+- **PACMAN3D-Z-1.0.0-win-x64.exe** (92 MB) - Full installer with shortcuts
+- **PACMAN3D-Z-Portable.exe** (92 MB) - Portable version, no installation needed
 
 **System Requirements:**
 - Windows 10 or later (64-bit)
@@ -131,8 +131,8 @@ PACMAN-Z/
 │   └── README.md        # Browser version documentation
 │
 ├── desktop/             # Windows executables
-│   ├── PACMAN-Z-1.0.0-win-x64.exe  # Installer (92 MB)
-│   ├── PACMAN-Z-Portable.exe        # Portable (92 MB)
+│   ├── PACMAN3D-Z-1.0.0-win-x64.exe  # Installer (92 MB)
+│   ├── PACMAN3D-Z-Portable.exe        # Portable (92 MB)
 │   └── README.md        # Desktop version documentation
 │
 ├── build/               # Build assets
